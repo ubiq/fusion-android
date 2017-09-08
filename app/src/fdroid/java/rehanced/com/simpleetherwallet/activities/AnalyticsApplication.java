@@ -6,24 +6,23 @@ import android.support.multidex.MultiDex;
 
 public class AnalyticsApplication extends Application {
 
-	private boolean isGooglePlayBuild = false;
+  private boolean isGooglePlayBuild = false;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-	
-	public boolean isGooglePlayBuild(){
-		return isGooglePlayBuild;
-	}
+  @Override protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
+  }
 
-    public void track(String s){
-        return;
-    }
+  public boolean isGooglePlayBuild() {
+    return isGooglePlayBuild;
+  }
 
-    public void event(String s){
-        return;
-    }
+  public void track(String s) {
+    return;
+  }
+
+  public void event(String s) {
+    return;
+  }
 
 }

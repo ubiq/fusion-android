@@ -18,53 +18,48 @@ import java.security.NoSuchProviderException;
 
 public class OwnWalletUtils extends WalletUtils {
 
-    // OVERRIDING THOSE METHODS BECAUSE OF CUSTOM WALLET NAMING (CUTING ALL THE TIMESTAMPTS FOR INTERNAL STORAGE)
+  // OVERRIDING THOSE METHODS BECAUSE OF CUSTOM WALLET NAMING (CUTING ALL THE TIMESTAMPTS FOR INTERNAL STORAGE)
 
-    public static String generateFullNewWalletFile(String password, File destinationDirectory)
-            throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+  public static String generateFullNewWalletFile(String password, File destinationDirectory)
+      throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CipherException, IOException {
 
-        return generateNewWalletFile(password, destinationDirectory, true);
+    return generateNewWalletFile(password, destinationDirectory, true);
+  }
+
+  public static String generateLightNewWalletFile(String password, File destinationDirectory)
+      throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CipherException, IOException {
+
+    return generateNewWalletFile(password, destinationDirectory, false);
+  }
+
+  public static String generateNewWalletFile(String password, File destinationDirectory, boolean useFullScrypt)
+      throws CipherException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+
+    ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+    return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
+  }
+
+  public static String generateWalletFile(String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
+      throws CipherException, IOException {
+
+    WalletFile walletFile;
+    if (useFullScrypt) {
+      walletFile = Wallet.createStandard(password, ecKeyPair);
+    } else {
+      walletFile = Wallet.createLight(password, ecKeyPair);
     }
 
-    public static String generateLightNewWalletFile(String password, File destinationDirectory)
-            throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+    String fileName = getWalletFileName(walletFile);
+    File destination = new File(destinationDirectory, fileName);
 
-        return generateNewWalletFile(password, destinationDirectory, false);
-    }
+    ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+    objectMapper.writeValue(destination, walletFile);
 
-    public static String generateNewWalletFile(
-            String password, File destinationDirectory, boolean useFullScrypt)
-            throws CipherException, IOException, InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException {
+    return fileName;
+  }
 
-        ECKeyPair ecKeyPair = Keys.createEcKeyPair();
-        return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
-    }
-
-    public static String generateWalletFile(
-            String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
-            throws CipherException, IOException {
-
-        WalletFile walletFile;
-        if (useFullScrypt) {
-            walletFile = Wallet.createStandard(password, ecKeyPair);
-        } else {
-            walletFile = Wallet.createLight(password, ecKeyPair);
-        }
-
-        String fileName = getWalletFileName(walletFile);
-        File destination = new File(destinationDirectory, fileName);
-
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-        objectMapper.writeValue(destination, walletFile);
-
-        return fileName;
-    }
-
-    private static String getWalletFileName(WalletFile walletFile) {
-        return walletFile.getAddress();
-    }
+  private static String getWalletFileName(WalletFile walletFile) {
+    return walletFile.getAddress();
+  }
 
 }

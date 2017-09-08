@@ -7,52 +7,46 @@ import android.support.annotation.RequiresApi;
 
 import rehanced.com.simpleetherwallet.interfaces.FingerprintListener;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
-public class FingerprintHelper extends FingerprintManager.AuthenticationCallback{
+@RequiresApi(api = Build.VERSION_CODES.M) public class FingerprintHelper extends FingerprintManager.AuthenticationCallback {
 
-    private FingerprintListener listener;
+  private FingerprintListener listener;
 
-    public FingerprintHelper(FingerprintListener listener) {
-        this.listener = listener;
+  public FingerprintHelper(FingerprintListener listener) {
+    this.listener = listener;
+  }
+
+  private CancellationSignal cancellationSignal;
+
+  public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
+    cancellationSignal = new CancellationSignal();
+
+    try {
+      manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+    } catch (SecurityException ex) {
+      listener.authenticationFailed("An error occurred:\n" + ex.getMessage());
+    } catch (Exception ex) {
+      listener.authenticationFailed("An error occurred\n" + ex.getMessage());
     }
+  }
 
-    private CancellationSignal cancellationSignal;
+  public void cancel() {
+    if (cancellationSignal != null) cancellationSignal.cancel();
+  }
 
-    public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
-        cancellationSignal = new CancellationSignal();
+  @Override public void onAuthenticationError(int errMsgId, CharSequence errString) {
+    listener.authenticationFailed(errString.toString());
+  }
 
-        try {
-            manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
-        } catch (SecurityException ex) {
-            listener.authenticationFailed("An error occurred:\n" + ex.getMessage());
-        } catch (Exception ex) {
-            listener.authenticationFailed("An error occurred\n" + ex.getMessage());
-        }
-    }
+  @Override public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+    listener.authenticationFailed(helpString.toString());
+  }
 
-    public void cancel() {
-        if (cancellationSignal != null)
-            cancellationSignal.cancel();
-    }
+  @Override public void onAuthenticationFailed() {
+    listener.authenticationFailed("Authentication failed");
+  }
 
-    @Override
-    public void onAuthenticationError(int errMsgId, CharSequence errString) {
-        listener.authenticationFailed(errString.toString());
-    }
-
-    @Override
-    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-        listener.authenticationFailed(helpString.toString());
-    }
-
-    @Override
-    public void onAuthenticationFailed() {
-        listener.authenticationFailed("Authentication failed");
-    }
-
-    @Override
-    public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-        listener.authenticationSucceeded(result);
-    }
+  @Override public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+    listener.authenticationSucceeded(result);
+  }
 
 }

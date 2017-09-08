@@ -28,95 +28,90 @@ import rehanced.com.simpleetherwallet.utils.WalletStorage;
 
 public class WalletGenService extends IntentService {
 
-    private NotificationCompat.Builder builder;
-    final int mNotificationId = 152;
+  private NotificationCompat.Builder builder;
+  final int mNotificationId = 152;
 
-    private boolean normalMode = true;
+  private boolean normalMode = true;
 
-    public WalletGenService() {
-        super("WalletGen Service");
+  public WalletGenService() {
+    super("WalletGen Service");
+  }
+
+  @Override protected void onHandleIntent(Intent intent) {
+    String password = intent.getStringExtra("PASSWORD");
+    String privatekey = "";
+
+    if (intent.hasExtra("PRIVATE_KEY")) {
+      normalMode = false;
+      privatekey = intent.getStringExtra("PRIVATE_KEY");
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        String password = intent.getStringExtra("PASSWORD");
-        String privatekey = "";
+    sendNotification();
+    try {
+      String walletAddress;
+      if (normalMode) { // Create new key
+        walletAddress = OwnWalletUtils.generateNewWalletFile(password, new File(this.getFilesDir(), ""), true);
+      } else { // Privatekey passed
+        ECKeyPair keys = ECKeyPair.create(Hex.decode(privatekey));
+        walletAddress = OwnWalletUtils.generateWalletFile(password, keys, new File(this.getFilesDir(), ""), true);
+      }
 
-        if(intent.hasExtra("PRIVATE_KEY")){
-            normalMode = false;
-            privatekey = intent.getStringExtra("PRIVATE_KEY");
-        }
+      WalletStorage.getInstance(this).add(new FullWallet("0x" + walletAddress, walletAddress), this);
+      AddressNameConverter.getInstance(this).put("0x" + walletAddress, "Wallet " + ("0x" + walletAddress).substring(0, 6), this);
+      Settings.walletBeingGenerated = false;
 
-        sendNotification();
-        try {
-            String walletAddress;
-            if(normalMode) { // Create new key
-                walletAddress = OwnWalletUtils.generateNewWalletFile(password, new File(this.getFilesDir(), ""), true);
-            } else { // Privatekey passed
-                ECKeyPair keys = ECKeyPair.create(Hex.decode(privatekey));
-                walletAddress = OwnWalletUtils.generateWalletFile(password, keys, new File(this.getFilesDir(), ""), true);
-            }
+      finished("0x" + walletAddress);
+    } catch (CipherException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (InvalidAlgorithmParameterException e) {
+      e.printStackTrace();
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } catch (NoSuchProviderException e) {
+      e.printStackTrace();
+    }
+  }
 
-            WalletStorage.getInstance(this).add(new FullWallet("0x"+walletAddress, walletAddress), this);
-            AddressNameConverter.getInstance(this).put("0x"+walletAddress, "Wallet "+("0x"+walletAddress).substring(0, 6), this);
-            Settings.walletBeingGenerated = false;
+  private void sendNotification() {
+    builder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_notification)
+        .setColor(0x2d435c)
+        .setTicker(normalMode ? getString(R.string.notification_wallgen_title) : getString(R.string.notification_wallimp_title))
+        .setContentTitle(this.getResources().getString(normalMode ? R.string.wallet_gen_service_title : R.string.wallet_gen_service_title_import))
+        .setOngoing(true)
+        .setProgress(0, 0, true)
+        .setContentText(getString(R.string.notification_wallgen_maytake));
+    final NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-            finished("0x"+walletAddress);
-        } catch (CipherException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        }
+    mNotifyMgr.notify(mNotificationId, builder.build());
+  }
+
+  private void finished(String address) {
+    builder.setContentTitle(normalMode ? getString(R.string.notification_wallgen_finished) : getString(R.string.notification_wallimp_finished))
+        .setLargeIcon(Blockies.createIcon(address.toLowerCase()))
+        .setAutoCancel(true)
+        .setLights(Color.CYAN, 3000, 3000)
+        .setSound(android.provider.Settings.System.DEFAULT_NOTIFICATION_URI)
+        .setProgress(100, 100, false)
+        .setOngoing(false)
+        .setAutoCancel(true)
+        .setContentText(getString(R.string.notification_click_to_view));
+
+    if (android.os.Build.VERSION.SDK_INT >= 18) // Android bug in 4.2, just disable it for everyone then...
+    {
+      builder.setVibrate(new long[] { 1000, 1000 });
     }
 
-    private void sendNotification(){
-        builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setColor(0x2d435c)
-                .setTicker(normalMode ? getString(R.string.notification_wallgen_title) : getString(R.string.notification_wallimp_title))
-                .setContentTitle(this.getResources().getString(normalMode ? R.string.wallet_gen_service_title : R.string.wallet_gen_service_title_import))
-                .setOngoing(true)
-                .setProgress(0, 0, true)
-                .setContentText(getString(R.string.notification_wallgen_maytake));
-        final NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    Intent main = new Intent(this, MainActivity.class);
+    main.putExtra("STARTAT", 1);
 
-        mNotifyMgr.notify(mNotificationId, builder.build());
-    }
+    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, main, PendingIntent.FLAG_UPDATE_CURRENT);
+    builder.setContentIntent(contentIntent);
 
-    private void finished(String address){
-        builder
-                .setContentTitle(normalMode ? getString(R.string.notification_wallgen_finished) : getString(R.string.notification_wallimp_finished))
-                .setLargeIcon(Blockies.createIcon(address.toLowerCase()))
-                .setAutoCancel(true)
-                .setLights(Color.CYAN, 3000, 3000)
-                .setSound(android.provider.Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setProgress(100, 100, false)
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setContentText(getString(R.string.notification_click_to_view));
+    final NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= 18) // Android bug in 4.2, just disable it for everyone then...
-            builder.setVibrate(new long[] { 1000, 1000});
-
-        Intent main = new Intent(this, MainActivity.class);
-        main.putExtra("STARTAT", 1);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                main, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-
-        final NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        mNotifyMgr.notify(mNotificationId, builder.build());
-    }
-
+    mNotifyMgr.notify(mNotificationId, builder.build());
+  }
 
 }

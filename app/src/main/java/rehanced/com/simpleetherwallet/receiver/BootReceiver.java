@@ -8,9 +8,8 @@ import rehanced.com.simpleetherwallet.services.NotificationLauncher;
 
 public class BootReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        NotificationLauncher.getInstance().start(context);
-    }
+  @Override public void onReceive(Context context, Intent intent) {
+    NotificationLauncher.getInstance().start(context);
+  }
 
 }

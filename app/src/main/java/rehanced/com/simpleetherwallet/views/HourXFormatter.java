@@ -8,11 +8,10 @@ import java.util.GregorianCalendar;
 
 public class HourXFormatter implements IAxisValueFormatter {
 
-    GregorianCalendar c = new GregorianCalendar();
+  GregorianCalendar c = new GregorianCalendar();
 
-    @Override
-    public String getFormattedValue(float value, AxisBase axis) {
-        c.setTimeInMillis(((long) (value))*1000);
-        return c.get(Calendar.HOUR_OF_DAY)+":00 ";
-    }
+  @Override public String getFormattedValue(float value, AxisBase axis) {
+    c.setTimeInMillis(((long) (value)) * 1000);
+    return c.get(Calendar.HOUR_OF_DAY) + ":00 ";
+  }
 }

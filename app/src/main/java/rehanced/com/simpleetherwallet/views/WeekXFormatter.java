@@ -8,11 +8,10 @@ import java.util.GregorianCalendar;
 
 public class WeekXFormatter implements IAxisValueFormatter {
 
-    GregorianCalendar c = new GregorianCalendar();
+  GregorianCalendar c = new GregorianCalendar();
 
-    @Override
-    public String getFormattedValue(float value, AxisBase axis) {
-        c.setTimeInMillis(((long) (value))*1000);
-        return c.get(Calendar.DAY_OF_MONTH)+". ";
-    }
+  @Override public String getFormattedValue(float value, AxisBase axis) {
+    c.setTimeInMillis(((long) (value)) * 1000);
+    return c.get(Calendar.DAY_OF_MONTH) + ". ";
+  }
 }
