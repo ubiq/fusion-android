@@ -6,11 +6,11 @@ android {
   compileSdkVersion 25
   buildToolsVersion "25.0.3"
   defaultConfig {
-    applicationId "com.rehanced.lunary"
-    minSdkVersion 16
+    applicationId "com.ubiqsmart"
+    minSdkVersion 21
     targetSdkVersion 25
     versionCode 19
-    versionName "1.29"
+    versionName "0.1"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
     multiDexEnabled true
@@ -84,26 +84,34 @@ android {
 }
 
 dependencies {
+  compile 'com.android.support:support-v4:25.4.0'
+  compile 'com.android.support:appcompat-v7:25.4.0'
+  compile 'com.android.support:design:25.4.0'
+  compile 'com.android.support:multidex:1.0.2'
+  compile 'com.android.support:recyclerview-v7:25.4.0'
+  googleplayCompile 'com.google.android.gms:play-services-analytics:11.2.2'
+
+  compile 'com.squareup.okhttp3:okhttp:3.9.0'
+  compile 'org.web3j:core-android:2.2.1'
+
+  compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+  compile 'me.zhanghai.android.patternlock:library:2.1.2'
+
+  compile 'com.jakewharton:butterknife:8.8.1'
+  annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+  compile 'me.dm7.barcodescanner:zxing:1.8.4'
+
+  compile 'me.grantland:autofittextview:0.2.+'
+  compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+  compile 'io.github.kobakei:ratethisapp:1.2.0'
+  compile 'com.github.apl-devs:appintro:v4.2.2'
+  compile 'com.github.clans:fab:1.6.4'
+  compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+
+  testCompile 'junit:junit:4.12'
+
   androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
-  compile project(path: ':materialdrawer')
-  compile project(':MPChartLib')
-  compile project(':Fab')
-  compile 'me.dm7.barcodescanner:zxing:1.8.4'
-  compile 'com.android.support:appcompat-v7:25.3.1'
-  compile 'com.android.support:design:25.3.1'
-  compile 'com.squareup.okhttp3:okhttp:3.8.0'
-  compile 'com.android.support:support-v4:25.3.1'
-  testCompile 'junit:junit:4.12'
-  compile project(path: ':ratethisapp')
-  compile 'com.android.support:multidex:1.0.1'
-  compile 'com.android.support:recyclerview-v7:25.3.1'
-  compile project(':autofittextview')
-  compile 'org.web3j:core-android:2.2.1'
-  googleplayCompile 'com.google.android.gms:play-services-analytics:10.2.6'
-  compile project(':appintro')
-  compile project(path: ':appintro')
-  compile 'me.zhanghai.android.patternlock:library:2.1.2'
-  compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 }

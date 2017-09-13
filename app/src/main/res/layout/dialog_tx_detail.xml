@@ -70,7 +70,7 @@
             android:textStyle="bold"
             android:id="@+id/walletname"
             android:singleLine="true"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/primary_dark"
             android:text="" />
 
           <me.grantland.widget.AutofitTextView
@@ -116,7 +116,7 @@
             android:singleLine="true"
             android:textStyle="bold"
             android:layout_gravity="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/primary_dark"
             android:id="@+id/other_address"
             android:text="" />
 
@@ -151,7 +151,7 @@
           android:textSize="20sp"
           android:singleLine="true"
           android:gravity="center"
-          android:textColor="@color/etherReceived"
+          android:textColor="@color/ether_received"
           android:id="@+id/amount"
           android:text="" />
 
@@ -354,7 +354,7 @@
         android:layout_marginTop="9dp"
         android:text="@string/open_in_browser"
         android:id="@+id/openinbrowser"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/primary_dark"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="8dp" />
 

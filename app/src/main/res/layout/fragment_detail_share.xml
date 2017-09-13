@@ -27,7 +27,7 @@
       <Button
         android:id="@+id/copytoclip"
         android:layout_width="match_parent"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/primary_dark"
         android:textColor="#ffffff"
         android:text="@string/fragment_detail_share_button"
         android:layout_marginLeft="10dp"

@@ -1,10 +1,10 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipeRefreshLayout2"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:fab="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:id="@+id/swipeRefreshLayout2"
   android:background="#FFFFFF">
 
   <FrameLayout
@@ -21,27 +21,27 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:showIn="@layout/activity_main"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:showIn="@layout/activity_main" />
 
     </LinearLayout>
 
     <FrameLayout
       android:id="@+id/nothing_found"
       android:layout_width="fill_parent"
-      android:visibility="gone"
+      android:layout_height="fill_parent"
       android:background="#ffffff"
-      android:layout_height="fill_parent">
+      android:visibility="gone">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_marginBottom="70dp"
 
-        android:layout_marginTop="40dp"
         android:layout_marginLeft="70dp"
         android:layout_marginRight="70dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
@@ -51,15 +51,15 @@
 
         <TextView
           android:id="@+id/infoText"
-          android:layout_marginTop="20dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="#99323232"
           android:layout_marginLeft="8dp"
           android:layout_marginRight="8dp"
-          android:textSize="15dp"
+          android:layout_marginTop="20dp"
           android:gravity="center"
-          android:text="@string/no_tx_history" />
+          android:text="@string/no_tx_history"
+          android:textColor="#99323232"
+          android:textSize="15dp" />
 
       </LinearLayout>
 
@@ -67,8 +67,8 @@
 
     <RelativeLayout
       android:layout_width="match_parent"
-      android:fitsSystemWindows="true"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:fitsSystemWindows="true">
 
       <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fabmenu"
@@ -76,26 +76,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:layout_gravity="bottom|right"
-        fab:menu_icon="@drawable/ic_new_tr_small"
+        app:menu_colorNormal="@color/primary"
+        app:menu_colorPressed="@color/accent_2"
+        app:menu_colorRipple="@color/accent"
         fab:menu_animationDelayPerItem="20"
-        fab:menu_shadowColor="#444"
-        fab:menu_colorNormal="@color/colorPrimary"
-        fab:menu_colorPressed="@color/colorAccent2"
-        fab:menu_colorRipple="@color/colorAccent">
+        fab:menu_icon="@drawable/ic_new_tr_small"
+        fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
           android:id="@+id/requestTx"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_action_request"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          app:menu_colorNormal="@color/primary"
+          app:menu_colorPressed="@color/accent_2"
+          app:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_request" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -103,9 +103,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_new_tr"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          app:menu_colorNormal="@color/primary"
+          app:menu_colorPressed="@color/accent_2"
+          app:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_send" />
 
       </com.github.clans.fab.FloatingActionMenu>

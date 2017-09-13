@@ -54,7 +54,7 @@
             android:textSize="24sp"
             android:gravity="center"
             android:minWidth="135dp"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/primary_dark"
             android:layout_weight="1" />
 
           <ImageView
@@ -149,18 +149,18 @@
         android:layout_gravity="bottom|right"
         fab:menu_animationDelayPerItem="20"
         fab:menu_shadowColor="#444"
-        fab:menu_colorNormal="@color/colorPrimary"
-        fab:menu_colorPressed="@color/colorAccent2"
-        fab:menu_colorRipple="@color/colorAccent">
+        fab:menu_colorNormal="@color/primary"
+        fab:menu_colorPressed="@color/accent_2"
+        fab:menu_colorRipple="@color/accent">
 
         <com.github.clans.fab.FloatingActionButton
           android:id="@+id/gen_fab"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_add_wallet"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_gen_new" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -168,9 +168,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_sacn"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_add_watch" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -178,9 +178,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_scanadd"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_scan" />
 
 

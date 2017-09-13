@@ -3,8 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/primary"
   android:orientation="vertical"
-  android:background="#49627e"
   android:showDividers="middle">
 
   <LinearLayout
@@ -14,33 +14,32 @@
     android:orientation="vertical">
 
     <TextView
-      android:text="Lunary Wallet"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center"
-      android:textColor="#FFFFFF"
-      android:textSize="40sp"
-      android:layout_marginTop="35dp"
       android:layout_marginBottom="16dp"
-      android:textAppearance="?android:textAppearanceMedium" />
+      android:layout_marginTop="35dp"
+      android:gravity="center"
+      android:text="@string/app_name"
+      android:textAppearance="?android:textAppearanceMedium"
+      android:textColor="#FFFFFF"
+      android:textSize="40sp" />
 
     <TextView
       android:id="@+id/pl_message_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:textColor="#F2F2F2"
-      android:textAppearance="?android:textAppearanceMedium" />
+      android:textAppearance="?android:textAppearanceMedium"
+      android:textColor="#F2F2F2" />
 
     <me.zhanghai.android.patternlock.PatternView
       android:id="@+id/pl_pattern"
-      android:layout_marginTop="40dp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
       android:layout_marginLeft="25dp"
       android:layout_marginRight="25dp"
-      android:layout_gravity="center"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-
+      android:layout_marginTop="40dp" />
 
   </LinearLayout>
 
@@ -48,16 +47,16 @@
     android:id="@+id/fingerprintcontainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="40sp"
     android:layout_marginBottom="40dp"
+    android:layout_marginTop="40sp"
     android:orientation="vertical">
 
     <ImageView
       android:layout_width="55dp"
       android:layout_height="55dp"
-      android:src="@drawable/ic_fingerprint"
+      android:layout_gravity="center"
       android:background="@drawable/fignerprintcircle"
-      android:layout_gravity="center" />
+      android:src="@drawable/ic_fingerprint" />
 
   </LinearLayout>
 </LinearLayout>

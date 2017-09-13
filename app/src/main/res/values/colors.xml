@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#587699</color>
-  <color name="colorPrimaryDark">#49627e</color>
+  <color name="primary">#00ea90</color>
+  <color name="primary_dark">#00b662</color>
 
-  <color name="colorAccent">#535353</color><!-- -->
-  <color name="colorAccent2">#9cacbf</color>
-  <color name="tabIndicator">#d2d7de</color>
+  <color name="accent">#535353</color><!-- -->
+  <color name="accent_2">#9cacbf</color>
+  <color name="tab_indicator">#d2d7de</color>
 
-  <color name="etherReceived">#d22a8031</color>
-  <color name="etherSpent">#d2a63f40</color>
-  <color name="normalBlack">#222222</color>
+  <color name="ether_received">#d22a8031</color>
+  <color name="ether_spent">#d2a63f40</color>
+  <color name="normal_black">#222222</color>
   <color name="unconfirmed">#b6b6b6</color>
   <color name="unconfirmedNew">#a3a3a3</color>
 
@@ -18,6 +18,7 @@
   <color name="color_orange">#f38a32</color>
   <color name="color_blue">#1479b7</color>
   <color name="divider_grey">#e4e4e5</color>
+  <color name="white">#fff</color>
 
   <array name="rect_color">
     <item>@color/color_blue</item>
@@ -27,7 +28,7 @@
     <item>@color/color_orange</item>
   </array>
 
-  <color name="chartFilled">#6e8caf</color>
-  <color name="colorPrimaryLittleDarker">#506d8f</color>
+  <color name="chart_filled">#6e8caf</color>
+  <color name="color_primary_little_darker">#506d8f</color>
 
 </resources>

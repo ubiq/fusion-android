@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="rehanced.com.simpleetherwallet"
+<manifest package="com.ubiqsmart"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <supports-screens
@@ -9,10 +9,6 @@
     android:resizeable="true"
     android:smallScreens="true"
     android:xlargeScreens="true" />
-
-  <uses-sdk
-    android:minSdkVersion="16"
-    android:targetSdkVersion="25" />
 
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -55,73 +51,75 @@
   <supports-screens android:anyDensity="true" />
 
   <application
-    android:name=".activities.AnalyticsApplication"
+    android:name="com.ubiqsmart.activities.App"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:largeHeap="true"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme">
+    android:theme="@style/UbiqTheme">
     <activity
-      android:name=".activities.MainActivity"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_main"
-      android:theme="@style/AppTheme.NoActionBar">
+      android:name="com.ubiqsmart.activities.MainActivity"
+      android:configChanges="orientation|screenSize">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
     <activity
-      android:name=".activities.AddressDetailActivity"
+      android:name="com.ubiqsmart.activities.AddressDetailActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_main"
-      android:theme="@style/AppTheme.NoActionBar2" />
+      android:theme="@style/UbiqTheme.NoActionBar2" />
+
     <activity
-      android:name=".activities.QRScanActivity"
+      android:name="com.ubiqsmart.activities.QRScanActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_main"
-      android:theme="@style/AppTheme.NoActionBar2" />
+      android:theme="@style/UbiqTheme.NoActionBar2" />
+
     <activity
-      android:name=".activities.SettingsActivity"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings"
-      android:theme="@style/AppTheme" />
-    <activity
-      android:name=".activities.WalletGenActivity"
+      android:name="com.ubiqsmart.activities.SettingsActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
-      android:theme="@style/AppTheme.NoActionBar2" />
+      android:theme="@style/UbiqTheme" />
+
     <activity
-      android:name=".activities.RequestEtherActivity"
+      android:name="com.ubiqsmart.activities.WalletGenActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
-      android:theme="@style/AppTheme.NoActionBar2" />
+      android:theme="@style/UbiqTheme.NoActionBar2" />
+
     <activity
-      android:name=".activities.SendActivity"
+      android:name="com.ubiqsmart.activities.RequestEtherActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
-      android:theme="@style/AppTheme.NoActionBar2"
+      android:theme="@style/UbiqTheme.NoActionBar2" />
+
+    <activity
+      android:name="com.ubiqsmart.activities.SendActivity"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/title_activity_settings"
+      android:theme="@style/UbiqTheme.NoActionBar2"
       android:windowSoftInputMode="stateHidden|adjustResize" />
-    <activity
-      android:name=".activities.AppIntroActivity"
-      android:label="@string/title_activity_main"
-      android:theme="@style/AppTheme.NoActionBar2" />
 
     <activity
-      android:name=".activities.AppLockActivity"
+      android:name="com.ubiqsmart.activities.AppIntroActivity"
+      android:theme="@style/UbiqTheme.NoActionBar2" />
+
+    <activity
+      android:name="com.ubiqsmart.activities.AppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
       android:screenOrientation="portrait"
-      android:theme="@style/AppTheme.NoActionBar2" />
+      android:theme="@style/UbiqTheme.NoActionBar2" />
 
     <activity
-      android:name=".activities.SetAppLockActivity"
+      android:name="com.ubiqsmart.activities.SetAppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
       android:screenOrientation="portrait"
-      android:theme="@style/AppTheme.NoActionBar2">
+      android:theme="@style/UbiqTheme.NoActionBar2">
       <intent-filter>
         <action android:name="rehanced.com.simpleetherwallet.activities.SetAppLockActivity" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -129,7 +127,7 @@
     </activity>
 
     <receiver
-      android:name=".receiver.BootReceiver"
+      android:name="com.ubiqsmart.receiver.BootReceiver"
       android:enabled="true"
       android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
       <intent-filter>
@@ -141,14 +139,14 @@
     </receiver>
 
     <service
-      android:name=".services.NotificationService"
+      android:name="com.ubiqsmart.services.NotificationService"
       android:exported="false" />
 
     <service
-      android:name=".services.WalletGenService"
+      android:name="com.ubiqsmart.services.WalletGenService"
       android:exported="false" />
     <service
-      android:name=".services.TransactionService"
+      android:name="com.ubiqsmart.services.TransactionService"
       android:exported="false" />
   </application>
 

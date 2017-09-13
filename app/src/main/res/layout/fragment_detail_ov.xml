@@ -79,7 +79,7 @@
                 android:gravity="center"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="7dp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/primary_dark" />
 
               <TextView
                 android:text="ETH"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:gravity="top"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/primary_dark" />
             </LinearLayout>
 
 
@@ -151,18 +151,18 @@
         android:layout_gravity="bottom|right"
         fab:menu_animationDelayPerItem="1"
         fab:menu_shadowColor="#444"
-        fab:menu_colorNormal="@color/colorPrimary"
-        fab:menu_colorPressed="@color/colorAccent2"
-        fab:menu_colorRipple="@color/colorAccent">
+        fab:menu_colorNormal="@color/primary"
+        fab:menu_colorPressed="@color/accent_2"
+        fab:menu_colorRipple="@color/accent">
 
         <com.github.clans.fab.FloatingActionButton
           android:id="@+id/set_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_changename"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_setwalletname" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -170,9 +170,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_new_tr"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_sendether_from" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -180,9 +180,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_new_tr"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_sendether_to" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -190,9 +190,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_add_wallet"
-          fab:menu_colorNormal="@color/colorPrimary"
-          fab:menu_colorPressed="@color/colorAccent2"
-          fab:menu_colorRipple="@color/colorAccent"
+          fab:menu_colorNormal="@color/primary"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
           fab:fab_label="@string/fab_add_aswatch" />
 
 

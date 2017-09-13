@@ -70,7 +70,7 @@
             android:textStyle="bold"
             android:id="@+id/walletname"
             android:singleLine="true"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/primary_dark"
             android:text="" />
 
           <me.grantland.widget.AutofitTextView

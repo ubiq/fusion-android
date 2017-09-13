@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/action_price"
+    android:icon="@drawable/ic_price"
+    android:enabled="true"
+    android:title="@string/charts" />
+  <item
+    android:id="@+id/action_wallet"
+    android:icon="@drawable/ic_wallet"
+    android:enabled="true"
+    android:title="@string/wallet" />
+  <item
+    android:id="@+id/action_transactions"
+    android:icon="@drawable/ic_transactions"
+    android:enabled="true"
+    android:title="@string/transactions" />
+</menu>

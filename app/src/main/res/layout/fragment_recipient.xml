@@ -1,8 +1,6 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:fab="http://schemas.android.com/apk/res-auto"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout android:id="@+id/swipeRefreshLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/swipeRefreshLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="#FFFFFF">
@@ -15,48 +13,48 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
+      android:layout_marginBottom="10dp"
       android:layout_marginTop="5dp"
-      android:layout_marginBottom="10dp">
+      android:orientation="vertical">
 
       <TextView
-        android:text="@string/choose_recipient_enterscan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/choose_recipient_enterscan" />
 
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:background="#7aa1a1a1" />
 
       <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <EditText
           android:id="@+id/receiver"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:hint="@string/fragment_recipient_hint_address"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
           android:layout_weight="1"
+          android:hint="@string/fragment_recipient_hint_address"
           android:inputType="text"
           android:maxLines="1" />
 
         <ImageButton
           android:id="@+id/scan_button"
-          android:src="@drawable/ic_scan_qr"
           android:layout_width="30dp"
+          android:layout_height="30dp"
           android:layout_marginRight="10dp"
           android:layout_marginTop="5dp"
-          android:layout_height="30dp" />
+          android:src="@drawable/ic_scan_qr" />
 
       </LinearLayout>
 
@@ -64,21 +62,21 @@
         android:id="@+id/send"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="#FFFFFF"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="@string/fragment_recipient_continue" />
+        android:backgroundTint="@color/primary_dark"
+        android:text="@string/fragment_recipient_continue"
+        android:textColor="#FFFFFF" />
 
     </LinearLayout>
 
     <TextView
-      android:text="@string/choose_recipient_contacts"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
       android:layout_marginLeft="10dp"
-      android:layout_marginRight="10dp" />
+      android:layout_marginRight="10dp"
+      android:layout_marginTop="10dp"
+      android:text="@string/choose_recipient_contacts" />
 
     <View
       android:layout_width="match_parent"
@@ -95,8 +93,8 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:showIn="@layout/activity_main"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:showIn="@layout/activity_main" />
 
     </RelativeLayout>
 

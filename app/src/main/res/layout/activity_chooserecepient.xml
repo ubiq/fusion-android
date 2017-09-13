@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/main_content"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/main_content"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="false">
@@ -11,8 +10,8 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/appbar_padding_top"
     android:fitsSystemWindows="true"
+    android:paddingTop="@dimen/appbar_padding_top"
     android:theme="@style/AppTheme.AppBarOverlay">
 
     <android.support.v7.widget.Toolbar
@@ -23,15 +22,15 @@
       app:popupTheme="@style/AppTheme.PopupOverlay">
 
       <TextView
+        android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_send_title"
+        android:layout_gravity="center"
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-light"
-        android:textSize="23sp"
+        android:text="@string/activity_send_title"
         android:textColor="#F4FEFEFE"
-        android:layout_gravity="center"
-        android:id="@+id/toolbar_title" />
+        android:textSize="23sp" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -45,7 +44,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-    <rehanced.com.simpleetherwallet.views.NonSwipeViewPager
+    <com.ubiqsmart.views.NonSwipeViewPager
       android:id="@+id/container"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />

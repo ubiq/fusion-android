@@ -71,7 +71,7 @@
             android:textStyle="bold"
             android:id="@+id/tokenname"
             android:singleLine="true"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/primary_dark"
             android:text="" /> <!--android:textColor="@color/colorPrimaryDark" -->
         </LinearLayout>
 
@@ -82,7 +82,7 @@
           android:layout_gravity="bottom"
           android:gravity="right"
           android:id="@+id/etherbalance"
-          android:textColor="@color/colorPrimary"
+          android:textColor="@color/primary"
           android:layout_weight="1"
           android:text="" /> <!--@color/colorPrimary -->
 
