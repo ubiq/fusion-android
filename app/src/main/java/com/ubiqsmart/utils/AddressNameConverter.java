@@ -1,48 +1,36 @@
 package com.ubiqsmart.utils;
 
 import android.content.Context;
+import com.ubiqsmart.repository.data.WalletDisplay;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.ubiqsmart.data.WalletDisplay;
+import java.io.*;
+import java.util.*;
 
 public class AddressNameConverter {
 
-  private HashMap<String, String> mapdb;
+  private  HashMap<String, String> mapdb;
   private static AddressNameConverter instance;
 
   public static AddressNameConverter getInstance(Context context) {
-    if (instance == null) instance = new AddressNameConverter(context);
+    if (instance == null) {
+      instance = new AddressNameConverter(context);
+    }
     return instance;
   }
 
   private AddressNameConverter(Context context) {
     try {
       load(context);
-      if (!contains("0xa9981a33f6b1a18da5db58148b2357f22b44e1e0")) {
-        put("0xa9981a33f6b1a18da5db58148b2357f22b44e1e0", "Lunary Development ✓", context);
-      }
     } catch (Exception e) {
-      mapdb = new HashMap<String, String>();
-      put("0xa9981a33f6b1a18da5db58148b2357f22b44e1e0", "Lunary Development ✓", context);
+      mapdb = new HashMap<>();
     }
   }
 
-  public synchronized void put(String addresse, String name, Context context) {
+  public synchronized void put(String address, String name, Context context) {
     if (name == null || name.length() == 0) {
-      mapdb.remove(addresse);
+      mapdb.remove(address);
     } else {
-      mapdb.put(addresse, name.length() > 22 ? name.substring(0, 22) : name);
+      mapdb.put(address, name.length() > 22 ? name.substring(0, 22) : name);
     }
     save(context);
   }
@@ -51,14 +39,14 @@ public class AddressNameConverter {
     return mapdb.get(addresse);
   }
 
-  public boolean contains(String addresse) {
-    return mapdb.containsKey(addresse);
+  public boolean contains(final String address) {
+    return mapdb.containsKey(address);
   }
 
-  public ArrayList<WalletDisplay> getAsAddressbook() {
-    ArrayList<WalletDisplay> erg = new ArrayList<WalletDisplay>();
+  public List<WalletDisplay> getAsAddressbook() {
+    final List<WalletDisplay> erg = new ArrayList<>();
     for (Map.Entry<String, String> entry : mapdb.entrySet()) {
-      erg.add(new WalletDisplay(entry.getValue().toString(), entry.getKey().toString()));
+      erg.add(new WalletDisplay(entry.getValue(), entry.getKey()));
     }
     Collections.sort(erg);
     return erg;
@@ -77,8 +65,8 @@ public class AddressNameConverter {
   }
 
   @SuppressWarnings("unchecked") public synchronized void load(Context context) throws IOException, ClassNotFoundException {
-    FileInputStream fout = new FileInputStream(new File(context.getFilesDir(), "namedb.dat"));
-    ObjectInputStream oos = new ObjectInputStream(new BufferedInputStream(fout));
+    final FileInputStream fout = new FileInputStream(new File(context.getFilesDir(), "namedb.dat"));
+    final ObjectInputStream oos = new ObjectInputStream(new BufferedInputStream(fout));
     mapdb = (HashMap<String, String>) oos.readObject();
     oos.close();
     fout.close();

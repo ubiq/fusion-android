@@ -10,8 +10,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.ubiqsmart.data.TransactionDisplay;
-import rehanced.com.ubiqsmart.R;
+import com.ubiqsmart.repository.data.TransactionDisplay;
+import com.ubiqsmart.R;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

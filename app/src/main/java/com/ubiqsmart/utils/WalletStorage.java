@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import com.ubiqsmart.activities.MainActivity;
-import com.ubiqsmart.data.FullWallet;
-import com.ubiqsmart.data.WatchWallet;
+import com.ubiqsmart.ui.main.MainActivity;
+import com.ubiqsmart.repository.data.FullWallet;
+import com.ubiqsmart.repository.data.WatchWallet;
 import com.ubiqsmart.interfaces.StorableWallet;
 import org.json.JSONException;
 import org.web3j.crypto.CipherException;
@@ -22,12 +22,15 @@ import java.util.*;
 
 public class WalletStorage {
 
-  private ArrayList<StorableWallet> mapdb;
   private static WalletStorage instance;
+
+  private List<StorableWallet> mapdb;
   private String walletToExport; // Used as temp if users wants to export but still needs to grant write permission
 
   public static WalletStorage getInstance(Context context) {
-    if (instance == null) instance = new WalletStorage(context);
+    if (instance == null) {
+      instance = new WalletStorage(context);
+    }
     return instance;
   }
 
@@ -36,10 +39,9 @@ public class WalletStorage {
       load(context);
     } catch (Exception e) {
       e.printStackTrace();
-      mapdb = new ArrayList<StorableWallet>();
+      mapdb = new ArrayList<>();
     }
-    if (mapdb.size() == 0) // Try to find local wallets
-    {
+    if (mapdb.size() == 0) { // Try to find local wallets
       checkForWallets(context);
     }
   }
@@ -52,7 +54,7 @@ public class WalletStorage {
     return true;
   }
 
-  public synchronized ArrayList<StorableWallet> get() {
+  public synchronized List<StorableWallet> get() {
     return mapdb;
   }
 
@@ -125,22 +127,22 @@ public class WalletStorage {
       ExternalStorageHandler.askForPermissionRead(c);
       return;
     }
-    File[] wallets = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Lunary/").listFiles();
+    final File[] wallets = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Lunary/").listFiles();
     if (wallets == null) {
       Dialogs.noImportWalletsFound(c);
       return;
     }
-    ArrayList<File> foundImports = new ArrayList<File>();
-    for (int i = 0; i < wallets.length; i++) {
-      if (wallets[i].isFile()) {
-        if (wallets[i].getName().startsWith("UTC") && wallets[i].getName().length() >= 40) {
-          foundImports.add(wallets[i]); // Mist naming
-        } else if (wallets[i].getName().length() >= 40) {
-          int position = wallets[i].getName().indexOf(".json");
+    final List<File> foundImports = new ArrayList<File>();
+    for (File wallet : wallets) {
+      if (wallet.isFile()) {
+        if (wallet.getName().startsWith("UTC") && wallet.getName().length() >= 40) {
+          foundImports.add(wallet); // Mist naming
+        } else if (wallet.getName().length() >= 40) {
+          int position = wallet.getName().indexOf(".json");
           if (position < 0) continue;
-          String addr = wallets[i].getName().substring(0, position);
-          if (addr.length() == 40 && !mapdb.contains("0x" + wallets[i].getName())) {
-            foundImports.add(wallets[i]); // Exported with Lunary
+          final String addr = wallet.getName().substring(0, position);
+          if (addr.length() == 40 && !mapdb.contains("0x" + wallet.getName())) {
+            foundImports.add(wallet); // Exported with Lunary
           }
         }
       }
@@ -160,10 +162,9 @@ public class WalletStorage {
     return exportWallet(c, false);
   }
 
-  public void importWallets(Context c, ArrayList<File> toImport) throws Exception {
+  public void importWallets(final Context c, final List<File> toImport) throws Exception {
     for (int i = 0; i < toImport.size(); i++) {
-
-      String address = stripWalletName(toImport.get(i).getName());
+      final String address = stripWalletName(toImport.get(i).getName());
       if (address.length() == 40) {
         copyFile(toImport.get(i), new File(c.getFilesDir(), address));
         toImport.get(i).delete();
@@ -174,26 +175,35 @@ public class WalletStorage {
         Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object
         mediaScannerIntent.setData(fileContentUri);
         c.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
-
       }
     }
   }
 
   public static String stripWalletName(String s) {
-    if (s.lastIndexOf("--") > 0) s = s.substring(s.lastIndexOf("--") + 2);
-    if (s.endsWith(".json")) s = s.substring(0, s.indexOf(".json"));
+    if (s.lastIndexOf("--") > 0) {
+      s = s.substring(s.lastIndexOf("--") + 2);
+    }
+    if (s.endsWith(".json")) {
+      s = s.substring(0, s.indexOf(".json"));
+    }
     return s;
   }
 
   private boolean exportWallet(Activity c, boolean already) {
-    if (walletToExport == null) return false;
-    if (walletToExport.startsWith("0x")) walletToExport = walletToExport.substring(2);
+    if (walletToExport == null) {
+      return false;
+    }
+    if (walletToExport.startsWith("0x")) {
+      walletToExport = walletToExport.substring(2);
+    }
 
     if (ExternalStorageHandler.hasPermission(c)) {
-      File folder = new File(Environment.getExternalStorageDirectory(), "Lunary");
-      if (!folder.exists()) folder.mkdirs();
+      final File folder = new File(Environment.getExternalStorageDirectory(), "Lunary");
+      if (!folder.exists()) {
+        folder.mkdirs();
+      }
 
-      File storeFile = new File(folder, walletToExport + ".json");
+      final File storeFile = new File(folder, walletToExport + ".json");
       try {
         copyFile(new File(c.getFilesDir(), walletToExport), storeFile);
       } catch (IOException e) {
@@ -201,8 +211,8 @@ public class WalletStorage {
       }
 
       // fix, otherwise won't show up via USB
-      Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-      Uri fileContentUri = Uri.fromFile(storeFile); // With 'permFile' being the File object
+      final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+      final Uri fileContentUri = Uri.fromFile(storeFile); // With 'permFile' being the File object
       mediaScannerIntent.setData(fileContentUri);
       c.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
       return true;
@@ -220,31 +230,37 @@ public class WalletStorage {
     try {
       inChannel.transferTo(0, inChannel.size(), outChannel);
     } finally {
-      if (inChannel != null) inChannel.close();
-      if (outChannel != null) outChannel.close();
+      if (inChannel != null) {
+        inChannel.close();
+      }
+      if (outChannel != null) {
+        outChannel.close();
+      }
     }
   }
 
   public Credentials getFullWallet(Context context, String password, String wallet) throws IOException, JSONException, CipherException {
-    if (wallet.startsWith("0x")) wallet = wallet.substring(2, wallet.length());
+    if (wallet.startsWith("0x")) {
+      wallet = wallet.substring(2, wallet.length());
+    }
     return WalletUtils.loadCredentials(password, new File(context.getFilesDir(), wallet));
   }
 
   public synchronized void save(Context context) {
-    FileOutputStream fout;
+    final FileOutputStream fout;
     try {
       fout = new FileOutputStream(new File(context.getFilesDir(), "wallets.dat"));
-      ObjectOutputStream oos = new ObjectOutputStream(fout);
+      final ObjectOutputStream oos = new ObjectOutputStream(fout);
       oos.writeObject(mapdb);
       oos.close();
       fout.close();
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
   }
 
   @SuppressWarnings("unchecked") public synchronized void load(Context context) throws IOException, ClassNotFoundException {
-    FileInputStream fout = new FileInputStream(new File(context.getFilesDir(), "wallets.dat"));
-    ObjectInputStream oos = new ObjectInputStream(new BufferedInputStream(fout));
+    final FileInputStream fout = new FileInputStream(new File(context.getFilesDir(), "wallets.dat"));
+    final ObjectInputStream oos = new ObjectInputStream(new BufferedInputStream(fout));
     mapdb = (ArrayList<StorableWallet>) oos.readObject();
     oos.close();
     fout.close();

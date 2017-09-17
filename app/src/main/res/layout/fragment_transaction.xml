@@ -4,8 +4,7 @@
   xmlns:fab="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="#FFFFFF">
+  android:layout_height="match_parent">
 
   <FrameLayout
     android:layout_width="match_parent"
@@ -47,6 +46,7 @@
         <ImageView
           android:layout_width="100dp"
           android:layout_height="100dp"
+          android:contentDescription="@null"
           android:src="@drawable/etherkont" />
 
         <TextView
@@ -59,7 +59,7 @@
           android:gravity="center"
           android:text="@string/no_tx_history"
           android:textColor="#99323232"
-          android:textSize="15dp" />
+          android:textSize="15sp" />
 
       </LinearLayout>
 

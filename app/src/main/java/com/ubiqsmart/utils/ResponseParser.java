@@ -1,10 +1,10 @@
 package com.ubiqsmart.utils;
 
 import android.content.Context;
-import com.ubiqsmart.data.TokenDisplay;
-import com.ubiqsmart.data.TransactionDisplay;
-import com.ubiqsmart.data.WalletDisplay;
-import com.ubiqsmart.data.WatchWallet;
+import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.TransactionDisplay;
+import com.ubiqsmart.repository.data.WalletDisplay;
+import com.ubiqsmart.repository.data.WatchWallet;
 import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.network.EtherscanAPI;

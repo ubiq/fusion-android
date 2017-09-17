@@ -332,6 +332,9 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="wallet">Wallet</string>
   <string name="transactions">Transactions</string>
   <string name="last_seven_days">Last 7 Days</string>
+  <string name="invalid_wallet">Invalid Ethereum address!</string>
+  <string name="locked_for_one_minute">Locked for 1 minute!</string>
+  <string name="zero_ubiqs">0.0000 UBQ</string>
 
 
 </resources>

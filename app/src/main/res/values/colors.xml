@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="primary">#00ea90</color>
-  <color name="primary_dark">#00b662</color>
+  <color name="primary">#333333</color>
+  <color name="primary_dark">#0c0c0c</color>
+  <color name="primary_light_color">#5c5c5c</color>
+  <color name="secondary_color">#00ea90</color>
+  <color name="secondary_light_color">#67ffc1</color>
+  <color name="secondary_dark_color">#00b662</color>
+  <color name="primary_text_color">#ffffff</color>
+  <color name="secondary_text_color">#000000</color>
 
-  <color name="accent">#535353</color><!-- -->
+  <color name="accent">@color/secondary_color</color>
   <color name="accent_2">#9cacbf</color>
-  <color name="tab_indicator">#d2d7de</color>
+
+  <color name="background_light">#fafafa</color>
+  <color name="background_super_dark">#ff292929</color>
+
+  <color name="hint_disabled_dark">#43000000</color>
 
   <color name="ether_received">#d22a8031</color>
   <color name="ether_spent">#d2a63f40</color>

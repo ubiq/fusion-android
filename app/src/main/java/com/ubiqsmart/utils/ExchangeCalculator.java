@@ -6,8 +6,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.ubiqsmart.data.CurrencyEntry;
-import com.ubiqsmart.data.TokenDisplay;
+import com.ubiqsmart.repository.data.CurrencyEntry;
+import com.ubiqsmart.repository.data.TokenDisplay;
 import com.ubiqsmart.interfaces.NetworkUpdateListener;
 
 import java.io.*;
@@ -31,7 +31,9 @@ public class ExchangeCalculator {
   }
 
   public static ExchangeCalculator getInstance() {
-    if (instance == null) instance = new ExchangeCalculator();
+    if (instance == null) {
+      instance = new ExchangeCalculator();
+    }
     return instance;
   }
 

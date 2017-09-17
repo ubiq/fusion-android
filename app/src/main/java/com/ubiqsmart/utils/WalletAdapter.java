@@ -10,10 +10,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.ubiqsmart.data.TransactionDisplay;
+import com.ubiqsmart.repository.data.TransactionDisplay;
 import me.grantland.widget.AutofitTextView;
-import rehanced.com.ubiqsmart.R;
-import com.ubiqsmart.data.WalletDisplay;
+import com.ubiqsmart.R;
+import com.ubiqsmart.repository.data.WalletDisplay;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
   private View.OnCreateContextMenuListener contextMenuListener;
   private int position;
 
-  public class MyViewHolder extends RecyclerView.ViewHolder {
+  public static class MyViewHolder extends RecyclerView.ViewHolder {
 
     public TextView walletname, walletbalance;
     public ImageView addressimage, type;
@@ -35,12 +35,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
 
     public MyViewHolder(View view) {
       super(view);
-      walletaddress = (AutofitTextView) view.findViewById(R.id.walletaddress);
-      walletname = (TextView) view.findViewById(R.id.walletname);
-      walletbalance = (TextView) view.findViewById(R.id.walletbalance);
-      addressimage = (ImageView) view.findViewById(R.id.addressimage);
-      type = (ImageView) view.findViewById(R.id.type);
-      container = (LinearLayout) view.findViewById(R.id.container);
+
+      walletaddress = view.findViewById(R.id.walletaddress);
+      walletname = view.findViewById(R.id.walletname);
+      walletbalance = view.findViewById(R.id.walletbalance);
+      addressimage = view.findViewById(R.id.addressimage);
+      type = view.findViewById(R.id.type);
+      container = view.findViewById(R.id.container);
     }
 
     public void clearAnimation() {

@@ -49,14 +49,6 @@ public final class QREncoder {
     encoded = encodeContents(data, bundle, type, format);
   }
 
-  public String getContents() {
-    return contents;
-  }
-
-  public String getDisplayContents() {
-    return displayContents;
-  }
-
   public String getTitle() {
     return title;
   }

@@ -4,7 +4,7 @@
     android:id="@+id/action_price"
     android:icon="@drawable/ic_price"
     android:enabled="true"
-    android:title="@string/charts" />
+    android:title="@string/exchange" />
   <item
     android:id="@+id/action_wallet"
     android:icon="@drawable/ic_wallet"

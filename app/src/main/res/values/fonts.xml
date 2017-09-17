@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="regular_font">fonts/Walkway_SemiBold.ttf</string>
+  <string name="bold_font">fonts/Walkway_Bold.ttf</string>
+</resources>

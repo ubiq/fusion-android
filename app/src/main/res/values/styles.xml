@@ -1,36 +1,47 @@
 <resources>
 
-  <style name="UbiqTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    <item name="colorPrimary">@color/primary</item>
-    <item name="colorPrimaryDark">@color/primary_dark</item>
-    <item name="colorAccent">@color/accent</item>
-
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-
+  <style name="Ubiq" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:colorPrimary">@color/primary</item>
+    <item name="android:colorPrimaryDark">@color/primary_dark</item>
+    <item name="android:colorBackground">@color/background_light</item>
+    <item name="android:textColorPrimary">@color/primary_text_color</item>
+    <item name="android:textColorSecondary">@color/secondary_text_color</item>
+    <item name="android:colorAccent">@color/accent</item>
+    <item name="android:navigationBarColor">@color/background_super_dark</item>
+    <item name="android:statusBarColor">@color/background_super_dark</item>
+    <item name="android:textColorHint">@color/hint_disabled_dark</item>
+    <item name="android:windowBackground">@color/background_light</item>
+    <item name="android:colorEdgeEffect">@color/secondary_light_color</item>
+    <item name="android:windowAllowEnterTransitionOverlap">true</item>
+    <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    <item name="android:windowSharedElementsUseOverlay">false</item>
     <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+    <item name="android:actionBarStyle">@style/ThemeOverlay.Ubiq.Dark</item>
     <item name="patternViewStyle">@style/PatternView</item>
   </style>
 
-  <style name="UbiqTheme.NoActionBar2">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-    <item name="patternViewStyle">@style/PatternView</item>
+  <style name="Ubiq.Splash">
+    <item name="android:windowBackground">@drawable/background_splash</item>
   </style>
 
-  <style name="UbiqTheme.AppLockActivity" parent="UbiqTheme.NoActionBar2">
-    <item name="android:windowBackground">@color/primary</item>
+  <style name="Ubiq.AppLock">
+    <item name="android:windowBackground">@color/background_super_dark</item>
   </style>
 
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="ThemeOverlay.Ubiq.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+  <style name="ThemeOverlay.Ubiq" parent="" />
 
-  <style name="TextAppearance.ToolbarTitleSmallCaps" parent="@android:style/TextAppearance.Material.Widget.ActionBar.Title">
-    <!--<item name="android:textColor">@color/text_primary_light</item>-->
-    <item name="fontPath">Walkway_Bold.ttf</item>
-    <item name="android:fontFeatureSettings">smcp</item>
-    <item name="android:letterSpacing">0.2</item>
+  <style name="ThemeOverlay.Ubiq.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <item name="android:background">@color/background_super_dark</item>
+    <item name="titleTextStyle">@style/TextAppearance.Ubiq.ToolbarTitle</item>
+  </style>
+
+  <style name="TextAppearance.Ubiq.ToolbarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <item name="fontPath">@string/bold_font</item>
+    <item name="android:letterSpacing">0.3</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/primary_text_color</item>
   </style>
 
   <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -43,6 +54,12 @@
     <item name="colorAccent">#fff</item>
   </style>
 
+  <style name="Widget.Ubiq" parent="android:Widget" />
+
+  <style name="Widget.Ubiq.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+    <item name="fontPath">@string/regular_font</item>
+  </style>
+
   <style name="Base.PatternView" parent="">
     <item name="pl_rowCount">3</item>
     <item name="pl_columnCount">3</item>
@@ -51,13 +68,13 @@
 
   <style name="PatternView" parent="Base.PatternView">
     <item name="pl_regularColor">#FFFFFF</item>
-    <item name="pl_errorColor">#cf4419</item>
+    <item name="pl_errorColor">#d73300</item>
     <item name="pl_successColor">#FFFFFF</item>
   </style>
 
   <style name="PatternView.Light" parent="Base.PatternView">
     <item name="pl_regularColor">?colorControlNormal</item>
-    <item name="pl_errorColor">#fff4511e</item>
+    <item name="pl_errorColor">#d73300</item>
     <item name="pl_successColor">?colorControlActivated</item>
   </style>
 </resources>

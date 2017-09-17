@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item android:drawable="@color/background_super_dark" />
+
+  <item
+    android:drawable="@drawable/as_ubiq_splash_background"
+    android:gravity="center" />
+
+</layer-list>

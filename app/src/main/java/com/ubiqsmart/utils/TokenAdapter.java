@@ -10,8 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.ubiqsmart.data.TokenDisplay;
-import rehanced.com.ubiqsmart.R;
+import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.R;
 
 import java.util.*;
 
@@ -24,19 +24,22 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.MyViewHolder
   private View.OnCreateContextMenuListener contextMenuListener;
   private int position;
 
-  public class MyViewHolder extends RecyclerView.ViewHolder {
+  public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView name, nativebalance, etherbalance, shorty;
+    public TextView name;
+    public TextView nativebalance;
+    public TextView etherbalance;
     public TextView image;
     public LinearLayout container;
 
     public MyViewHolder(View view) {
       super(view);
-      nativebalance = (TextView) view.findViewById(R.id.nativebalance);
-      name = (TextView) view.findViewById(R.id.tokenname);
-      image = (TextView) view.findViewById(R.id.addressimage);
-      etherbalance = (TextView) view.findViewById(R.id.etherbalance);
-      container = (LinearLayout) view.findViewById(R.id.container);
+
+      nativebalance = view.findViewById(R.id.nativebalance);
+      name = view.findViewById(R.id.tokenname);
+      image = view.findViewById(R.id.addressimage);
+      etherbalance = view.findViewById(R.id.etherbalance);
+      container = view.findViewById(R.id.container);
     }
 
     public void clearAnimation() {

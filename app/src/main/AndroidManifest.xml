@@ -27,10 +27,10 @@
     android:name="android.hardware.camera"
     android:required="false" />
   <uses-feature
-    android:name="android.hardware.fingerprint"
+    android:name="android.hardware.camera.autofocus"
     android:required="false" />
   <uses-feature
-    android:name="android.hardware.camera.autofocus"
+    android:name="android.hardware.fingerprint"
     android:required="false" />
   <uses-feature
     android:name="android.hardware.telephony"
@@ -51,16 +51,18 @@
   <supports-screens android:anyDensity="true" />
 
   <application
-    android:name="com.ubiqsmart.activities.App"
+    android:name="com.ubiqsmart.App"
     android:allowBackup="true"
+    android:fullBackupContent="false"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:largeHeap="true"
     android:supportsRtl="true"
-    android:theme="@style/UbiqTheme">
+    android:theme="@style/Ubiq">
     <activity
-      android:name="com.ubiqsmart.activities.MainActivity"
-      android:configChanges="orientation|screenSize">
+      android:name=".ui.splash.SplashActivity"
+      android:noHistory="true"
+      android:theme="@style/Ubiq.Splash">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -68,58 +70,53 @@
       </intent-filter>
     </activity>
 
-    <activity
-      android:name="com.ubiqsmart.activities.AddressDetailActivity"
-      android:configChanges="orientation|screenSize"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
+    <activity android:name="com.ubiqsmart.ui.onboarding.AppIntroActivity" />
 
     <activity
-      android:name="com.ubiqsmart.activities.QRScanActivity"
-      android:configChanges="orientation|screenSize"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
+      android:name="com.ubiqsmart.ui.main.MainActivity"
+      android:configChanges="orientation|screenSize" />
 
     <activity
-      android:name="com.ubiqsmart.activities.SettingsActivity"
+      android:name="com.ubiqsmart.ui.detail.AddressDetailActivity"
+      android:configChanges="orientation|screenSize" />
+
+    <activity
+      android:name="com.ubiqsmart.ui.scanqr.QRScanActivity"
+      android:configChanges="orientation|screenSize" />
+
+    <activity
+      android:name="com.ubiqsmart.ui.settings.SettingsActivity"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/title_activity_settings" />
+
+    <activity
+      android:name="com.ubiqsmart.ui.wallet.WalletGenActivity"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/title_activity_settings" />
+
+    <activity
+      android:name="com.ubiqsmart.ui.send.RequestEtherActivity"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/title_activity_settings" />
+
+    <activity
+      android:name="com.ubiqsmart.ui.send.SendActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
-      android:theme="@style/UbiqTheme" />
-
-    <activity
-      android:name="com.ubiqsmart.activities.WalletGenActivity"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
-
-    <activity
-      android:name="com.ubiqsmart.activities.RequestEtherActivity"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
-
-    <activity
-      android:name="com.ubiqsmart.activities.SendActivity"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings"
-      android:theme="@style/UbiqTheme.NoActionBar2"
       android:windowSoftInputMode="stateHidden|adjustResize" />
 
-    <activity
-      android:name="com.ubiqsmart.activities.AppIntroActivity"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
 
     <activity
-      android:name="com.ubiqsmart.activities.AppLockActivity"
+      android:name="com.ubiqsmart.ui.base.AppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
-      android:screenOrientation="portrait"
-      android:theme="@style/UbiqTheme.NoActionBar2" />
+      android:screenOrientation="portrait" />
 
     <activity
-      android:name="com.ubiqsmart.activities.SetAppLockActivity"
+      android:name="com.ubiqsmart.ui.settings.SetAppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
-      android:screenOrientation="portrait"
-      android:theme="@style/UbiqTheme.NoActionBar2">
+      android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="rehanced.com.simpleetherwallet.activities.SetAppLockActivity" />
         <category android:name="android.intent.category.DEFAULT" />

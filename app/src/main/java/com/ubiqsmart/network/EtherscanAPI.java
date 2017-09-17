@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.interfaces.StorableWallet;
+import com.ubiqsmart.utils.Key;
+import com.ubiqsmart.utils.RequestCache;
+import com.ubiqsmart.utils.TokenIconCache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -14,10 +17,6 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import rehanced.com.ubiqsmart.APIKey;
-import com.ubiqsmart.utils.Key;
-import com.ubiqsmart.utils.RequestCache;
-import com.ubiqsmart.utils.TokenIconCache;
 
 import java.io.*;
 import java.util.*;
@@ -30,7 +29,9 @@ public class EtherscanAPI {
   private static EtherscanAPI instance;
 
   public static EtherscanAPI getInstance() {
-    if (instance == null) instance = new EtherscanAPI();
+    if (instance == null) {
+      instance = new EtherscanAPI();
+    }
     return instance;
   }
 
@@ -46,7 +47,7 @@ public class EtherscanAPI {
   /**
    * Retrieve all internal transactions from address like contract calls, for normal transactions @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getNormalTransactions() )
    * @param address Ether address
-   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.FragmentTransactions#update() or @see rehanced.com.simpleetherwallet.fragments.FragmentTransactionsAll#update()
+   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    * @throws IOException Network exceptions
    */
@@ -72,7 +73,7 @@ public class EtherscanAPI {
   /**
    * Retrieve all normal ether transactions from address (excluding contract calls etc, @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getInternalTransactions() )
    * @param address Ether address
-   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.FragmentTransactions#update() or @see rehanced.com.simpleetherwallet.fragments.FragmentTransactionsAll#update()
+   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    * @throws IOException Network exceptions
    */
@@ -104,7 +105,7 @@ public class EtherscanAPI {
   /**
    * Get token balances via ethplorer.io
    * @param address Ether address
-   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.FragmentDetailOverview#update()
+   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.DetailOverviewFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    * @throws IOException Network exceptions
    */
@@ -126,7 +127,7 @@ public class EtherscanAPI {
    * @param c Application context, used to load TokenIconCache if reinstanced
    * @param tokenName Name of token
    * @param lastToken Boolean defining whether this is the last icon to download or not. If so callback is called to refresh recyclerview (notifyDataSetChanged)
-   * @param callback Callback to @see rehanced.com.simpleetherwallet.fragments.FragmentDetailOverview#onLastIconDownloaded()
+   * @param callback Callback to @see rehanced.com.simpleetherwallet.fragments.DetailOverviewFragment#onLastIconDownloaded()
    * @throws IOException Network exceptions
    */
   public void loadTokenIcon(final Context c, String tokenName, final boolean lastToken, final LastIconLoaded callback) throws IOException {
@@ -191,7 +192,7 @@ public class EtherscanAPI {
   }
 
   private EtherscanAPI() {
-    token = new Key(APIKey.API_KEY).toString();
+    token = new Key("9ZUSL64LS9POL3J2MVKR0ES1MBQHSFUOKK").toString();
   }
 
 }

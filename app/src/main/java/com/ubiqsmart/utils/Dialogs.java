@@ -19,14 +19,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ubiqsmart.activities.AddressDetailActivity;
-import com.ubiqsmart.activities.MainActivity;
-import com.ubiqsmart.data.TokenDisplay;
-import com.ubiqsmart.data.TransactionDisplay;
-import com.ubiqsmart.data.WatchWallet;
-import com.ubiqsmart.fragments.FragmentWallets;
+import com.ubiqsmart.ui.detail.AddressDetailActivity;
+import com.ubiqsmart.ui.main.MainActivity;
+import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.TransactionDisplay;
+import com.ubiqsmart.repository.data.WatchWallet;
+import com.ubiqsmart.ui.main.WalletsFragment;
 import me.grantland.widget.AutofitTextView;
-import rehanced.com.ubiqsmart.R;
+import com.ubiqsmart.R;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -37,20 +37,20 @@ public class Dialogs {
   public static void showTokenetails(final Activity c, final TokenDisplay tok) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_token_detail, true).show();
     View view = dialog.getCustomView();
-    ImageView contractIcon = (ImageView) view.findViewById(R.id.my_addressicon);
-    TextView tokenname = (TextView) view.findViewById(R.id.walletname);
-    AutofitTextView contractAddr = (AutofitTextView) view.findViewById(R.id.walletaddr);
+    ImageView contractIcon = view.findViewById(R.id.my_addressicon);
+    TextView tokenname = view.findViewById(R.id.walletname);
+    AutofitTextView contractAddr = view.findViewById(R.id.walletaddr);
 
-    TextView supply = (TextView) view.findViewById(R.id.supply);
-    TextView priceUSD = (TextView) view.findViewById(R.id.price);
-    TextView priceETH = (TextView) view.findViewById(R.id.price2);
-    TextView capUSD = (TextView) view.findViewById(R.id.cap);
-    TextView capETH = (TextView) view.findViewById(R.id.cap2);
-    TextView holders = (TextView) view.findViewById(R.id.holders);
-    TextView digits = (TextView) view.findViewById(R.id.digits);
-    TextView created = (TextView) view.findViewById(R.id.timestamp);
+    TextView supply = view.findViewById(R.id.supply);
+    TextView priceUSD = view.findViewById(R.id.price);
+    TextView priceETH = view.findViewById(R.id.price2);
+    TextView capUSD = view.findViewById(R.id.cap);
+    TextView capETH = view.findViewById(R.id.cap2);
+    TextView holders = view.findViewById(R.id.holders);
+    TextView digits = view.findViewById(R.id.digits);
+    TextView created = view.findViewById(R.id.timestamp);
 
-    LinearLayout from = (LinearLayout) view.findViewById(R.id.from);
+    LinearLayout from = view.findViewById(R.id.from);
 
     from.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -80,26 +80,26 @@ public class Dialogs {
   public static void showTXDetails(final Activity c, final TransactionDisplay tx) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_tx_detail, true).show();
     View view = dialog.getCustomView();
-    ImageView myicon = (ImageView) view.findViewById(R.id.my_addressicon);
-    ImageView othericon = (ImageView) view.findViewById(R.id.other_addressicon);
-    TextView myAddressname = (TextView) view.findViewById(R.id.walletname);
-    TextView otherAddressname = (TextView) view.findViewById(R.id.other_address);
-    AutofitTextView myAddressaddr = (AutofitTextView) view.findViewById(R.id.walletaddr);
-    AutofitTextView otherAddressaddr = (AutofitTextView) view.findViewById(R.id.other_addressaddr);
-    TextView amount = (TextView) view.findViewById(R.id.amount);
+    ImageView myicon = view.findViewById(R.id.my_addressicon);
+    ImageView othericon = view.findViewById(R.id.other_addressicon);
+    TextView myAddressname = view.findViewById(R.id.walletname);
+    TextView otherAddressname = view.findViewById(R.id.other_address);
+    AutofitTextView myAddressaddr = view.findViewById(R.id.walletaddr);
+    AutofitTextView otherAddressaddr = view.findViewById(R.id.other_addressaddr);
+    TextView amount = view.findViewById(R.id.amount);
 
-    TextView month = (TextView) view.findViewById(R.id.month);
-    TextView gasUsed = (TextView) view.findViewById(R.id.gasused);
-    TextView blocknr = (TextView) view.findViewById(R.id.blocknr);
-    TextView gasPrice = (TextView) view.findViewById(R.id.gasPrice);
-    TextView nonce = (TextView) view.findViewById(R.id.nonce);
-    TextView txcost = (TextView) view.findViewById(R.id.txcost);
-    TextView txcost2 = (TextView) view.findViewById(R.id.txcost2);
-    Button openInBrowser = (Button) view.findViewById(R.id.openinbrowser);
-    LinearLayout from = (LinearLayout) view.findViewById(R.id.from);
-    LinearLayout to = (LinearLayout) view.findViewById(R.id.to);
-    TextView amountfiat = (TextView) view.findViewById(R.id.amountfiat);
-    TextView errormsg = (TextView) view.findViewById(R.id.errormsg);
+    TextView month = view.findViewById(R.id.month);
+    TextView gasUsed = view.findViewById(R.id.gasused);
+    TextView blocknr = view.findViewById(R.id.blocknr);
+    TextView gasPrice = view.findViewById(R.id.gasPrice);
+    TextView nonce = view.findViewById(R.id.nonce);
+    TextView txcost = view.findViewById(R.id.txcost);
+    TextView txcost2 = view.findViewById(R.id.txcost2);
+    Button openInBrowser = view.findViewById(R.id.openinbrowser);
+    LinearLayout from = view.findViewById(R.id.from);
+    LinearLayout to = view.findViewById(R.id.to);
+    TextView amountfiat = view.findViewById(R.id.amountfiat);
+    TextView errormsg = view.findViewById(R.id.errormsg);
 
     from.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -202,9 +202,9 @@ public class Dialogs {
           final boolean suc = WalletStorage.getInstance(c).add(new WatchWallet(input.getText().toString()), c);
           new Handler().postDelayed(new Runnable() {
             @Override public void run() {
-              if (c.fragments != null && c.fragments.get(1) != null) {
+              if (c.getFragments() != null && c.getFragments().get(1) != null) {
                 try {
-                  ((FragmentWallets) c.fragments.get(1)).update();
+                  ((WalletsFragment) c.getFragments().get(1)).update();
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
@@ -245,7 +245,7 @@ public class Dialogs {
 
   }
 
-  public static void importWallets(final MainActivity c, final ArrayList<File> files) {
+  public static void importWallets(final MainActivity c, final List<File> files) {
     String addresses = "";
     for (int i = 0; i < files.size() && i < 3; i++)
       addresses += WalletStorage.stripWalletName(files.get(i).getName()) + "\n";
@@ -264,7 +264,7 @@ public class Dialogs {
         try {
           WalletStorage.getInstance(c).importWallets(c, files);
           c.snackError("Wallet" + (files.size() > 1 ? "s" : "") + " successfully imported!");
-          if (c.fragments != null && c.fragments.get(1) != null) ((FragmentWallets) c.fragments.get(1)).update();
+          if (c.getFragments() != null && c.getFragments().get(1) != null) ((WalletsFragment) c.getFragments().get(1)).update();
         } catch (Exception e) {
           c.snackError("Error while importing wallets");
           e.printStackTrace();

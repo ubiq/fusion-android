@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import com.ubiqsmart.activities.MainActivity;
+import com.ubiqsmart.ui.main.MainActivity;
 import com.ubiqsmart.network.EtherscanAPI;
 import com.ubiqsmart.utils.ExchangeCalculator;
 import okhttp3.Call;
@@ -18,7 +18,7 @@ import org.spongycastle.util.encoders.Hex;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.methods.request.RawTransaction;
-import rehanced.com.ubiqsmart.R;
+import com.ubiqsmart.R;
 import com.ubiqsmart.utils.WalletStorage;
 
 import java.io.*;

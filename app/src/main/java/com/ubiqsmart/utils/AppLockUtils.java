@@ -11,7 +11,7 @@ public class AppLockUtils {
 
   public static boolean hasDeviceFingerprintSupport(Context context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+      final FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
       return ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
           && fingerprintManager.isHardwareDetected()
           && fingerprintManager.hasEnrolledFingerprints();

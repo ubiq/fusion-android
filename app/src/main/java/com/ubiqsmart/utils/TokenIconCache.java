@@ -5,20 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 public class TokenIconCache {
 
-  private HashMap<String, byte[]> cache;
+  private Map<String, byte[]> cache;
   private static TokenIconCache instance;
 
   public static TokenIconCache getInstance(Context c) {
@@ -29,16 +21,17 @@ public class TokenIconCache {
   private TokenIconCache(Context c) {
     try {
       load(c);
-
     } catch (Exception e) {
-      cache = new HashMap<String, byte[]>();
+      cache = new HashMap<>();
     }
     Log.d("iconmap", cache.toString());
   }
 
   public Bitmap get(String s) {
-    if (cache.get(s) == null) return null;
-    BitmapFactory.Options options = new BitmapFactory.Options();
+    if (cache.get(s) == null) {
+      return null;
+    }
+    final BitmapFactory.Options options = new BitmapFactory.Options();
     options.inSampleSize = calculateInSampleSize(options, 20, 31);
     return BitmapFactory.decodeByteArray(cache.get(s), 0, cache.get(s).length, options);
   }
@@ -95,7 +88,9 @@ public class TokenIconCache {
       inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File(activity.getFilesDir(), "tokeniconcache.dat"))));
       cache = (HashMap<String, byte[]>) inputStream.readObject();
     } finally {
-      if (inputStream != null) inputStream.close();
+      if (inputStream != null) {
+        inputStream.close();
+      }
     }
   }
 

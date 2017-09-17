@@ -73,7 +73,6 @@
     <item>24</item>
   </string-array>
 
-
   <string name="notification_title">Transaction Received</string>
 
   <string-array name="multi_select_list_preference_default_value" />
@@ -205,7 +204,7 @@
   <string name="notification_click_to_view">Click to view</string>
   <string name="ether_and_token">Ether and Token</string>
   <string name="prefs_lock_with_pw">Lock with Password</string>
-  <string name="prefs_lock_with_pw_sum">If enabled Lunary will ask you for a password before launching the app</string>
+  <string name="prefs_lock_with_pw_sum">If enabled Ubiq will ask you for a password before launching the app</string>
   <string name="prefs_set_pw">Set Password</string>
   <string name="prefs_set_pw_sum">Specify your login pattern</string>
   <string name="prefs_cat_security">Security</string>
@@ -240,7 +239,7 @@
   <string name="setting_cat_advanced">Advanced</string>
   <string name="password_in_clear_text">Show Password in clear text</string>
   <string name="lunary_wallet">Lunary Wallet</string>
-  <string name="charts">Charts</string>
+  <string name="exchange">Exchange</string>
   <string name="wallet">Wallet</string>
   <string name="transactions">Transactions</string>
 
@@ -337,6 +336,10 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="unconfirmed">Unconfirmed</string>
   <string name="locked_one_minute">Locked for 1 minute!</string>
   <string name="last_seven_days">Last 7 Days</string>
+  <string name="invalid_wallet">Invalid Ethereum address!</string>
+  <string name="invalid_private_key">Invalid private key!</string>
+  <string name="locked_for_one_minute">Locked for 1 minute!</string>
+  <string name="zero_ubiqs">0.0000 UBQ</string>
 
 
 </resources>

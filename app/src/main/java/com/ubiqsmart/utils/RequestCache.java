@@ -1,6 +1,6 @@
 package com.ubiqsmart.utils;
 
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Used for temporary caching of responses. Clears once android garbage collects
@@ -10,13 +10,15 @@ public class RequestCache {
   public static final String TYPE_TOKEN = "TOKEN_";
   public static final String TYPE_TXS_NORMAL = "TXS_NORMAL_";
   public static final String TYPE_TXS_INTERNAL = "TXS_INTERNAL_";
-  public static final String TYPE_BALANCES = "BALANCES_";
 
-  private HashMap<String, String> map = new HashMap<String, String>();
   private static RequestCache instance;
 
+  private Map<String, String> map = new HashMap<>();
+
   public static RequestCache getInstance() {
-    if (instance == null) instance = new RequestCache();
+    if (instance == null) {
+      instance = new RequestCache();
+    }
     return instance;
   }
 

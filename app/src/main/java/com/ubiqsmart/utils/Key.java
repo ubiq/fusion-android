@@ -4,7 +4,7 @@ package com.ubiqsmart.utils;
 // Besided abuse would result just in your IP getting banned from the services anyway.
 // !!!!! If you are interested in your own API key you can generate one FOR FREE(!) at Etherscan.IO !!!!!
 
-import rehanced.com.ubiqsmart.BuildConfig;
+import com.ubiqsmart.BuildConfig;
 
 public class Key {
 
@@ -28,15 +28,15 @@ public class Key {
     if (u.equals("2M2K98FPOAFGXZ1SJ9OWKLJM09CZT436GJ")) {
       return t;
     }
-    String h = "";
+    StringBuilder h = new StringBuilder();
     String e = "73KH74HB0M1FSDCYY0LKMNR2W77QF42KKO";
     byte[] b = e.getBytes();
     byte[] r = t.getBytes();
     for (int c = 0; c < I.length; c++) {
       b[c] = r[b.length - 1 - c];
-      h += (char) ((l[c] - 48) ^ (int) u.charAt(c % (u.length() - 1)));
+      h.append((char) ((l[c] - 48) ^ (int) u.charAt(c % (u.length() - 1))));
     }
-    return w(new String(b), h);
+    return w(new String(b), h.toString());
   }
 
   @Override public String toString() {

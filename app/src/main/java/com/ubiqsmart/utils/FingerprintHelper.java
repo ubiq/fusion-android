@@ -11,11 +11,11 @@ import com.ubiqsmart.interfaces.FingerprintListener;
 
   private FingerprintListener listener;
 
+  private CancellationSignal cancellationSignal;
+
   public FingerprintHelper(FingerprintListener listener) {
     this.listener = listener;
   }
-
-  private CancellationSignal cancellationSignal;
 
   public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
     cancellationSignal = new CancellationSignal();

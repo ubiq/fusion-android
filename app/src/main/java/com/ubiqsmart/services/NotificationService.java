@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
-import com.ubiqsmart.activities.MainActivity;
+import com.ubiqsmart.ui.main.MainActivity;
 import com.ubiqsmart.network.EtherscanAPI;
 import com.ubiqsmart.utils.Blockies;
 import com.ubiqsmart.utils.ExchangeCalculator;
@@ -25,7 +25,7 @@ import java.math.BigInteger;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import rehanced.com.ubiqsmart.R;
+import com.ubiqsmart.R;
 import com.ubiqsmart.utils.WalletStorage;
 
 public class NotificationService extends IntentService {
