@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/main_content"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/main_content"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#000000"
   android:orientation="vertical">
 
   <android.support.design.widget.AppBarLayout
@@ -22,15 +21,15 @@
       app:popupTheme="@style/ThemeOverlay.Ubiq.PopupOverlay">
 
       <TextView
+        android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/qr_scan_title"
+        android:layout_gravity="center"
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-light"
-        android:textSize="23sp"
+        android:text="@string/qr_scan_title"
         android:textColor="#F4FEFEFE"
-        android:layout_gravity="center"
-        android:id="@+id/toolbar_title" />
+        android:textSize="23sp" />
 
     </android.support.v7.widget.Toolbar>
 

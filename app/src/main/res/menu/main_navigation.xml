@@ -11,7 +11,6 @@
     android:enabled="true"
     android:title="@string/wallet" />
   <item
-    android:id="@+id/action_transactions"
     android:icon="@drawable/ic_transactions"
     android:enabled="true"
     android:title="@string/transactions" />

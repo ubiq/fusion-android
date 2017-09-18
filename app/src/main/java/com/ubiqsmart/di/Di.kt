@@ -6,7 +6,7 @@ import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.singleton
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import com.ubiqsmart.repository.api.PoloniexApiService
+import com.ubiqsmart.repository.api.CryptoCompareApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -36,6 +36,10 @@ val networkingModule = Kodein.Module {
                 .build()
     }
 
-    bind<PoloniexApiService>() with singleton { Retrofit.Builder().build().create(PoloniexApiService::class.java) }
+    bind<CryptoCompareApi>() with singleton { Retrofit.Builder().build().create(CryptoCompareApi::class.java) }
+
+}
+
+val datasourceModule = Kodein.Module {
 
 }

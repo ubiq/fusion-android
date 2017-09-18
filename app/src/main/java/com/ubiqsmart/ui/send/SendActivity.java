@@ -28,7 +28,7 @@ public class SendActivity extends SecureAppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_chooserecepient);
+    setContentView(R.layout.activity_choose_recipient);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);

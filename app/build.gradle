@@ -20,6 +20,11 @@ android {
 
 
   }
+
+  buildTypes.all { buildType ->
+    buildConfigField "string", "CRYPTOCOMPARE_API_ENDPOINT", "https://min-api.cryptocompare.com/data/"
+  }
+
   buildTypes {
     release {
       minifyEnabled true
@@ -45,7 +50,7 @@ android {
   lintOptions {
     disable 'MissingTranslation'
   }
-  
+
   task ndkBuild(type: Exec) {
     def rootDir = project.rootDir
     def localProperties = new File(rootDir, "local.properties")

@@ -47,11 +47,11 @@ public class ResponseParser {
 
       return erg;
     } catch (JSONException e) {
-      return new ArrayList<TransactionDisplay>();
+      return new ArrayList<>();
     }
   }
 
-  public static ArrayList<WalletDisplay> parseWallets(String response, ArrayList<StorableWallet> storedwallets, Context context) throws Exception {
+  public static List<WalletDisplay> parseWallets(String response, List<StorableWallet> storedwallets, Context context) throws Exception {
     ArrayList<WalletDisplay> display = new ArrayList<WalletDisplay>();
     JSONArray data = new JSONObject(response).getJSONArray("result");
     for (int i = 0; i < storedwallets.size(); i++) {
@@ -105,28 +105,6 @@ public class ResponseParser {
     String gasprice = new JSONObject(response).getString("result");
     return new BigInteger(gasprice.substring(2), 16);
   }
-
-  // Only call for each address, not the combined one
-    /*public static void saveNewestNoncesOfAddresses(Context c, ArrayList<TransactionDisplay> tx, String address){
-        try{
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-            long curNonce = -1;
-            for(int i=tx.size()-1; i >= 0; i--){
-                if(tx.get(i).getFromAddress().equals(address)) { // From address is always our address (thanks to @parseTransactions above for that)
-                    curNonce = Long.parseLong(tx.get(tx.size() - 1).getNounce());
-                    break;
-                }
-            }
-
-            long oldNonce = preferences.getLong("NONCE"+address, 0);
-            if(curNonce > oldNonce){
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong("NONCE"+address, curNonce);
-                editor.commit();
-            }
-        }catch(Exception e){
-        }
-    }*/
 
   public static double parsePriceConversionRate(String response) {
     try {

@@ -24,13 +24,7 @@
     <item name="android:windowBackground">@drawable/background_splash</item>
   </style>
 
-  <style name="Ubiq.AppLock">
-    <item name="android:windowBackground">@color/background_super_dark</item>
-  </style>
-
   <style name="ThemeOverlay.Ubiq.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-  <style name="ThemeOverlay.Ubiq" parent="" />
 
   <style name="ThemeOverlay.Ubiq.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     <item name="android:background">@color/background_super_dark</item>
@@ -53,8 +47,6 @@
   <style name="WhiteCheck">
     <item name="colorAccent">#fff</item>
   </style>
-
-  <style name="Widget.Ubiq" parent="android:Widget" />
 
   <style name="Widget.Ubiq.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
     <item name="fontPath">@string/regular_font</item>

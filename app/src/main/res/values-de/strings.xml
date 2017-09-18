@@ -1,5 +1,4 @@
 <resources>
-  <string name="translator_name">German translation by Manuel S. C.</string>
   <string name="app_name">Ubiq</string>
 
   <string name="action_settings">Einstellungen</string>
@@ -11,11 +10,7 @@
   <string name="fab_gen_new">Erstelle neues Konto</string>
   <string name="fab_request">Anfordern</string>
   <string name="fab_send">Senden</string>
-  <string name="fab_sendether">Sende Ether</string>
   <string name="fab_setwalletname">Kontonamen ändern</string>
-  <string name="drawer_import">Konten importieren</string>
-  <string name="drawer_about">Über uns</string>
-  <string name="drawer_donate">Spenden</string>
 
   <string name="fr_price_current_price">Aktueller Preis</string>
   <string name="fr_wallet_overall_balance">Gesamt Kontostand</string>
@@ -26,8 +21,6 @@
   <string name="main_ac_wallet_added_fatal">Err: Ungültige Ethereum Adresse</string>
   <string name="detail_acc_name_changed_suc">Konto erfolgreich umbenannt</string>
   <string name="title_activity_settings">Einstellungen</string>
-
-  <string name="pref_header_general">Allgemein</string>
 
   <string name="pref_title_social_recommendations">0 Betrag Überweisungen anzeigen</string>
   <string name="pref_description_social_recommendations">Wenn aktiviert werden Contract aufrufe mit leerem Betrag ebenfalls angezeigt</string>
@@ -72,21 +65,10 @@
 
   <string name="notification_title">Überweisungseingang</string>
 
-  <string-array name="multi_select_list_preference_default_value" />
-
-  <string name="pref_title_system_sync_settings">System sync settings</string>
-
   <!-- Example settings for Notifications -->
-  <string name="pref_header_notifications">Benachrichtigungen</string>
 
   <string name="pref_title_new_message_notifications">Eingehende Überweisungen</string>
   <string name="pref_title_new_message_notifications_sum">Benachrichtigt dich bei neuen eingehenden Überweisungen</string>
-
-  <string name="pref_title_ringtone">Ringtone</string>
-  <string name="pref_ringtone_silent">Silent</string>
-
-  <string name="pref_title_vibrate">Vibrate</string>
-  <string name="title_activity_wallet_gen">Erstelle Konto</string>
 
   <!-- Strings related to login -->
   <string name="prompt_email">Passwort</string>
@@ -129,7 +111,6 @@
   <string name="fragment_send_send_button">Senden</string>
   <string name="fragment_recipient_hint_address">Adresse</string>
   <string name="fragment_recipient_continue">Weiter</string>
-  <string name="fragment_detail_add_sharing">Adresse Teilen</string>
   <string name="fragment_detail_share_button">Teilen</string>
   <string name="walletgen_title">Generiere Konto</string>
   <string name="request_ether_title">Ether Anfordern</string>
@@ -231,7 +212,6 @@
   <string name="send_expert_warning">Du kannst zusätzliche Daten an deine Transaktion anhängen. Fülle diese Informationen nur aus wenn du wirklich weißt was du tust, andernfalls könnte das womöglich schlimme Folgen haben!</string>
   <string name="expert_mode_optional">Experten Modus (Optional)</string>
   <string name="transaction_failed">Überweisung gescheitert</string>
-  <string name="reddit">Lunary Subreddit</string>
   <string name="add">+</string>
   <string name="show">Suche</string>
   <string name="setting_erc_qr_encoding">Nutze ERC-67 QR Encoding</string>
@@ -328,13 +308,14 @@ More details about this topic can be found in Google\'s Privacy Policies:
 
 ]]>
     </string>
-  <string name="lunary_wallet">Lunary Wallet</string>
   <string name="wallet">Wallet</string>
   <string name="transactions">Transactions</string>
   <string name="last_seven_days">Last 7 Days</string>
   <string name="invalid_wallet">Invalid Ethereum address!</string>
   <string name="locked_for_one_minute">Locked for 1 minute!</string>
   <string name="zero_ubiqs">0.0000 UBQ</string>
+  <string name="ubq">ETH</string>
+  <string name="grant_camera_permission">Please grant camera permission in order to read QR codes</string>
 
 
 </resources>

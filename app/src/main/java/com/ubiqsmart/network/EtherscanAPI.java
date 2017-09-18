@@ -171,10 +171,11 @@ public class EtherscanAPI {
     get("http://download.finance.yahoo.com/d/quotes.csv?s=" + currencyConversion + "=X&f=snl1", b);
   }
 
-  public void getBalances(ArrayList<StorableWallet> addresses, Callback b) throws IOException {
+  public void getBalances(List<StorableWallet> addresses, Callback b) throws IOException {
     String url = "https://api.etherscan.io/api?module=account&action=balancemulti&address=";
-    for (StorableWallet address : addresses)
+    for (StorableWallet address : addresses) {
       url += address.getPubKey() + ",";
+    }
     url = url.substring(0, url.length() - 1) + "&tag=latest&apikey=" + token; // remove last , AND add token
     get(url, b);
   }

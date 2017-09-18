@@ -111,7 +111,6 @@
           android:src="@drawable/etherkont" />
 
         <TextView
-          android:id="@+id/textView1"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="8dp"
@@ -152,7 +151,7 @@
           android:id="@+id/gen_fab"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@drawable/ic_add_wallet"
+          android:src="@drawable/ic_wallet"
           fab:fab_label="@string/fab_gen_new"
           fab:menu_colorNormal="@color/accent"
           fab:menu_colorPressed="@color/accent_2"
@@ -162,7 +161,7 @@
           android:id="@+id/add_fab"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@drawable/ic_sacn"
+          android:src="@drawable/ic_scan"
           fab:fab_label="@string/fab_add_watch"
           fab:menu_colorNormal="@color/accent"
           fab:menu_colorPressed="@color/accent_2"

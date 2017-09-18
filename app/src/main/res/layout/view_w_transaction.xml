@@ -9,7 +9,6 @@
   android:orientation="vertical">
 
   <LinearLayout
-    android:id="@+id/mainpanel"
     android:layout_width="match_parent"
     android:layout_height="88dp"
     android:layout_marginLeft="10dp"

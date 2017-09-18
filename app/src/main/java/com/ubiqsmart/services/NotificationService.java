@@ -47,7 +47,7 @@ public class NotificationService extends IntentService {
         }
 
         @Override public void onResponse(Call call, final Response response) throws IOException {
-          JSONArray data = null;
+          JSONArray data;
           try {
             data = new JSONObject(response.body().string()).getJSONArray("result");
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NotificationService.this);
@@ -98,12 +98,8 @@ public class NotificationService extends IntentService {
         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setContentTitle(this.getResources().getString(R.string.notification_title))
         .setAutoCancel(true)
-        .setContentText(amount + " ETH");
-
-    if (android.os.Build.VERSION.SDK_INT >= 18) // Android bug in 4.2, just disable it for everyone then...
-    {
-      builder.setVibrate(new long[] { 1000, 1000 });
-    }
+        .setContentText(amount + " ETH")
+        .setVibrate(new long[] { 1000, 1000 });
 
     final NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 

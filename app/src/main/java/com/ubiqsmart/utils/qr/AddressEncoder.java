@@ -11,11 +11,6 @@ public class AddressEncoder {
   private String data;
   private byte type;
 
-  public AddressEncoder(String address, String amount) {
-    this(address);
-    this.amount = amount;
-  }
-
   public AddressEncoder(String address) {
     this.address = address;
   }

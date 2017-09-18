@@ -170,24 +170,34 @@ public class ExchangeCalculator {
     }
     if (!currency.equals(conversionNames[2].getName())) {
       conversionNames[2].setName(currency);
-      if (currency.equals("USD")) {
-        conversionNames[2].setShorty("$");
-      } else if (currency.equals("EUR")) {
-        conversionNames[2].setShorty("€");
-      } else if (currency.equals("GPB")) {
-        conversionNames[2].setShorty("£");
-      } else if (currency.equals("AUD")) {
-        conversionNames[2].setShorty("$");
-      } else if (currency.equals("RUB")) {
-        conversionNames[2].setShorty("р");
-      } else if (currency.equals("CHF")) {
-        conversionNames[2].setShorty("Fr");
-      } else if (currency.equals("CAD")) {
-        conversionNames[2].setShorty("$");
-      } else if (currency.equals("JPY")) {
-        conversionNames[2].setShorty("¥");
-      } else {
-        conversionNames[2].setShorty(currency);
+      switch (currency) {
+        case "USD":
+          conversionNames[2].setShorty("$");
+          break;
+        case "EUR":
+          conversionNames[2].setShorty("€");
+          break;
+        case "GPB":
+          conversionNames[2].setShorty("£");
+          break;
+        case "AUD":
+          conversionNames[2].setShorty("$");
+          break;
+        case "RUB":
+          conversionNames[2].setShorty("р");
+          break;
+        case "CHF":
+          conversionNames[2].setShorty("Fr");
+          break;
+        case "CAD":
+          conversionNames[2].setShorty("$");
+          break;
+        case "JPY":
+          conversionNames[2].setShorty("¥");
+          break;
+        default:
+          conversionNames[2].setShorty(currency);
+          break;
       }
     }
 
@@ -221,7 +231,6 @@ public class ExchangeCalculator {
       }
 
       @Override public void onResponse(Call call, final Response response) throws IOException {
-
         rateForChartDisplay = ResponseParser.parsePriceConversionRate(response.body().string());
         conversionNames[2].setRate(Math.floor(conversionNames[2].getRate() * rateForChartDisplay * 100) / 100);
         update.onUpdate(response);

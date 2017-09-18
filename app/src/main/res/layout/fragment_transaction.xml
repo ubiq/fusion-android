@@ -13,7 +13,6 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-
       android:orientation="vertical">
 
       <android.support.v7.widget.RecyclerView
@@ -60,9 +59,7 @@
           android:text="@string/no_tx_history"
           android:textColor="#99323232"
           android:textSize="15sp" />
-
       </LinearLayout>
-
     </FrameLayout>
 
     <RelativeLayout
@@ -85,8 +82,9 @@
         app:menu_colorPressed="@color/accent_2"
         app:menu_colorRipple="@color/accent"
         fab:menu_animationDelayPerItem="20"
-        fab:menu_icon="@drawable/ic_new_tr_small"
-        fab:menu_shadowColor="#444">
+        fab:menu_icon="@drawable/ic_new_transaction"
+        fab:menu_shadowColor="#444"
+        app:menu_icon="@drawable/ic_new_tx">
 
         <com.github.clans.fab.FloatingActionButton
           android:id="@+id/requestTx"
@@ -102,7 +100,7 @@
           android:id="@+id/newTransaction"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@drawable/ic_new_tr"
+          android:src="@drawable/ic_new_tx"
           app:menu_colorNormal="@color/primary"
           app:menu_colorPressed="@color/accent_2"
           app:menu_colorRipple="@color/accent"

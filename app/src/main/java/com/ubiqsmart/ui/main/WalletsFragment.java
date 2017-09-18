@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -63,16 +65,19 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
   private SwipeRefreshLayout swipeLayout;
   private FrameLayout nothingToShow;
 
+  private SharedPreferences preferences;
+
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.fragment_wallets, container, false);
+    final View rootView = inflater.inflate(R.layout.fragment_wallets, container, false);
 
     ac = (MainActivity) this.getActivity();
+    preferences = PreferenceManager.getDefaultSharedPreferences(ac);
 
-    nothingToShow = (FrameLayout) rootView.findViewById(R.id.nothing_found);
-    ImageView leftPress = (ImageView) rootView.findViewById(R.id.wleft);
-    ImageView rightPress = (ImageView) rootView.findViewById(R.id.wright);
-    balanceView = (TextView) rootView.findViewById(R.id.balance);
-    swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+    nothingToShow = rootView.findViewById(R.id.nothing_found);
+    final ImageView leftPress = rootView.findViewById(R.id.wleft);
+    final ImageView rightPress = rootView.findViewById(R.id.wright);
+    balanceView = rootView.findViewById(R.id.balance);
+    swipeLayout = rootView.findViewById(R.id.swipeRefreshLayout);
     swipeLayout.setColorSchemeColors(ac.getResources().getColor(R.color.primary));
     swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
@@ -86,7 +91,7 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
       }
     });
 
-    ExchangeCalculator.getInstance().setIndex(ac.getPreferences().getInt("main_index", 0));
+    ExchangeCalculator.getInstance().setIndex(preferences.getInt("main_index", 0));
 
     leftPress.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -97,7 +102,7 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
                 + cur.getName());
         ac.broadCastDataSetChanged();
         walletAdapter.notifyDataSetChanged();
-        SharedPreferences.Editor editor = ac.getPreferences().edit();
+        SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("main_index", ExchangeCalculator.getInstance().getIndex());
         editor.apply();
       }
@@ -112,17 +117,16 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
                 + cur.getName());
         ac.broadCastDataSetChanged();
         walletAdapter.notifyDataSetChanged();
-        SharedPreferences.Editor editor = ac.getPreferences().edit();
+        final SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("main_index", ExchangeCalculator.getInstance().getIndex());
         editor.apply();
       }
     });
 
-    recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+    recyclerView = rootView.findViewById(R.id.recycler_view);
     walletAdapter = new WalletAdapter(wallets, ac, this, this);
-    LinearLayoutManager mgr = new LinearLayoutManager(ac.getApplicationContext());
-    RecyclerView.LayoutManager mLayoutManager = mgr;
-    recyclerView.setLayoutManager(mLayoutManager);
+    final LinearLayoutManager mgr = new LinearLayoutManager(ac.getApplicationContext());
+    recyclerView.setLayoutManager(mgr);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(walletAdapter);
     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), mgr.getOrientation());
@@ -176,21 +180,27 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
   }
 
   public void update() throws IOException {
-    if (ac == null) return;
+    if (ac == null) {
+      return;
+    }
+
     wallets.clear();
     balance = 0;
-    final ArrayList<StorableWallet> storedwallets = new ArrayList<StorableWallet>(WalletStorage.getInstance(ac).get());
+    final List<StorableWallet> storedWallets = new ArrayList<>(WalletStorage.getInstance(ac).get());
 
-    if (storedwallets.size() == 0) {
+    if (storedWallets.isEmpty()) {
       nothingToShow.setVisibility(View.VISIBLE);
       onItemsLoadComplete();
     } else {
       nothingToShow.setVisibility(View.GONE);
-      EtherscanAPI.getInstance().getBalances(storedwallets, new Callback() {
-        @Override public void onFailure(Call call, IOException e) {
-          if (ac != null) ac.snackError("Can't fetch account balances. Invalid response.");
+      EtherscanAPI.getInstance().getBalances(storedWallets, new Callback() {
+        @Override public void onFailure(@NonNull Call call, IOException e) {
+          if (ac != null) {
+            ac.snackError("Can't fetch account balances. Invalid response.");
+          }
+
           final List<WalletDisplay> w = new ArrayList<WalletDisplay>();
-          for (StorableWallet cur : storedwallets)
+          for (StorableWallet cur : storedWallets)
             w.add(new WalletDisplay(AddressNameConverter.getInstance(ac).get(cur.getPubKey()), cur.getPubKey(), new BigInteger("-1"),
                 WalletDisplay.CONTACT));
 
@@ -203,10 +213,10 @@ public class WalletsFragment extends Fragment implements View.OnClickListener, V
           });
         }
 
-        @Override public void onResponse(Call call, Response response) throws IOException {
+        @Override public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
           final List<WalletDisplay> w;
           try {
-            w = ResponseParser.parseWallets(response.body().string(), storedwallets, ac);
+            w = ResponseParser.parseWallets(response.body().string(), storedWallets, ac);
           } catch (Exception e) {
             e.printStackTrace();
             return;

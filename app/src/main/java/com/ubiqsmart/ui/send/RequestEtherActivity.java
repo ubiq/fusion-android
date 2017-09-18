@@ -47,19 +47,20 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_requestether);
+    setContentView(R.layout.activity_request_ether);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    final Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    coord = (CoordinatorLayout) findViewById(R.id.main_content);
-    qr = (ImageView) findViewById(qrcode);
-    recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-    amount = (TextView) findViewById(R.id.amount);
-    usdPrice = (TextView) findViewById(R.id.usdPrice);
+    coord = findViewById(R.id.main_content);
+    qr = findViewById(qrcode);
+    recyclerView = findViewById(R.id.recycler_view);
+    amount = findViewById(R.id.amount);
+    usdPrice = findViewById(R.id.usdPrice);
     walletAdapter = new WalletAdapter(wallets, this, this, this);
+
     LinearLayoutManager mgr = new LinearLayoutManager(this.getApplicationContext());
     RecyclerView.LayoutManager mLayoutManager = mgr;
     recyclerView.setLayoutManager(mLayoutManager);

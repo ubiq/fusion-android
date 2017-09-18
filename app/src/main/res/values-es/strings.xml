@@ -1,5 +1,4 @@
 <resources>
-  <string name="translator_name">Spanish translation by Adam S.</string>
 
   <string name="app_name">Ubiq</string>
 
@@ -12,11 +11,7 @@
   <string name="fab_gen_new">Generar Cartera Nueva</string>
   <string name="fab_request">Solicitar</string>
   <string name="fab_send">Mandar</string>
-  <string name="fab_sendether">Mandar Ether</string>
   <string name="fab_setwalletname">Asignar Nombre a la Cartera</string>
-  <string name="drawer_import">Importar Carteras</string>
-  <string name="drawer_about">Sobre Nosotros</string>
-  <string name="drawer_donate">Donar</string>
 
   <string name="fr_price_current_price">Precio Actual</string>
   <string name="fr_wallet_overall_balance">Saldo Total</string>
@@ -28,16 +23,12 @@
   <string name="detail_acc_name_changed_suc">Nombre cambiado con éxito</string>
   <string name="title_activity_settings">Ajustes</string>
 
-  <string name="pref_header_general">General</string>
-
   <string name="pref_title_social_recommendations">Mostrar transacciones sin cantidad</string>
   <string name="pref_description_social_recommendations">Mostrar transacciones de contratos que no incluyen una cantidad de Ether</string>
 
 
   <string name="pref_title_start">Poner Cartera como pestaña principal</string>
   <string name="pref_sum_start">Al abrir la aplicación, abrirá la pestaña de Cartera en lugar de la de Precio</string>
-
-  <string name="pref_header_data_sync">Datos &amp; Sincronización</string>
 
   <string name="pref_title_sync_frequency">Frecuencia de Sincronización</string>
   <string name="pref_sum_sync_frequency">Intervalo de comprobación para transacciones nuevas</string>
@@ -76,20 +67,8 @@
 
   <string name="notification_title">Transacción Recibida</string>
 
-  <string-array name="multi_select_list_preference_default_value" />
-
-  <string name="pref_title_system_sync_settings">Ajustes de sincronización</string>
-
-  <string name="pref_header_notifications">Notificaciones</string>
-
   <string name="pref_title_new_message_notifications">Transacciones Entrantes</string>
   <string name="pref_title_new_message_notifications_sum">Mostrar una notificación al recibir una transacción nueva en una de tus carteras</string>
-
-  <string name="pref_title_ringtone">Ringtone</string>
-  <string name="pref_ringtone_silent">Sin Sonido</string>
-
-  <string name="pref_title_vibrate">Vibrar</string>
-  <string name="title_activity_wallet_gen">Generar Cartera</string>
 
   <string name="prompt_email">Contraseña</string>
   <string name="prompt_password">Confirmar Contraseña</string>
@@ -131,7 +110,6 @@
   <string name="fragment_send_send_button">Enviar</string>
   <string name="fragment_recipient_hint_address">Dirección</string>
   <string name="fragment_recipient_continue">Seguir</string>
-  <string name="fragment_detail_add_sharing">Compartir Dirección</string>
   <string name="fragment_detail_share_button">Compartir</string>
   <string name="walletgen_title">Generar Cartera</string>
   <string name="request_ether_title">Solicitar Ether</string>
@@ -233,7 +211,6 @@
   <string name="send_expert_warning">You can add extra data to send along with your transaction. If you don\'t know what this is then don\'t touch it or bad things may happen!</string>
   <string name="expert_mode_optional">Expert Mode (Optional)</string>
   <string name="transaction_failed">Transaction failed</string>
-  <string name="reddit">Lunary Subreddit</string>
   <string name="add">Add</string>
   <string name="show">Show</string>
   <string name="setting_erc_qr_encoding">Use ERC-67 QR Encoding</string>
@@ -330,13 +307,14 @@ More details about this topic can be found in Google\'s Privacy Policies:
 
 ]]>
     </string>
-  <string name="lunary_wallet">Lunary Wallet</string>
   <string name="wallet">Wallet</string>
   <string name="transactions">Transactions</string>
   <string name="last_seven_days">Last 7 Days</string>
   <string name="invalid_wallet">Invalid Ethereum address!</string>
   <string name="locked_for_one_minute">Locked for 1 minute!</string>
   <string name="zero_ubiqs">0.0000 UBQ</string>
+  <string name="ubq">ETH</string>
+  <string name="grant_camera_permission">Please grant camera permission in order to read QR codes</string>
 
 
 </resources>
