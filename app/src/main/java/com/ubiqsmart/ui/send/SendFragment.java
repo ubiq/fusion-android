@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -113,18 +114,20 @@ public class SendFragment extends Fragment {
       }
     });
 
-    if (getArguments().containsKey("TO_ADDRESS")) {
-      setToAddress(getArguments().getString("TO_ADDRESS"), ac);
+    final Bundle arguments = getArguments();
+
+    if (arguments.containsKey("TO_ADDRESS")) {
+      setToAddress(arguments.getString("TO_ADDRESS"), ac);
     }
 
-    if (getArguments().containsKey("AMOUNT")) {
-      curAmount = new BigDecimal(getArguments().getString("AMOUNT"));
-      amount.setText(getArguments().getString("AMOUNT"));
+    if (arguments.containsKey("AMOUNT")) {
+      curAmount = new BigDecimal(arguments.getString("AMOUNT"));
+      amount.setText(arguments.getString("AMOUNT"));
     }
 
     gas.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        gasText.setText(i + 1 + "");
+        gasText.setText(String.format(Locale.getDefault(), "%d", i + 1));
         curTxCost = (new BigDecimal(gaslimit).multiply(new BigDecimal((i + 1) + ""))).divide(new BigDecimal("1000000000"), 6, BigDecimal.ROUND_DOWN);
 
         updateDisplays();
@@ -138,31 +141,30 @@ public class SendFragment extends Fragment {
     });
 
     spinner = rootView.findViewById(R.id.spinner);
-    final ArrayAdapter<String> spinnerArrayAdapter =
-        new ArrayAdapter<String>(ac, R.layout.address_spinner, WalletStorage.getInstance(ac).getFullOnly()) {
-          @Override public View getView(int position, View convertView, ViewGroup parent) {
-            View view = super.getView(position, convertView, parent);
-            view.setPadding(0, view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
-            return view;
-          }
-        };
-    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spinner.setAdapter(spinnerArrayAdapter);
 
+    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(ac, R.layout.address_spinner, WalletStorage.getInstance(ac).getFullOnly()) {
+      @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View view = super.getView(position, convertView, parent);
+        view.setPadding(0, view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
+        return view;
+      }
+    };
+    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+    spinner.setAdapter(spinnerArrayAdapter);
     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         try {
           EtherscanAPI.getInstance().getBalance(spinner.getSelectedItem().toString(), new Callback() {
-            @Override public void onFailure(Call call, IOException e) {
+            @Override public void onFailure(@NonNull Call call, @NonNull IOException e) {
               ac.runOnUiThread(new Runnable() {
                 @Override public void run() {
                   ac.snackError("Cant fetch your account balance", Snackbar.LENGTH_LONG);
                 }
               });
-
             }
 
-            @Override public void onResponse(Call call, final Response response) throws IOException {
+            @Override public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
               ac.runOnUiThread(new Runnable() {
                 @Override public void run() {
                   try {
@@ -202,11 +204,14 @@ public class SendFragment extends Fragment {
     });
 
     currencySpinner = rootView.findViewById(R.id.currency_spinner);
-    List<String> currencyList = new ArrayList<>();
+
+    final List<String> currencyList = new ArrayList<>();
     currencyList.add("ETH");
     currencyList.add(ExchangeCalculator.getInstance().getMainCurreny().getName());
-    ArrayAdapter<String> curAdapter = new ArrayAdapter<>(ac, android.R.layout.simple_spinner_item, currencyList);
+
+    final ArrayAdapter<String> curAdapter = new ArrayAdapter<>(ac, android.R.layout.simple_spinner_item, currencyList);
     curAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
     currencySpinner.setAdapter(curAdapter);
     currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -256,8 +261,8 @@ public class SendFragment extends Fragment {
       }
     });
 
-    if (getArguments().containsKey("FROM_ADDRESS")) {
-      setFromAddress(getArguments().getString("FROM_ADDRESS"));
+    if (arguments.containsKey("FROM_ADDRESS")) {
+      setFromAddress(arguments.getString("FROM_ADDRESS"));
     } else {
       spinner.setSelection(0);
     }
@@ -342,15 +347,15 @@ public class SendFragment extends Fragment {
   private void getEstimatedGasPriceLimit() {
     try {
       EtherscanAPI.getInstance().getGasLimitEstimate(toAddress.getText().toString(), new Callback() {
-        @Override public void onFailure(Call call, IOException e) {
+        @Override public void onFailure(@NonNull Call call, @NonNull IOException e) {
         }
 
-        @Override public void onResponse(Call call, Response response) throws IOException {
+        @Override public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
           try {
             gaslimit = ResponseParser.parseGasPrice(response.body().string());
             ac.runOnUiThread(new Runnable() {
               @Override public void run() {
-                userGasLimit.setText(gaslimit + "");
+                userGasLimit.setText(String.format("%s", gaslimit));
               }
             });
           } catch (Exception e) {
@@ -431,29 +436,31 @@ public class SendFragment extends Fragment {
   }
 
   private void sendEther(String password, String fromAddress) {
-    Intent txService = new Intent(ac, TransactionService.class);
+    final Intent txService = new Intent(ac, TransactionService.class);
     txService.putExtra("FROM_ADDRESS", fromAddress);
     txService.putExtra("TO_ADDRESS", toAddress.getText().toString());
     txService.putExtra("AMOUNT", curAmount.toPlainString()); // In ether, gets converted by the service itself
-    txService.putExtra("GAS_PRICE",
-        new BigDecimal((gas.getProgress() + 1) + "").multiply(new BigDecimal("1000000000")).toPlainString());// "21000000000");
+    txService.putExtra("GAS_PRICE", new BigDecimal((gas.getProgress() + 1) + "").multiply(new BigDecimal("1000000000")).toPlainString());// "21000000000");
     txService.putExtra("GAS_LIMIT", userGasLimit.getText().length() <= 0 ? gaslimit.toString() : userGasLimit.getText().toString());
     txService.putExtra("PASSWORD", password);
     txService.putExtra("DATA", data.getText().toString());
     ac.startService(txService);
 
-    Intent data = new Intent();
+    final Intent data = new Intent();
     data.putExtra("FROM_ADDRESS", fromAddress);
     data.putExtra("TO_ADDRESS", toAddress.getText().toString());
     data.putExtra("AMOUNT", curAmount.toPlainString());
+
     ac.setResult(RESULT_OK, data);
     ac.finish();
   }
 
   public void setToAddress(String to, Context c) {
-    if (toAddress == null) return;
+    if (toAddress == null) {
+      return;
+    }
     toAddress.setText(to);
-    String name = AddressNameConverter.getInstance(c).get(to);
+    final String name = AddressNameConverter.getInstance(c).get(to);
     toName.setText(name == null ? to.substring(0, 10) : name);
     toicon.setImageBitmap(Blockies.createIcon(to.toLowerCase()));
     getEstimatedGasPriceLimit();

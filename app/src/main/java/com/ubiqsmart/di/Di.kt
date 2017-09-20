@@ -1,12 +1,16 @@
 package com.ubiqsmart.di
 
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.bind
-import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.singleton
+import com.github.salomonbrys.kodein.*
+import com.github.salomonbrys.kodein.android.androidContextScope
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import com.ubiqsmart.network.EtherscanAPI
 import com.ubiqsmart.repository.api.CryptoCompareApi
+import com.ubiqsmart.services.NotificationLauncher
+import com.ubiqsmart.utils.AddressNameConverter
+import com.ubiqsmart.utils.ExchangeCalculator
+import com.ubiqsmart.utils.WalletStorage
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -23,23 +27,41 @@ val networkingModule = Kodein.Module {
 
     // Networking
 
-//    bind<Cache>() with scopedSingleton(androidContextScope) {
-//        Cache()
-//    }
+    bind<Cache>() with scopedSingleton(androidContextScope) {
+        val dir = it.applicationContext.cacheDir
+        Cache(dir, 50)
+    }
 
-    bind<OkHttpClient>() with singleton { OkHttpClient.Builder().build() }
+    bind<OkHttpClient>() with singleton {
+        OkHttpClient.Builder()
+                .cache(instance())
+                .build()
+    }
 
     bind<Retrofit>() with singleton {
         Retrofit.Builder()
+                .client(instance())
                 .addConverterFactory(MoshiConverterFactory.create(instance()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
-    bind<CryptoCompareApi>() with singleton { Retrofit.Builder().build().create(CryptoCompareApi::class.java) }
+    bind<CryptoCompareApi>() with singleton {
+        val retrofit: Retrofit = instance()
+        retrofit.create(CryptoCompareApi::class.java)
+    }
 
 }
 
-val datasourceModule = Kodein.Module {
+val toDeprecateModule = Kodein.Module {
 
+    bind<ExchangeCalculator>() with singleton { ExchangeCalculator.getInstance() }
+
+    bind<WalletStorage>() with scopedSingleton(androidContextScope) { WalletStorage.getInstance(it.applicationContext, instance(), instance(), instance()) }
+
+    bind<NotificationLauncher>() with singleton { NotificationLauncher.getInstance() }
+
+    bind<AddressNameConverter>() with scopedSingleton(androidContextScope) { AddressNameConverter.getInstance(it.applicationContext) }
+
+    bind<EtherscanAPI>() with singleton { EtherscanAPI.getInstance() }
 }

@@ -5,26 +5,26 @@ import android.support.annotation.NonNull;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class TokenDisplay implements Comparable {
+public class Token implements Comparable {
 
   private String name;
   private String shorty;
   private BigDecimal balance;
   private int digits;
   private double usdprice;
-  private String contractAddr;
+  private String contractAddress;
   private String totalSupply;
   private long holderCount;
   private long createdAt;
 
-  public TokenDisplay(String name, String shorty, BigDecimal balance, int digits, double usdprice, String contractAddr, String totalSupply,
-      long holderCount, long createdAt) {
+  public Token(String name, String shorty, BigDecimal balance, int digits, double usdprice, String contractAddress, String totalSupply, long holderCount,
+      long createdAt) {
     this.name = name;
     this.shorty = shorty;
     this.balance = balance;
     this.digits = digits;
     this.usdprice = usdprice;
-    this.contractAddr = contractAddr;
+    this.contractAddress = contractAddress;
     this.totalSupply = totalSupply;
     this.holderCount = holderCount;
     this.createdAt = createdAt;
@@ -58,18 +58,10 @@ public class TokenDisplay implements Comparable {
     return balance;
   }
 
-  /**
-   * Uses digits and balance to create a double value
-   * @return Token balance in double
-   */
   public double getBalanceDouble() {
     return balance.divide((new BigDecimal("10").pow(digits))).doubleValue();
   }
 
-  /**
-   * Uses digits and total supply to create a long value
-   * @return Token supply in long
-   */
   public long getTotalSupplyLong() {
     return new BigInteger(totalSupply).divide((new BigInteger("10").pow(digits))).longValue();
   }
@@ -94,12 +86,12 @@ public class TokenDisplay implements Comparable {
     this.usdprice = usdprice;
   }
 
-  public String getContractAddr() {
-    return contractAddr;
+  public String getContractAddress() {
+    return contractAddress;
   }
 
-  public void setContractAddr(String contractAddr) {
-    this.contractAddr = contractAddr;
+  public void setContractAddress(String contractAddress) {
+    this.contractAddress = contractAddress;
   }
 
   public String getTotalSupply() {
@@ -119,18 +111,21 @@ public class TokenDisplay implements Comparable {
   }
 
   @Override public int compareTo(@NonNull Object o) {
-    return ((TokenDisplay) o).getShorty().compareTo(shorty);
+    return ((Token) o).getShorty().compareTo(shorty);
   }
 
   @Override public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
 
-    TokenDisplay that = (TokenDisplay) o;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
-    if (digits != that.digits) return false;
-    if (!name.equals(that.name)) return false;
-    return shorty.equals(that.shorty);
+    final Token that = (Token) o;
+
+    return digits == that.digits && name.equals(that.name) && shorty.equals(that.shorty);
 
   }
 

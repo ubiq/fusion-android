@@ -1,4 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipeRefreshLayout"
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:fab="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -37,7 +37,7 @@
           android:orientation="horizontal">
 
           <ImageView
-            android:id="@+id/wleft"
+            android:id="@+id/left_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,7 +45,7 @@
             android:src="@drawable/ic_arrow_left" />
 
           <TextView
-            android:id="@+id/balance"
+            android:id="@+id/balance_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -56,7 +56,7 @@
             android:textSize="24sp" />
 
           <ImageView
-            android:id="@+id/wright"
+            android:id="@+id/right_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

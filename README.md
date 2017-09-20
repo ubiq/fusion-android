@@ -1,11 +1,16 @@
-# Lunary Ethereum Wallet
+# Ubiq Fusion for Android
 
-Lunary is a beautiful designed, easy to use, secure and Open Source Ethereum Wallet for Android.
+Currently, this project is under heavy development. Originally started as a fork of Lunary Ethereum Wallet (but is moving towards to its own codebase merging
+ features and ideas also found on [Walleth](https://github.com/walleth/walleth) project).
 
-[![Get it on Google Play](http://rehanced.com/apps/badge.png)](https://play.google.com/store/apps/details?id=com.rehanced.lunary)
-[![Get it on F-Droid](http://rehanced.com/apps/fdroidbadge.png)](https://f-droid.org/repository/browse/?fdid=com.rehanced.lunary)
+Right now, we are working on:
 
-<img src="http://rehanced.com/apps/lunary/githubbanner.png" >
+* Porting to Kotlin (some code is ported with Intellij Studio with direct conversion, so maybe the code is not the most idiomatic one, eventually it will
+change)
+* Adding support for MVVM (with RxJava2, LiveData, Room, Kodein and those kind of goodies)
+* Brand new design
+
+As Lunary, this project will support the following features:
 
 ## Features
 * Mutli wallet support  
@@ -24,32 +29,11 @@ Lunary is a beautiful designed, easy to use, secure and Open Source Ethereum Wal
 * Available in English, German and Spanish
 
 ## Build:
-Google Play flavor requires own API key:
-```
-public class APIKey {
-    public static final String API_KEY = ""; // Enter your API Key obtained from Etherscan.io
-}
-```
+
+To be written
 
 ## Thanks to:
-* [Web3j](https://github.com/web3j/web3j)
-* [FloatingActionButton](https://github.com/Clans/FloatingActionButton)
-* [MaterialDrawer](https://github.com/mikepenz/MaterialDrawer)
-* [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
-* [zxing](https://github.com/zxing/zxing)
-* [RateThisApp](https://github.com/kobakei/Android-RateThisApp)
-* [AppIntro](https://github.com/apl-devs/AppIntro)
-
-## Web APIs:
-* [Etherscan.io](https://etherscan.io/)  
-* [Poloniex.com](https://poloniex.com/)  
-* [Ethplorer.io](https://ethplorer.io)
-
-## Donations / Support Lunary
-Ethereum: 0xa9981a33f6b1A18da5Db58148B2357f22B44e1e0
+* [Lunary Wallet](https://github.com/manuelsc/Lunary-Ethereum-Wallet)
 
 ## Licence
 GPL3
-
-## Community
-Visit us on [/r/Lunary](https://www.reddit.com/r/lunary/)

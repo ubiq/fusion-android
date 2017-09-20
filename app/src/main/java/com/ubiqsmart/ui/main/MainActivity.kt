@@ -6,21 +6,18 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.Menu
 import android.view.MenuItem
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.android.withContext
 import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
-import com.ubiqsmart.repository.data.WatchWallet
 import com.ubiqsmart.interfaces.NetworkUpdateListener
+import com.ubiqsmart.repository.data.WatchWallet
 import com.ubiqsmart.services.NotificationLauncher
 import com.ubiqsmart.services.WalletGenService
 import com.ubiqsmart.ui.base.SecureAppCompatActivity
@@ -33,45 +30,51 @@ import com.ubiqsmart.ui.wallet.WalletGenActivity
 import com.ubiqsmart.utils.*
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.Response
+import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.io.IOException
 import java.math.BigDecimal
 import java.security.Security
 
-class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodeinAware {
-
-    override val kodein = LazyKodein(appKodein)
-
-    var appBar: AppBarLayout? = null
-        private set
+class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
 
     lateinit var fragments: List<Fragment>
 
     private val preferences: SharedPreferences by withContext(this).instance()
+
+    private val exchangeCalculator: ExchangeCalculator by instance()
+
+    private val walletStorage: WalletStorage by with(applicationContext).instance()
+    private val notificationLauncher: NotificationLauncher by instance()
+    private val addressNameConverter: AddressNameConverter by with(applicationContext).instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        appBar = findViewById(R.id.appbar)
+        displayAppIntroIfNecessary()
 
-        if (preferences.getLong("APP_INSTALLED", 0) == 0L) {
-            val intro = Intent(this, AppIntroActivity::class.java)
-            startActivityForResult(intro, AppIntroActivity.REQUEST_CODE)
+        setupActionBar()
+        setupFragments()
+        setupViewPager()
+        setupBottomNavigationView()
+
+        fetchCurrentExchangeRate()
+
+        Settings.initiate(this)
+        notificationLauncher.start(this)
+    }
+
+    private fun fetchCurrentExchangeRate() {
+        try {
+            val currency = preferences.getString("maincurrency", "USD")
+            exchangeCalculator.updateExchangeRates(currency, this)
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = ""
-            setDisplayHomeAsUpEnabled(false)
-            setDisplayHomeAsUpEnabled(false)
-        }
-
-        fragments = arrayListOf(PriceFragment(), WalletsFragment(), TransactionsAllFragment())
-
-        view_pager.adapter = SectionsPagerAdapter(supportFragmentManager)
-        view_pager.offscreenPageLimit = 3
-
+    private fun setupBottomNavigationView() {
         bottom_navigation_view.setOnNavigationItemSelectedListener { item ->
             val itemId = item.itemId
             val currentItem = when (itemId) {
@@ -83,19 +86,31 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodei
             true
         }
         bottom_navigation_view.selectedItemId = R.id.action_wallet
+    }
 
-        try {
-            val currency = preferences.getString("maincurrency", "USD")
-            ExchangeCalculator.getInstance().updateExchangeRates(currency, this)
-        } catch (e: IOException) {
-            e.printStackTrace()
+    private fun setupFragments() {
+        fragments = arrayListOf(PriceFragment(), WalletsFragment(), TransactionsAllFragment())
+    }
+
+    private fun displayAppIntroIfNecessary() {
+        if (preferences.getLong("APP_INSTALLED", 0) == 0L) {
+            val intro = Intent(this, AppIntroActivity::class.java)
+            startActivityForResult(intro, AppIntroActivity.REQUEST_CODE)
         }
+    }
 
-        Settings.initiate(this)
-        NotificationLauncher.getInstance().start(this)
+    private fun setupViewPager() {
+        view_pager.adapter = SectionsPagerAdapter(supportFragmentManager)
+        view_pager.offscreenPageLimit = 3
+    }
 
-        //Security.removeProvider("BC");
-        Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
+    private fun setupActionBar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            title = ""
+            setDisplayHomeAsUpEnabled(false)
+            setDisplayHomeAsUpEnabled(false)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,36 +118,40 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodei
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_import_wallet -> try {
-                WalletStorage.getInstance(this).importingWalletsDetector(this)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 
-            R.id.action_settings -> {
-                val settings = Intent(this, SettingsActivity::class.java)
-                startActivityForResult(settings, SettingsActivity.REQUEST_CODE)
-            }
+        R.id.action_import_wallet -> try {
+            walletStorage.importingWalletsDetector(this)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
-        return super.onOptionsItemSelected(item)
+
+        R.id.action_settings -> {
+            val settings = Intent(this, SettingsActivity::class.java)
+            startActivityForResult(settings, SettingsActivity.REQUEST_CODE)
+            true
+        }
+
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
+
             ExternalStorageHandler.REQUEST_WRITE_STORAGE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     (fragments[1] as WalletsFragment).export()
                 } else {
                     snackError(getString(R.string.main_grant_permission_export))
                 }
-                return
             }
+
             ExternalStorageHandler.REQUEST_READ_STORAGE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        WalletStorage.getInstance(this).importingWalletsDetector(this)
+                        walletStorage.importingWalletsDetector(this)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -140,7 +159,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodei
                 } else {
                     snackError(getString(R.string.main_grant_permission_import))
                 }
-                return
             }
         }
     }
@@ -150,128 +168,137 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodei
         broadCastDataSetChanged()
 
         // Update wallets if activity resumed and a new wallet was found (finished generation or added as watch only address)
-        if (WalletStorage.getInstance(this).get().size != (fragments[1] as WalletsFragment).displayedWalletCount) {
+        if (walletStorage.get().size != (fragments[1] as WalletsFragment).displayedWalletCount) {
             try {
                 (fragments[1] as WalletsFragment).update()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == QRScanActivity.REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val type = data?.getByteExtra("TYPE", QRScanActivity.SCAN_ONLY)
-                if (type == QRScanActivity.SCAN_ONLY) {
-                    if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
-                        snackError(getString(R.string.invalid_wallet))
-                        return
-                    }
-                    val watch = Intent(this, AddressDetailActivity::class.java)
-                    watch.putExtra("ADDRESS", data.getStringExtra("ADDRESS"))
-                    startActivity(watch)
-                } else if (type == QRScanActivity.ADD_TO_WALLETS) {
-                    if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
-                        snackError(getString(R.string.invalid_wallet))
-                        return
-                    }
-                    val suc = WalletStorage.getInstance(this).add(WatchWallet(data.getStringExtra("ADDRESS")), this)
-                    Handler().postDelayed({
-                        if (fragments != null && fragments!![1] != null) {
-                            try {
-                                (fragments!![1] as WalletsFragment).update()
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
+        when (requestCode) {
+            QRScanActivity.REQUEST_CODE -> handleOnQrScanResult(resultCode, data)
+            WalletGenActivity.REQUEST_CODE -> handleWalletGenerationResult(resultCode, data)
+            SendActivity.REQUEST_CODE -> handleSendResult(resultCode, data)
+            AppIntroActivity.REQUEST_CODE -> handleAppIntroResult(resultCode)
+            SettingsActivity.REQUEST_CODE -> handleSettingsUpdateResult()
+        }
+    }
 
-                        }
-                        //if (tabLayout != null) {
-                        //  tabLayout.getTabAt(1).select();
-                        //}
-                        val mySnackbar = Snackbar.make(main_content,
-                                this@MainActivity.resources.getString(if (suc) R.string.main_ac_wallet_added_suc else R.string.main_ac_wallet_added_er),
-                                Snackbar.LENGTH_SHORT)
-                        if (suc) {
-                            AddressNameConverter.getInstance(this@MainActivity)
-                                    .put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6), this@MainActivity)
-                        }
+    private fun handleSettingsUpdateResult() {
+        val currency = preferences.getString("maincurrency", "USD")
+        if (currency != exchangeCalculator.mainCurreny.name) {
+            try {
+                exchangeCalculator.updateExchangeRates(currency, this)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
 
-                        mySnackbar.show()
-                    }, 100)
-                } else if (type == QRScanActivity.REQUEST_PAYMENT) {
-                    if (WalletStorage.getInstance(this).fullOnly.size == 0) {
-                        Dialogs.noFullWallet(this)
-                    } else {
-                        val watch = Intent(this, SendActivity::class.java).apply {
-                            putExtra("TO_ADDRESS", data.getStringExtra("ADDRESS"))
-                            putExtra("AMOUNT", data.getStringExtra("AMOUNT"))
-                        }
-                        startActivity(watch)
-                    }
-                } else if (type == QRScanActivity.PRIVATE_KEY) {
-                    if (OwnWalletUtils.isValidPrivateKey(data.getStringExtra("ADDRESS"))) {
-                        importPrivateKey(data.getStringExtra("ADDRESS"))
-                    } else {
-                        this.snackError(getString(com.ubiqsmart.R.string.invalid_private_key))
-                    }
-                }
-            } else {
-                val mySnackbar = Snackbar.make(main_content!!, this@MainActivity.resources.getString(R.string.main_ac_wallet_added_fatal), Snackbar.LENGTH_SHORT)
-                mySnackbar.show()
-            }
-        } else if (requestCode == WalletGenActivity.REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val generatingService = Intent(this, WalletGenService::class.java).apply {
-                    putExtra("PASSWORD", data?.getStringExtra("PASSWORD"))
-                    val hasPrivateKey = data?.hasExtra("PRIVATE_KEY") ?: false
-                    if (hasPrivateKey) putExtra("PRIVATE_KEY", data?.getStringExtra("PRIVATE_KEY"))
-                }
-                startService(generatingService)
-            }
-        } else if (requestCode == SendActivity.REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (fragments == null || fragments!![2] == null) return
-                (fragments!![2] as TransactionsAllFragment).addUnconfirmedTransaction(data?.getStringExtra("FROM_ADDRESS"), data?.getStringExtra
-                ("TO_ADDRESS"),
-                        BigDecimal("-" + data?.getStringExtra("AMOUNT")).multiply(BigDecimal("1000000000000000000")).toBigInteger())
-                //if (tabLayout != null) {
-                //  tabLayout.getTabAt(2).select();
-                //}
-            }
-        } else if (requestCode == AppIntroActivity.REQUEST_CODE) {
-            if (resultCode != Activity.RESULT_OK) {
-                finish()
-            } else {
-                preferences.edit().apply {
-                    putLong("APP_INSTALLED", System.currentTimeMillis())
-                    commit()
-                }
-            }
-        } else if (requestCode == SettingsActivity.REQUEST_CODE) {
-            val currency = preferences.getString("maincurrency", "USD")
-            if (currency != ExchangeCalculator.getInstance().mainCurreny.name) {
-                try {
-                    ExchangeCalculator.getInstance().updateExchangeRates(currency, this)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+            Handler().postDelayed({
+                (fragments[0] as PriceFragment).update()
+                (fragments[1] as WalletsFragment).updateBalanceText()
+                (fragments[1] as WalletsFragment).notifyDataSetChanged()
+                (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
+            }, 950)
+        }
+    }
 
-                Handler().postDelayed({
-                    (fragments[0] as PriceFragment).update()
-                    (fragments[1] as WalletsFragment).updateBalanceText()
-                    (fragments[1] as WalletsFragment).notifyDataSetChanged()
-                    (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
-                }, 950)
+    private fun handleAppIntroResult(resultCode: Int) {
+        if (resultCode != Activity.RESULT_OK) {
+            finish()
+        } else {
+            preferences.edit().apply {
+                putLong("APP_INSTALLED", System.currentTimeMillis())
+                commit()
             }
         }
     }
 
+    private fun handleSendResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            (fragments[2] as TransactionsAllFragment).addUnconfirmedTransaction(data?.getStringExtra("FROM_ADDRESS"), data?.getStringExtra("TO_ADDRESS"), BigDecimal("-" + data?.getStringExtra("AMOUNT")).multiply(BigDecimal("1000000000000000000")).toBigInteger())
+            //if (tabLayout != null) {
+            //  tabLayout.getTabAt(2).select();
+            //}
+        }
+    }
+
+    private fun handleWalletGenerationResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val generatingService = Intent(this, WalletGenService::class.java).apply {
+                putExtra("PASSWORD", data?.getStringExtra("PASSWORD"))
+                val hasPrivateKey = data?.hasExtra("PRIVATE_KEY") ?: false
+                if (hasPrivateKey) putExtra("PRIVATE_KEY", data?.getStringExtra("PRIVATE_KEY"))
+            }
+            startService(generatingService)
+        }
+    }
+
+    private fun handleOnQrScanResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val type = data?.getByteExtra("TYPE", QRScanActivity.SCAN_ONLY)
+            if (type == QRScanActivity.SCAN_ONLY) {
+                if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
+                    snackError(getString(R.string.invalid_wallet))
+                    return
+                }
+                val watch = Intent(this, AddressDetailActivity::class.java)
+                watch.putExtra("ADDRESS", data.getStringExtra("ADDRESS"))
+                startActivity(watch)
+            } else if (type == QRScanActivity.ADD_TO_WALLETS) {
+                if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
+                    snackError(getString(R.string.invalid_wallet))
+                    return
+                }
+                val suc = walletStorage.add(WatchWallet(data.getStringExtra("ADDRESS")))
+                Handler().postDelayed({
+                    try {
+                        (fragments[1] as WalletsFragment).update()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                    //if (tabLayout != null) {
+                    //  tabLayout.getTabAt(1).select();
+                    //}
+                    val mySnackbar = Snackbar.make(main_content,
+                            this@MainActivity.resources.getString(if (suc) R.string.main_ac_wallet_added_suc else R.string.main_ac_wallet_added_er),
+                            Snackbar.LENGTH_SHORT)
+                    if (suc) {
+                        addressNameConverter.put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6), this@MainActivity)
+                    }
+
+                    mySnackbar.show()
+                }, 100)
+            } else if (type == QRScanActivity.REQUEST_PAYMENT) {
+                if (walletStorage.fullOnly.size == 0) {
+                    DialogFactory.noFullWallet(this)
+                } else {
+                    val watch = Intent(this, SendActivity::class.java).apply {
+                        putExtra("TO_ADDRESS", data.getStringExtra("ADDRESS"))
+                        putExtra("AMOUNT", data.getStringExtra("AMOUNT"))
+                    }
+                    startActivity(watch)
+                }
+            } else if (type == QRScanActivity.PRIVATE_KEY) {
+                if (OwnWalletUtils.isValidPrivateKey(data.getStringExtra("ADDRESS"))) {
+                    importPrivateKey(data.getStringExtra("ADDRESS"))
+                } else {
+                    this.snackError(getString(com.ubiqsmart.R.string.invalid_private_key))
+                }
+            }
+        } else {
+            val mySnackbar = Snackbar.make(main_content!!, this@MainActivity.resources.getString(R.string.main_ac_wallet_added_fatal), Snackbar.LENGTH_SHORT)
+            mySnackbar.show()
+        }
+    }
+
     fun importPrivateKey(privatekey: String) {
-        val genI = Intent(this, WalletGenActivity::class.java)
-        genI.putExtra("PRIVATE_KEY", privatekey)
+        val genI = Intent(this, WalletGenActivity::class.java).apply {
+            putExtra("PRIVATE_KEY", privatekey)
+        }
         startActivityForResult(genI, WalletGenActivity.REQUEST_CODE)
     }
 
@@ -315,7 +342,7 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener, LazyKodei
 
         // Spongy Castle Provider
         init {
-            Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
+            Security.insertProviderAt(BouncyCastleProvider(), 1)
         }
     }
 }

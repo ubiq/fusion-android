@@ -1,4 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipeRefreshLayout2"
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout2"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:fab="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -68,7 +68,7 @@
 
 
               <TextView
-                android:id="@+id/balance"
+                android:id="@+id/balance_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"

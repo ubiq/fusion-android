@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import com.ubiqsmart.R;
-import com.ubiqsmart.repository.data.WalletDisplay;
+import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.ui.scanqr.QRScanActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.WalletAdapter;
@@ -27,7 +27,7 @@ public class ChooseRecipientFragment extends Fragment implements View.OnClickLis
 
   private RecyclerView recyclerView;
   private WalletAdapter walletAdapter;
-  private List<WalletDisplay> wallets = new ArrayList<>();
+  private List<Wallet> wallets = new ArrayList<>();
   private SendActivity ac;
   private ImageButton qr;
   private Button send;
@@ -108,7 +108,7 @@ public class ChooseRecipientFragment extends Fragment implements View.OnClickLis
     if (ac == null) return;
     wallets.clear();
 
-    wallets.addAll(new ArrayList<WalletDisplay>(AddressNameConverter.getInstance(ac).getAsAddressbook()));
+    wallets.addAll(new ArrayList<Wallet>(AddressNameConverter.getInstance(ac).getAsAddressBook()));
     walletAdapter.notifyDataSetChanged();
   }
 

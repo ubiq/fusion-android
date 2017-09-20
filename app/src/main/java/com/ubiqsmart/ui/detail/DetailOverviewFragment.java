@@ -27,14 +27,14 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.ubiqsmart.ui.send.SendActivity;
-import com.ubiqsmart.repository.data.CurrencyEntry;
-import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.Currency;
+import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.repository.data.WatchWallet;
 import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.network.EtherscanAPI;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.Blockies;
-import com.ubiqsmart.utils.Dialogs;
+import com.ubiqsmart.utils.DialogFactory;
 import com.ubiqsmart.utils.ExchangeCalculator;
 import com.ubiqsmart.utils.TokenAdapter;
 import com.ubiqsmart.utils.WalletStorage;
@@ -63,7 +63,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
   private FloatingActionMenu fabmenu;
   private RecyclerView recyclerView;
   private TokenAdapter walletAdapter;
-  private List<TokenDisplay> token = new ArrayList<>();
+  private List<Token> token = new ArrayList<>();
   private SwipeRefreshLayout swipeLayout;
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,12 +75,12 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
 
     icon = rootView.findViewById(R.id.addressimage);
     address = rootView.findViewById(R.id.ethaddress);
-    balance = rootView.findViewById(R.id.balance);
+    balance = rootView.findViewById(R.id.balance_view);
     currency = rootView.findViewById(R.id.currency);
     header = rootView.findViewById(R.id.header);
     fabmenu = rootView.findViewById(R.id.fabmenu);
 
-    CurrencyEntry cur = ExchangeCalculator.getInstance().getCurrent();
+    Currency cur = ExchangeCalculator.getInstance().getCurrent();
     balanceDouble = new BigDecimal(getArguments().getDouble("BALANCE"));
     balance.setText(ExchangeCalculator.getInstance().convertRateExact(balanceDouble, cur.getRate()) + "");
     currency.setText(cur.getName());
@@ -95,7 +95,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), mgr.getOrientation());
     recyclerView.addItemDecoration(dividerItemDecoration);
 
-    swipeLayout = rootView.findViewById(R.id.swipeRefreshLayout2);
+    swipeLayout = rootView.findViewById(R.id.swipe_refresh_layout2);
     swipeLayout.setColorSchemeColors(ac.getResources().getColor(R.color.primary));
     swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
@@ -110,7 +110,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
 
     header.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        CurrencyEntry cur = ExchangeCalculator.getInstance().next();
+        Currency cur = ExchangeCalculator.getInstance().next();
         balance.setText(ExchangeCalculator.getInstance().convertRateExact(balanceDouble, cur.getRate()) + "");
         currency.setText(cur.getName());
         walletAdapter.notifyDataSetChanged();
@@ -132,7 +132,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
     send_ether.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (WalletStorage.getInstance(ac).getFullOnly().size() == 0) {
-          Dialogs.noFullWallet(ac);
+          DialogFactory.noFullWallet(ac);
         } else {
           Intent tx = new Intent(ac, SendActivity.class);
           tx.putExtra("TO_ADDRESS", ethaddress);
@@ -145,7 +145,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
     send_ether_from.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (WalletStorage.getInstance(ac).getFullOnly().size() == 0) {
-          Dialogs.noFullWallet(ac);
+          DialogFactory.noFullWallet(ac);
         } else {
           Intent tx = new Intent(ac, SendActivity.class);
           tx.putExtra("FROM_ADDRESS", ethaddress);
@@ -210,7 +210,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
         BigDecimal ethbal;
         try {
           ethbal = new BigDecimal(ResponseParser.parseBalance(response.body().string()));
-          token.add(0, new TokenDisplay("Ether", "ETH", ethbal.multiply(new BigDecimal(1000d)), 3, 1, "", "", 0, 0));
+          token.add(0, new Token("Ether", "ETH", ethbal.multiply(new BigDecimal(1000d)), 3, 1, "", "", 0, 0));
           balanceDouble = balanceDouble.add(ethbal);
         } catch (JSONException e) {
           ac.runOnUiThread(new Runnable() {
@@ -220,7 +220,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
           });
           e.printStackTrace();
         }
-        final CurrencyEntry cur = ExchangeCalculator.getInstance().getCurrent();
+        final Currency cur = ExchangeCalculator.getInstance().getCurrent();
         ac.runOnUiThread(new Runnable() {
           @Override public void run() {
             // balance.setText(ExchangeCalculator.getInstance().convertRateExact(balanceDouble, ExchangeCalculator.getInstance().get));
@@ -250,7 +250,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
 
           balanceDouble = balanceDouble.add(new BigDecimal(ExchangeCalculator.getInstance().sumUpTokenEther(token)));
 
-          final CurrencyEntry cur = ExchangeCalculator.getInstance().getCurrent();
+          final Currency cur = ExchangeCalculator.getInstance().getCurrent();
           ac.runOnUiThread(new Runnable() {
             @Override public void run() {
               balance.setText(ExchangeCalculator.getInstance().convertRateExact(balanceDouble, cur.getRate()) + "");
@@ -337,7 +337,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
     if (ac == null) return;
     int itemPosition = recyclerView.getChildLayoutPosition(view);
     if (itemPosition == 0 || itemPosition >= token.size()) return;  // if clicked on Ether
-    Dialogs.showTokenetails(ac, token.get(itemPosition));
+    DialogFactory.showTokenetails(ac, token.get(itemPosition));
   }
 
   @Override public void onLastIconDownloaded() {

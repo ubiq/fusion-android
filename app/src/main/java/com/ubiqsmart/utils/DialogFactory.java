@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ubiqsmart.ui.detail.AddressDetailActivity;
 import com.ubiqsmart.ui.main.MainActivity;
-import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.repository.data.TransactionDisplay;
 import com.ubiqsmart.repository.data.WatchWallet;
 import com.ubiqsmart.ui.main.WalletsFragment;
@@ -32,9 +32,9 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Dialogs {
+public class DialogFactory {
 
-  public static void showTokenetails(final Activity c, final TokenDisplay tok) {
+  public static void showTokenetails(final Activity c, final Token tok) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_token_detail, true).show();
     View view = dialog.getCustomView();
     ImageView contractIcon = view.findViewById(R.id.my_addressicon);
@@ -55,55 +55,55 @@ public class Dialogs {
     from.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         Intent i = new Intent(c, AddressDetailActivity.class);
-        i.putExtra("ADDRESS", tok.getContractAddr());
+        i.putExtra("ADDRESS", tok.getContractAddress());
         c.startActivity(i);
       }
     });
 
     ExchangeCalculator ex = ExchangeCalculator.getInstance();
-    contractIcon.setImageBitmap(Blockies.createIcon(tok.getContractAddr().toLowerCase()));
+    contractIcon.setImageBitmap(Blockies.createIcon(tok.getContractAddress().toLowerCase()));
     tokenname.setText(tok.getName());
-    contractAddr.setText(tok.getContractAddr().toLowerCase());
-    supply.setText(ex.displayUsdNicely(tok.getTotalSupplyLong()) + " " + tok.getShorty());
-    priceUSD.setText(tok.getUsdprice() + " $");
+    contractAddr.setText(tok.getContractAddress().toLowerCase());
+    supply.setText(String.format("%s %s", ex.displayUsdNicely(tok.getTotalSupplyLong()), tok.getShorty()));
+    priceUSD.setText(String.format("%s $", tok.getUsdprice()));
 
-    priceETH.setText(ex.displayEthNicelyExact(ex.convertTokenToEther(1, tok.getUsdprice())) + " " + ex.getEtherCurrency().getShorty());
+    priceETH.setText(String.format("%s %s", ex.displayEthNicelyExact(ex.convertTokenToEther(1, tok.getUsdprice())), ex.getEtherCurrency().getShorty()));
     capETH.setText(
-        ex.displayUsdNicely(ex.convertTokenToEther(tok.getTotalSupplyLong(), tok.getUsdprice())) + " " + ex.getEtherCurrency().getShorty());
-    capUSD.setText(ex.displayUsdNicely(tok.getUsdprice() * tok.getTotalSupplyLong()) + " $");
-    holders.setText(ex.displayUsdNicely(tok.getHolderCount()) + "");
-    digits.setText(tok.getDigits() + "");
+        String.format("%s %s", ex.displayUsdNicely(ex.convertTokenToEther(tok.getTotalSupplyLong(), tok.getUsdprice())), ex.getEtherCurrency().getShorty()));
+    capUSD.setText(String.format("%s $", ex.displayUsdNicely(tok.getUsdprice() * tok.getTotalSupplyLong())));
+    holders.setText(String.format("%s", ex.displayUsdNicely(tok.getHolderCount())));
+    digits.setText(String.format(Locale.getDefault(), "%d", tok.getDigits()));
     SimpleDateFormat dateformat = new SimpleDateFormat("dd. MMMM yyyy", Locale.getDefault());
-    created.setText(dateformat.format(tok.getCreatedAt() * 1000) + "");
+    created.setText(String.format("%s", dateformat.format(tok.getCreatedAt() * 1000)));
   }
 
   public static void showTXDetails(final Activity c, final TransactionDisplay tx) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_tx_detail, true).show();
-    View view = dialog.getCustomView();
-    ImageView myicon = view.findViewById(R.id.my_addressicon);
-    ImageView othericon = view.findViewById(R.id.other_addressicon);
-    TextView myAddressname = view.findViewById(R.id.walletname);
-    TextView otherAddressname = view.findViewById(R.id.other_address);
-    AutofitTextView myAddressaddr = view.findViewById(R.id.walletaddr);
-    AutofitTextView otherAddressaddr = view.findViewById(R.id.other_addressaddr);
-    TextView amount = view.findViewById(R.id.amount);
+    final View view = dialog.getCustomView();
+    final ImageView myicon = view.findViewById(R.id.my_addressicon);
+    final ImageView othericon = view.findViewById(R.id.other_addressicon);
+    final TextView myAddressname = view.findViewById(R.id.walletname);
+    final TextView otherAddressname = view.findViewById(R.id.other_address);
+    final AutofitTextView myAddressaddr = view.findViewById(R.id.walletaddr);
+    final AutofitTextView otherAddressaddr = view.findViewById(R.id.other_addressaddr);
+    final TextView amount = view.findViewById(R.id.amount);
 
-    TextView month = view.findViewById(R.id.month);
-    TextView gasUsed = view.findViewById(R.id.gasused);
-    TextView blocknr = view.findViewById(R.id.blocknr);
-    TextView gasPrice = view.findViewById(R.id.gasPrice);
-    TextView nonce = view.findViewById(R.id.nonce);
-    TextView txcost = view.findViewById(R.id.txcost);
-    TextView txcost2 = view.findViewById(R.id.txcost2);
-    Button openInBrowser = view.findViewById(R.id.openinbrowser);
-    LinearLayout from = view.findViewById(R.id.from);
-    LinearLayout to = view.findViewById(R.id.to);
-    TextView amountfiat = view.findViewById(R.id.amountfiat);
-    TextView errormsg = view.findViewById(R.id.errormsg);
+    final TextView month = view.findViewById(R.id.month);
+    final TextView gasUsed = view.findViewById(R.id.gasused);
+    final TextView blocknr = view.findViewById(R.id.blocknr);
+    final TextView gasPrice = view.findViewById(R.id.gasPrice);
+    final TextView nonce = view.findViewById(R.id.nonce);
+    final TextView txcost = view.findViewById(R.id.txcost);
+    final TextView txcost2 = view.findViewById(R.id.txcost2);
+    final Button openInBrowser = view.findViewById(R.id.openinbrowser);
+    final LinearLayout from = view.findViewById(R.id.from);
+    final LinearLayout to = view.findViewById(R.id.to);
+    final TextView amountfiat = view.findViewById(R.id.amountfiat);
+    final TextView errormsg = view.findViewById(R.id.errormsg);
 
     from.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        Intent i = new Intent(c, AddressDetailActivity.class);
+        final Intent i = new Intent(c, AddressDetailActivity.class);
         i.putExtra("ADDRESS", tx.getFromAddress());
         c.startActivity(i);
       }
@@ -111,7 +111,7 @@ public class Dialogs {
 
     to.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        Intent i = new Intent(c, AddressDetailActivity.class);
+        final Intent i = new Intent(c, AddressDetailActivity.class);
         i.putExtra("ADDRESS", tx.getToAddress());
         c.startActivity(i);
       }
@@ -119,8 +119,8 @@ public class Dialogs {
 
     openInBrowser.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        String url = "https://etherscan.io/tx/" + tx.getTxHash();
-        Intent i = new Intent(Intent.ACTION_VIEW);
+        final String url = "https://etherscan.io/tx/" + tx.getTxHash();
+        final Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         c.startActivity(i);
       }
@@ -130,9 +130,13 @@ public class Dialogs {
     othericon.setImageBitmap(Blockies.createIcon(tx.getToAddress().toLowerCase()));
 
     String myName = AddressNameConverter.getInstance(c).get(tx.getFromAddress().toLowerCase());
-    if (myName == null) myName = shortName(tx.getFromAddress().toLowerCase());
+    if (myName == null) {
+      myName = shortName(tx.getFromAddress().toLowerCase());
+    }
     String otherName = AddressNameConverter.getInstance(c).get(tx.getToAddress().toLowerCase());
-    if (otherName == null) otherName = shortName(tx.getToAddress().toLowerCase());
+    if (otherName == null) {
+      otherName = shortName(tx.getToAddress().toLowerCase());
+    }
     myAddressname.setText(myName);
     otherAddressname.setText(otherName);
 
@@ -140,29 +144,27 @@ public class Dialogs {
     myAddressaddr.setText(tx.getFromAddress());
     otherAddressaddr.setText(tx.getToAddress());
     SimpleDateFormat dateformat = new SimpleDateFormat("dd. MMMM yyyy, HH:mm:ss", Locale.getDefault());
-    month.setText(dateformat.format(tx.getDate()) + "");
-    blocknr.setText(tx.getBlock() + "");
-    gasUsed.setText(tx.getGasUsed() + "");
-    gasPrice.setText(tx.getGasprice() / 1000000000 + " Gwei");
-    nonce.setText(tx.getNounce() + "");
-    txcost.setText(
-        ExchangeCalculator.getInstance().displayEthNicelyExact(ExchangeCalculator.getInstance().weiToEther(tx.getGasUsed() * tx.getGasprice()))
-            + " Ξ");
-    txcost2.setText(ExchangeCalculator.getInstance().convertToUsd(ExchangeCalculator.getInstance().weiToEther(tx.getGasUsed() * tx.getGasprice()))
-        + " "
-        + ExchangeCalculator.getInstance().getMainCurreny().getShorty());
-    amount.setText((tx.getAmount() > 0 ? "+ " : "- ") + Math.abs(tx.getAmount()) + " Ξ");
+    month.setText(String.format("%s", dateformat.format(tx.getDate())));
+    blocknr.setText(String.format(Locale.getDefault(), "%d", tx.getBlock()));
+    gasUsed.setText(String.format(Locale.getDefault(), "%d", tx.getGasUsed()));
+    gasPrice.setText(String.format(Locale.getDefault(), "%d Gwei", tx.getGasprice() / 1000000000));
+    nonce.setText(String.format("%s", tx.getNounce()));
+    txcost.setText(String.format("%s Ξ",
+        ExchangeCalculator.getInstance().displayEthNicelyExact(ExchangeCalculator.getInstance().weiToEther(tx.getGasUsed() * tx.getGasprice()))));
+    txcost2.setText(
+        String.format("%s %s", ExchangeCalculator.getInstance().convertToUsd(ExchangeCalculator.getInstance().weiToEther(tx.getGasUsed() * tx.getGasprice())),
+            ExchangeCalculator.getInstance().getMainCurreny().getShorty()));
+    amount.setText(String.format("%s%s Ξ", tx.getAmount() > 0 ? "+ " : "- ", Math.abs(tx.getAmount())));
     amount.setTextColor(c.getResources().getColor(tx.getAmount() > 0 ? R.color.ether_received : R.color.ether_spent));
-    amountfiat.setText(ExchangeCalculator.getInstance().displayUsdNicely(ExchangeCalculator.getInstance().convertToUsd(tx.getAmount()))
-        + " "
-        + ExchangeCalculator.getInstance().getMainCurreny().getShorty());
+    amountfiat.setText(String.format("%s %s", ExchangeCalculator.getInstance().displayUsdNicely(ExchangeCalculator.getInstance().convertToUsd(tx.getAmount())),
+        ExchangeCalculator.getInstance().getMainCurreny().getShorty()));
   }
 
   private static String shortName(String addr) {
     return "0x" + addr.substring(2, 8);
   }
 
-  public static void addWatchOnly(final MainActivity c) {
+  public static void addWatchOnly(final MainActivity c, final WalletStorage walletStorage) {
     AlertDialog.Builder builder;
     if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
     {
@@ -199,7 +201,7 @@ public class Dialogs {
         InputMethodManager inputMgr = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMgr.hideSoftInputFromWindow(input.getWindowToken(), 0);
         if (input.getText().toString().length() == 42 && input.getText().toString().startsWith("0x")) {
-          final boolean suc = WalletStorage.getInstance(c).add(new WatchWallet(input.getText().toString()), c);
+          final boolean suc = walletStorage.add(new WatchWallet(input.getText().toString()));
           new Handler().postDelayed(new Runnable() {
             @Override public void run() {
               if (c.getFragments() != null && c.getFragments().get(1) != null) {
@@ -245,7 +247,7 @@ public class Dialogs {
 
   }
 
-  public static void importWallets(final MainActivity c, final List<File> files) {
+  public static void importWallets(final MainActivity c, final WalletStorage walletStorage, final List<File> files) {
     String addresses = "";
     for (int i = 0; i < files.size() && i < 3; i++)
       addresses += WalletStorage.stripWalletName(files.get(i).getName()) + "\n";
@@ -262,7 +264,7 @@ public class Dialogs {
     builder.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int which) {
         try {
-          WalletStorage.getInstance(c).importWallets(c, files);
+          walletStorage.importWallets(files);
           c.snackError("Wallet" + (files.size() > 1 ? "s" : "") + " successfully imported!");
           if (c.getFragments() != null && c.getFragments().get(1) != null) ((WalletsFragment) c.getFragments().get(1)).update();
         } catch (Exception e) {

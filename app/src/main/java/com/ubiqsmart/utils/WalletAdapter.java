@@ -13,14 +13,14 @@ import android.widget.TextView;
 import com.ubiqsmart.repository.data.TransactionDisplay;
 import me.grantland.widget.AutofitTextView;
 import com.ubiqsmart.R;
-import com.ubiqsmart.repository.data.WalletDisplay;
+import com.ubiqsmart.repository.data.Wallet;
 
 import java.util.*;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHolder> {
 
   private Context context;
-  private List<WalletDisplay> boxlist;
+  private List<Wallet> boxlist;
   private int lastPosition = -1;
   private View.OnClickListener listener;
   private View.OnCreateContextMenuListener contextMenuListener;
@@ -49,7 +49,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
     }
   }
 
-  public WalletAdapter(List<WalletDisplay> boxlist, Context context, View.OnClickListener listener, View.OnCreateContextMenuListener l) {
+  public WalletAdapter(List<Wallet> boxlist, Context context, View.OnClickListener listener, View.OnCreateContextMenuListener l) {
     this.boxlist = boxlist;
     this.context = context;
     this.listener = listener;
@@ -65,7 +65,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
   }
 
   @Override public void onBindViewHolder(MyViewHolder holder, final int position) {
-    WalletDisplay box = boxlist.get(position);
+    Wallet box = boxlist.get(position);
 
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
       @Override public boolean onLongClick(View v) {
@@ -76,7 +76,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
     holder.walletaddress.setText(box.getPublicKey());
     String walletname = AddressNameConverter.getInstance(context).get(box.getPublicKey());
     holder.walletname.setText(walletname == null ? "New Wallet" : walletname);
-    if (box.getType() != WalletDisplay.CONTACT) {
+    if (box.getType() != Wallet.CONTACT) {
       holder.walletbalance.setText(ExchangeCalculator.getInstance()
           .displayBalanceNicely(
               ExchangeCalculator.getInstance().convertRate(box.getBalance(), ExchangeCalculator.getInstance().getCurrent().getRate()))
@@ -85,7 +85,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
     }
     holder.addressimage.setImageBitmap(Blockies.createIcon(box.getPublicKey()));
 
-    holder.type.setVisibility(box.getType() == TransactionDisplay.NORMAL || box.getType() == WalletDisplay.CONTACT ? View.INVISIBLE : View.VISIBLE);
+    holder.type.setVisibility(box.getType() == TransactionDisplay.NORMAL || box.getType() == Wallet.CONTACT ? View.INVISIBLE : View.VISIBLE);
 
     setAnimation(holder.container, position);
   }

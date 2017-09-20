@@ -1,4 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipeRefreshLayout2"
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout2"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -81,10 +81,9 @@
         app:menu_colorNormal="@color/primary"
         app:menu_colorPressed="@color/accent_2"
         app:menu_colorRipple="@color/accent"
+        app:menu_icon="@drawable/ic_new_tx"
         fab:menu_animationDelayPerItem="20"
-        fab:menu_icon="@drawable/ic_new_transaction"
-        fab:menu_shadowColor="#444"
-        app:menu_icon="@drawable/ic_new_tx">
+        fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
           android:id="@+id/requestTx"

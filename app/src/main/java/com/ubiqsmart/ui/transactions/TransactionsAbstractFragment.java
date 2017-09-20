@@ -32,7 +32,7 @@ import com.ubiqsmart.ui.detail.AddressDetailActivity;
 import com.ubiqsmart.ui.send.RequestEtherActivity;
 import com.ubiqsmart.ui.send.SendActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
-import com.ubiqsmart.utils.Dialogs;
+import com.ubiqsmart.utils.DialogFactory;
 import com.ubiqsmart.utils.TransactionAdapter;
 import com.ubiqsmart.utils.WalletStorage;
 
@@ -73,7 +73,7 @@ public abstract class TransactionsAbstractFragment extends Fragment implements V
     recyclerView.setAdapter(walletAdapter);
     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), mgr.getOrientation());
     recyclerView.addItemDecoration(dividerItemDecoration);
-    swipeLayout = rootView.findViewById(R.id.swipeRefreshLayout2);
+    swipeLayout = rootView.findViewById(R.id.swipe_refresh_layout2);
     swipeLayout.setColorSchemeColors(ac.getResources().getColor(R.color.primary));
     swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
@@ -113,7 +113,7 @@ public abstract class TransactionsAbstractFragment extends Fragment implements V
 
   private void openSendActivity() {
     if (WalletStorage.getInstance(ac).getFullOnly().size() == 0) {
-      Dialogs.noFullWallet(ac);
+      DialogFactory.noFullWallet(ac);
     } else {
       Intent newTrans = new Intent(ac, SendActivity.class);
       if (address != null) newTrans.putExtra("FROM_ADDRESS", address);
@@ -123,7 +123,7 @@ public abstract class TransactionsAbstractFragment extends Fragment implements V
 
   private void openRequestActivity() {
     if (WalletStorage.getInstance(ac).get().size() == 0) {
-      Dialogs.noWallet(ac);
+      DialogFactory.noWallet(ac);
     } else {
       Intent newTrans = new Intent(ac, RequestEtherActivity.class);
       ac.startActivity(newTrans);
@@ -264,6 +264,6 @@ public abstract class TransactionsAbstractFragment extends Fragment implements V
     if (ac == null) return;
     int itemPosition = recyclerView.getChildLayoutPosition(view);
     if (itemPosition >= wallets.size()) return;
-    Dialogs.showTXDetails(ac, wallets.get(itemPosition));
+    DialogFactory.showTXDetails(ac, wallets.get(itemPosition));
   }
 }

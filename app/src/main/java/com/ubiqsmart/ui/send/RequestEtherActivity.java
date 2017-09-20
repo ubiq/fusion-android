@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.ubiqsmart.R;
-import com.ubiqsmart.repository.data.WalletDisplay;
+import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.ui.base.SecureAppCompatActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
@@ -41,7 +41,7 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
   private ImageView qr;
   private RecyclerView recyclerView;
   private WalletAdapter walletAdapter;
-  private List<WalletDisplay> wallets = new ArrayList<>();
+  private List<Wallet> wallets = new ArrayList<>();
   private String selectedEtherAddress;
   private TextView amount, usdPrice;
 
@@ -98,12 +98,12 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
 
   public void update() {
     wallets.clear();
-    ArrayList<WalletDisplay> myAddresses = new ArrayList<WalletDisplay>();
+    ArrayList<Wallet> myAddresses = new ArrayList<Wallet>();
     ArrayList<StorableWallet> storedAddresses = new ArrayList<StorableWallet>(WalletStorage.getInstance(this).get());
     for (int i = 0; i < storedAddresses.size(); i++) {
       if (i == 0) selectedEtherAddress = storedAddresses.get(i).getPubKey();
       myAddresses.add(
-          new WalletDisplay(AddressNameConverter.getInstance(this).get(storedAddresses.get(i).getPubKey()), storedAddresses.get(i).getPubKey()));
+          new Wallet(AddressNameConverter.getInstance(this).get(storedAddresses.get(i).getPubKey()), storedAddresses.get(i).getPubKey()));
     }
 
     wallets.addAll(myAddresses);

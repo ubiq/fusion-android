@@ -6,8 +6,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.ubiqsmart.repository.data.CurrencyEntry;
-import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.Currency;
+import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.interfaces.NetworkUpdateListener;
 
 import java.io.*;
@@ -37,8 +37,8 @@ public class ExchangeCalculator {
     return instance;
   }
 
-  private CurrencyEntry[] conversionNames = new CurrencyEntry[] {
-      new CurrencyEntry("ETH", 1, "Ξ"), new CurrencyEntry("BTC", 0.07, "฿"), new CurrencyEntry("USD", 0, "$")
+  private Currency[] conversionNames = new Currency[] {
+      new Currency("ETH", 1, "Ξ"), new Currency("BTC", 0.07, "฿"), new Currency("USD", 0, "$")
   };
 
   private int index = 0;
@@ -55,25 +55,25 @@ public class ExchangeCalculator {
     return rateForChartDisplay;
   }
 
-  public CurrencyEntry next() {
+  public Currency next() {
     index = (index + 1) % conversionNames.length;
     return conversionNames[index];
   }
 
-  public CurrencyEntry getCurrent() {
+  public Currency getCurrent() {
     return conversionNames[index];
   }
 
-  public CurrencyEntry previous() {
+  public Currency previous() {
     index = index > 0 ? index - 1 : conversionNames.length - 1;
     return conversionNames[index];
   }
 
-  public CurrencyEntry getMainCurreny() {
+  public Currency getMainCurreny() {
     return conversionNames[2];
   }
 
-  public CurrencyEntry getEtherCurrency() {
+  public Currency getEtherCurrency() {
     return conversionNames[0];
   }
 
@@ -146,9 +146,9 @@ public class ExchangeCalculator {
    * @param token List of all tokens on an address
    * @return ether price of all tokens combined (exclusive ether balance itself)
    */
-  public double sumUpTokenEther(List<TokenDisplay> token) {
+  public double sumUpTokenEther(List<Token> token) {
     double summedEther = 0;
-    for (TokenDisplay t : token) {
+    for (Token t : token) {
       if (t.getShorty().equals("ETH")) continue;
       summedEther += convertTokenToEther(t.getBalanceDouble(), t.getUsdprice());
     }

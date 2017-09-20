@@ -315,6 +315,7 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="zero_ubiqs">0.0000 UBQ</string>
   <string name="ubq">ETH</string>
   <string name="grant_camera_permission">Please grant camera permission in order to read QR codes</string>
+  <string name="share_via">Share via</string>
 
 
 </resources>

@@ -10,7 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.ubiqsmart.repository.data.TokenDisplay;
+import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.R;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.*;
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.MyViewHolder> {
 
   private Context context;
-  private List<TokenDisplay> boxlist;
+  private List<Token> boxlist;
   private int lastPosition = -1;
   private View.OnClickListener listener;
   private View.OnCreateContextMenuListener contextMenuListener;
@@ -47,7 +47,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.MyViewHolder
     }
   }
 
-  public TokenAdapter(List<TokenDisplay> boxlist, Context context, View.OnClickListener listener, View.OnCreateContextMenuListener l) {
+  public TokenAdapter(List<Token> boxlist, Context context, View.OnClickListener listener, View.OnCreateContextMenuListener l) {
     this.boxlist = boxlist;
     this.context = context;
     this.listener = listener;
@@ -63,7 +63,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.MyViewHolder
   }
 
   @Override public void onBindViewHolder(MyViewHolder holder, final int position) {
-    TokenDisplay box = boxlist.get(position);
+    Token box = boxlist.get(position);
 
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
       @Override public boolean onLongClick(View v) {
@@ -79,7 +79,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.MyViewHolder
         .displayEthNicely(ExchangeCalculator.getInstance()
             .convertRate(ExchangeCalculator.getInstance().convertTokenToEther(tbalance, box.getUsdprice()),
                 ExchangeCalculator.getInstance().getCurrent().getRate())) + " " + ExchangeCalculator.getInstance().getCurrent().getShorty());
-    if (box.getContractAddr() != null && box.getContractAddr().length() > 3) {
+    if (box.getContractAddress() != null && box.getContractAddress().length() > 3) {
       holder.image.setText("");
       String iconName = box.getName();
       if (iconName.indexOf(" ") > 0) iconName = iconName.substring(0, iconName.indexOf(" "));

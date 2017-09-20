@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import com.ubiqsmart.ui.main.MainActivity;
+import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.repository.data.FullWallet;
 import com.ubiqsmart.repository.data.WatchWallet;
-import com.ubiqsmart.interfaces.StorableWallet;
+import com.ubiqsmart.ui.main.MainActivity;
 import org.json.JSONException;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
@@ -24,33 +23,48 @@ public class WalletStorage {
 
   private static WalletStorage instance;
 
+  private final Context context;
+  private final SharedPreferences sharedPreferences;
+  private final WalletStorage walletStorage;
+  private final AddressNameConverter addressNameConverter;
+
   private List<StorableWallet> mapdb;
   private String walletToExport; // Used as temp if users wants to export but still needs to grant write permission
 
-  public static WalletStorage getInstance(Context context) {
+  public static WalletStorage getInstance(final Context context, final SharedPreferences preferences, final WalletStorage walletStorage,
+      final AddressNameConverter addressNameConverter) {
     if (instance == null) {
-      instance = new WalletStorage(context);
+      instance = new WalletStorage(context, preferences, walletStorage, addressNameConverter);
     }
     return instance;
   }
 
-  private WalletStorage(Context context) {
+  private WalletStorage(final Context context, final SharedPreferences sharedPreferences, final WalletStorage walletStorage,
+      final AddressNameConverter addressNameConverter) {
+    this.context = context.getApplicationContext();
+    this.sharedPreferences = sharedPreferences;
+    this.walletStorage = walletStorage;
+    this.addressNameConverter = addressNameConverter;
+
     try {
-      load(context);
+      load();
     } catch (Exception e) {
       e.printStackTrace();
       mapdb = new ArrayList<>();
     }
+
     if (mapdb.size() == 0) { // Try to find local wallets
-      checkForWallets(context);
+      checkForWallets();
     }
   }
 
-  public synchronized boolean add(StorableWallet addresse, Context context) {
+  public synchronized boolean add(StorableWallet address) {
     for (int i = 0; i < mapdb.size(); i++)
-      if (mapdb.get(i).getPubKey().equalsIgnoreCase(addresse.getPubKey())) return false;
-    mapdb.add(addresse);
-    save(context);
+      if (mapdb.get(i).getPubKey().equalsIgnoreCase(address.getPubKey())) {
+        return false;
+      }
+    mapdb.add(address);
+    save();
     return true;
   }
 
@@ -58,12 +72,14 @@ public class WalletStorage {
     return mapdb;
   }
 
-  public synchronized ArrayList<String> getFullOnly() {
-    ArrayList<String> erg = new ArrayList<String>();
+  public synchronized List<String> getFullOnly() {
+    final List<String> erg = new ArrayList<>();
     if (mapdb.size() == 0) return erg;
     for (int i = 0; i < mapdb.size(); i++) {
-      StorableWallet cur = mapdb.get(i);
-      if (cur instanceof FullWallet) erg.add(cur.getPubKey());
+      final StorableWallet cur = mapdb.get(i);
+      if (cur instanceof FullWallet) {
+        erg.add(cur.getPubKey());
+      }
     }
     return erg;
   }
@@ -92,34 +108,40 @@ public class WalletStorage {
       }
       mapdb.remove(position);
     }
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    SharedPreferences.Editor editor = preferences.edit();
+
+    SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.remove(address);
     editor.apply();
-    save(context);
+
+    save();
   }
 
-  public void checkForWallets(Context c) {
+  private void checkForWallets() {
     // Full wallets
-    File[] wallets = c.getFilesDir().listFiles();
+    final File[] wallets = context.getFilesDir().listFiles();
     if (wallets == null) {
       return;
     }
-    for (int i = 0; i < wallets.length; i++) {
-      if (wallets[i].isFile()) {
-        if (wallets[i].getName().length() == 40) {
-          add(new FullWallet("0x" + wallets[i].getName(), wallets[i].getName()), c);
+
+    for (File wallet : wallets) {
+      if (wallet.isFile()) {
+        if (wallet.getName().length() == 40) {
+          add(new FullWallet("0x" + wallet.getName(), wallet.getName()));
         }
       }
     }
 
     // Watch only
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-    Map<String, ?> allEntries = preferences.getAll();
+    final Map<String, ?> allEntries = sharedPreferences.getAll();
     for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-      if (entry.getKey().length() == 42 && !mapdb.contains(entry.getKey())) add(new WatchWallet(entry.getKey()), c);
+      if (entry.getKey().length() == 42 && !mapdb.contains(entry.getKey())) {
+        add(new WatchWallet(entry.getKey()));
+      }
     }
-    if (mapdb.size() > 0) save(c);
+
+    if (mapdb.size() > 0) {
+      save();
+    }
   }
 
   public void importingWalletsDetector(MainActivity c) {
@@ -129,10 +151,10 @@ public class WalletStorage {
     }
     final File[] wallets = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Lunary/").listFiles();
     if (wallets == null) {
-      Dialogs.noImportWalletsFound(c);
+      DialogFactory.noImportWalletsFound(c);
       return;
     }
-    final List<File> foundImports = new ArrayList<File>();
+    final List<File> foundImports = new ArrayList<>();
     for (File wallet : wallets) {
       if (wallet.isFile()) {
         if (wallet.getName().startsWith("UTC") && wallet.getName().length() >= 40) {
@@ -148,10 +170,11 @@ public class WalletStorage {
       }
     }
     if (foundImports.size() == 0) {
-      Dialogs.noImportWalletsFound(c);
+      DialogFactory.noImportWalletsFound(c);
       return;
     }
-    Dialogs.importWallets(c, foundImports);
+
+    DialogFactory.importWallets(c, walletStorage, foundImports);
   }
 
   public void setWalletForExport(String wallet) {
@@ -162,19 +185,21 @@ public class WalletStorage {
     return exportWallet(c, false);
   }
 
-  public void importWallets(final Context c, final List<File> toImport) throws Exception {
+  public void importWallets(final List<File> toImport) throws Exception {
     for (int i = 0; i < toImport.size(); i++) {
       final String address = stripWalletName(toImport.get(i).getName());
       if (address.length() == 40) {
-        copyFile(toImport.get(i), new File(c.getFilesDir(), address));
+        copyFile(toImport.get(i), new File(context.getFilesDir(), address));
         toImport.get(i).delete();
-        WalletStorage.getInstance(c).add(new FullWallet("0x" + address, address), c);
-        AddressNameConverter.getInstance(c).put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6), c);
 
-        Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object
+        walletStorage.add(new FullWallet("0x" + address, address));
+        addressNameConverter.put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6), context);
+
+        final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        final Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object
         mediaScannerIntent.setData(fileContentUri);
-        c.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
+
+        context.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
       }
     }
   }
@@ -183,21 +208,24 @@ public class WalletStorage {
     if (s.lastIndexOf("--") > 0) {
       s = s.substring(s.lastIndexOf("--") + 2);
     }
+
     if (s.endsWith(".json")) {
       s = s.substring(0, s.indexOf(".json"));
     }
+
     return s;
   }
 
-  private boolean exportWallet(Activity c, boolean already) {
+  private boolean exportWallet(final Activity activity, boolean already) {
     if (walletToExport == null) {
       return false;
     }
+
     if (walletToExport.startsWith("0x")) {
       walletToExport = walletToExport.substring(2);
     }
 
-    if (ExternalStorageHandler.hasPermission(c)) {
+    if (ExternalStorageHandler.hasPermission(context)) {
       final File folder = new File(Environment.getExternalStorageDirectory(), "Lunary");
       if (!folder.exists()) {
         folder.mkdirs();
@@ -205,7 +233,7 @@ public class WalletStorage {
 
       final File storeFile = new File(folder, walletToExport + ".json");
       try {
-        copyFile(new File(c.getFilesDir(), walletToExport), storeFile);
+        copyFile(new File(context.getFilesDir(), walletToExport), storeFile);
       } catch (IOException e) {
         return false;
       }
@@ -214,39 +242,38 @@ public class WalletStorage {
       final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
       final Uri fileContentUri = Uri.fromFile(storeFile); // With 'permFile' being the File object
       mediaScannerIntent.setData(fileContentUri);
-      c.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
+
+      context.sendBroadcast(mediaScannerIntent); // With 'this' being the context, e.g. the activity
       return true;
     } else if (!already) {
-      ExternalStorageHandler.askForPermission(c);
-      return exportWallet(c, true);
+      ExternalStorageHandler.askForPermission(activity);
+      return exportWallet(activity, true);
     } else {
       return false;
     }
   }
 
   private void copyFile(File src, File dst) throws IOException {
-    FileChannel inChannel = new FileInputStream(src).getChannel();
-    FileChannel outChannel = new FileOutputStream(dst).getChannel();
+    final FileChannel inChannel = new FileInputStream(src).getChannel();
+    final FileChannel outChannel = new FileOutputStream(dst).getChannel();
     try {
       inChannel.transferTo(0, inChannel.size(), outChannel);
     } finally {
       if (inChannel != null) {
         inChannel.close();
       }
-      if (outChannel != null) {
-        outChannel.close();
-      }
+      outChannel.close();
     }
   }
 
-  public Credentials getFullWallet(Context context, String password, String wallet) throws IOException, JSONException, CipherException {
+  public Credentials getFullWallet(String password, String wallet) throws IOException, JSONException, CipherException {
     if (wallet.startsWith("0x")) {
       wallet = wallet.substring(2, wallet.length());
     }
     return WalletUtils.loadCredentials(password, new File(context.getFilesDir(), wallet));
   }
 
-  public synchronized void save(Context context) {
+  private synchronized void save() {
     final FileOutputStream fout;
     try {
       fout = new FileOutputStream(new File(context.getFilesDir(), "wallets.dat"));
@@ -258,7 +285,7 @@ public class WalletStorage {
     }
   }
 
-  @SuppressWarnings("unchecked") public synchronized void load(Context context) throws IOException, ClassNotFoundException {
+  @SuppressWarnings("unchecked") private synchronized void load() throws IOException, ClassNotFoundException {
     final FileInputStream fout = new FileInputStream(new File(context.getFilesDir(), "wallets.dat"));
     final ObjectInputStream oos = new ObjectInputStream(new BufferedInputStream(fout));
     mapdb = (ArrayList<StorableWallet>) oos.readObject();

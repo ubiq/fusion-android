@@ -1,14 +1,14 @@
 package com.ubiqsmart.utils;
 
 import android.content.Context;
-import com.ubiqsmart.repository.data.WalletDisplay;
+import com.ubiqsmart.repository.data.Wallet;
 
 import java.io.*;
 import java.util.*;
 
 public class AddressNameConverter {
 
-  private  HashMap<String, String> mapdb;
+  private HashMap<String, String> mapdb;
   private static AddressNameConverter instance;
 
   public static AddressNameConverter getInstance(Context context) {
@@ -43,24 +43,23 @@ public class AddressNameConverter {
     return mapdb.containsKey(address);
   }
 
-  public List<WalletDisplay> getAsAddressbook() {
-    final List<WalletDisplay> erg = new ArrayList<>();
+  public List<Wallet> getAsAddressBook() {
+    final List<Wallet> erg = new ArrayList<>();
     for (Map.Entry<String, String> entry : mapdb.entrySet()) {
-      erg.add(new WalletDisplay(entry.getValue(), entry.getKey()));
+      erg.add(new Wallet(entry.getValue(), entry.getKey()));
     }
     Collections.sort(erg);
     return erg;
   }
 
   public synchronized void save(Context context) {
-    FileOutputStream fout;
     try {
-      fout = new FileOutputStream(new File(context.getFilesDir(), "namedb.dat"));
+      FileOutputStream fout = new FileOutputStream(new File(context.getFilesDir(), "namedb.dat"));
       ObjectOutputStream oos = new ObjectOutputStream(fout);
       oos.writeObject(mapdb);
       oos.close();
       fout.close();
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
   }
 
