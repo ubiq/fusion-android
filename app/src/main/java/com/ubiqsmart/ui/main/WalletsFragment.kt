@@ -22,6 +22,7 @@ import com.ubiqsmart.network.EtherscanAPI
 import com.ubiqsmart.repository.data.Wallet
 import com.ubiqsmart.ui.base.BaseFragment
 import com.ubiqsmart.ui.detail.AddressDetailActivity
+import com.ubiqsmart.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.ui.scanqr.QRScanActivity
 import com.ubiqsmart.ui.wallet.WalletGenActivity
 import com.ubiqsmart.utils.*

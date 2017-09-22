@@ -1,4 +1,4 @@
-package com.ubiqsmart.utils;
+package com.ubiqsmart.ui.detail.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.R;
+import com.ubiqsmart.utils.ExchangeCalculator;
+import com.ubiqsmart.utils.TokenIconCache;
 
 import java.util.*;
 

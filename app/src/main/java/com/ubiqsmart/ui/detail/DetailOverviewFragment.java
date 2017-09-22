@@ -36,7 +36,7 @@ import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.Blockies;
 import com.ubiqsmart.utils.DialogFactory;
 import com.ubiqsmart.utils.ExchangeCalculator;
-import com.ubiqsmart.utils.TokenAdapter;
+import com.ubiqsmart.ui.detail.adapter.TokenAdapter;
 import com.ubiqsmart.utils.WalletStorage;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -78,7 +78,7 @@ public class DetailOverviewFragment extends Fragment implements View.OnClickList
     balance = rootView.findViewById(R.id.balance_view);
     currency = rootView.findViewById(R.id.currency);
     header = rootView.findViewById(R.id.header);
-    fabmenu = rootView.findViewById(R.id.fabmenu);
+    fabmenu = rootView.findViewById(R.id.fab_menu);
 
     Currency cur = ExchangeCalculator.getInstance().getCurrent();
     balanceDouble = new BigDecimal(getArguments().getDouble("BALANCE"));

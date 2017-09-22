@@ -37,8 +37,8 @@ public class DialogFactory {
   public static void showTokenetails(final Activity c, final Token tok) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_token_detail, true).show();
     View view = dialog.getCustomView();
-    ImageView contractIcon = view.findViewById(R.id.my_addressicon);
-    TextView tokenname = view.findViewById(R.id.walletname);
+    ImageView contractIcon = view.findViewById(R.id.my_address_icon);
+    TextView tokenname = view.findViewById(R.id.wallet_name);
     AutofitTextView contractAddr = view.findViewById(R.id.walletaddr);
 
     TextView supply = view.findViewById(R.id.supply);
@@ -80,15 +80,15 @@ public class DialogFactory {
   public static void showTXDetails(final Activity c, final TransactionDisplay tx) {
     MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_tx_detail, true).show();
     final View view = dialog.getCustomView();
-    final ImageView myicon = view.findViewById(R.id.my_addressicon);
-    final ImageView othericon = view.findViewById(R.id.other_addressicon);
-    final TextView myAddressname = view.findViewById(R.id.walletname);
+    final ImageView myicon = view.findViewById(R.id.my_address_icon);
+    final ImageView othericon = view.findViewById(R.id.other_address_icon);
+    final TextView myAddressname = view.findViewById(R.id.wallet_name);
     final TextView otherAddressname = view.findViewById(R.id.other_address);
     final AutofitTextView myAddressaddr = view.findViewById(R.id.walletaddr);
     final AutofitTextView otherAddressaddr = view.findViewById(R.id.other_addressaddr);
     final TextView amount = view.findViewById(R.id.amount);
 
-    final TextView month = view.findViewById(R.id.month);
+    final TextView month = view.findViewById(R.id.month_view);
     final TextView gasUsed = view.findViewById(R.id.gasused);
     final TextView blocknr = view.findViewById(R.id.blocknr);
     final TextView gasPrice = view.findViewById(R.id.gasPrice);

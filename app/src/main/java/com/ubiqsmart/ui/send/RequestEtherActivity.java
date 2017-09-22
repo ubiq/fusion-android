@@ -24,7 +24,7 @@ import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.ui.base.SecureAppCompatActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.ExchangeCalculator;
-import com.ubiqsmart.utils.WalletAdapter;
+import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 import com.ubiqsmart.utils.WalletStorage;
 import com.ubiqsmart.utils.qr.AddressEncoder;
 import com.ubiqsmart.utils.qr.Contents;

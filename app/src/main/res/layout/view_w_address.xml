@@ -59,7 +59,7 @@
           android:orientation="horizontal">
 
           <TextView
-            android:id="@+id/walletname"
+            android:id="@+id/wallet_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -79,7 +79,7 @@
         </LinearLayout>
 
         <TextView
-          android:id="@+id/walletbalance"
+          android:id="@+id/wallet_balance"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"

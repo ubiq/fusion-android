@@ -54,7 +54,7 @@
           android:layout_gravity="bottom"
           android:layout_marginRight="12dp"
           android:layout_marginBottom="2dp"
-          android:id="@+id/my_addressicon" />
+          android:id="@+id/my_address_icon" />
 
 
         <LinearLayout
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:id="@+id/walletname"
+            android:id="@+id/wallet_name"
             android:singleLine="true"
             android:textColor="@color/primary_dark"
             android:text="" />

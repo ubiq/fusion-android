@@ -23,26 +23,26 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View rootView = super.onCreateView(inflater, container, savedInstanceState);
-    send.setVisibility(GONE);
-    requestTx.setVisibility(GONE);
-    fabmenu.setVisibility(View.GONE);
+    getSend().setVisibility(GONE);
+    getRequest_transaction().setVisibility(GONE);
+    getFabmenu().setVisibility(View.GONE);
     return rootView;
   }
 
   public void update(boolean force) {
-    if (ac == null) return;
+    if (getAc() == null) return;
     resetRequestCount();
     getWallets().clear();
-    if (swipeLayout != null) swipeLayout.setRefreshing(true);
+    if (getSwipe_refresh_layout2() != null) getSwipe_refresh_layout2().setRefreshing(true);
 
     try {
-      EtherscanAPI.getInstance().getNormalTransactions(address, new Callback() {
+      EtherscanAPI.getInstance().getNormalTransactions(getAddress(), new Callback() {
         @Override public void onFailure(Call call, IOException e) {
           if (isAdded()) {
-            ac.runOnUiThread(new Runnable() {
+            getAc().runOnUiThread(new Runnable() {
               @Override public void run() {
                 onItemsLoadComplete();
-                ((AddressDetailActivity) ac).snackError(getString(R.string.err_no_con));
+                ((AddressDetailActivity) getAc()).snackError(getString(R.string.err_no_con));
               }
             });
           }
@@ -50,11 +50,11 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
 
         @Override public void onResponse(Call call, Response response) throws IOException {
           String restring = response.body().string();
-          if (restring != null && restring.length() > 2) RequestCache.getInstance().put(RequestCache.TYPE_TXS_NORMAL, address, restring);
+          if (restring != null && restring.length() > 2) RequestCache.getInstance().put(RequestCache.TYPE_TXS_NORMAL, getAddress(), restring);
           final List<TransactionDisplay> w =
-              new ArrayList<TransactionDisplay>(ResponseParser.parseTransactions(restring, "Unnamed Address", address, TransactionDisplay.NORMAL));
+              new ArrayList<TransactionDisplay>(ResponseParser.parseTransactions(restring, "Unnamed Address", getAddress(), TransactionDisplay.NORMAL));
           if (isAdded()) {
-            ac.runOnUiThread(new Runnable() {
+            getAc().runOnUiThread(new Runnable() {
               @Override public void run() {
                 onComplete(w);
               }
@@ -62,13 +62,13 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
           }
         }
       }, force);
-      EtherscanAPI.getInstance().getInternalTransactions(address, new Callback() {
+      EtherscanAPI.getInstance().getInternalTransactions(getAddress(), new Callback() {
         @Override public void onFailure(Call call, IOException e) {
           if (isAdded()) {
-            ac.runOnUiThread(new Runnable() {
+            getAc().runOnUiThread(new Runnable() {
               @Override public void run() {
                 onItemsLoadComplete();
-                ((AddressDetailActivity) ac).snackError(getString(R.string.err_no_con));
+                ((AddressDetailActivity) getAc()).snackError(getString(R.string.err_no_con));
               }
             });
           }
@@ -76,11 +76,11 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
 
         @Override public void onResponse(Call call, Response response) throws IOException {
           String restring = response.body().string();
-          if (restring != null && restring.length() > 2) RequestCache.getInstance().put(RequestCache.TYPE_TXS_INTERNAL, address, restring);
+          if (restring != null && restring.length() > 2) RequestCache.getInstance().put(RequestCache.TYPE_TXS_INTERNAL, getAddress(), restring);
           final List<TransactionDisplay> w =
-              new ArrayList<TransactionDisplay>(ResponseParser.parseTransactions(restring, "Unnamed Address", address, TransactionDisplay.CONTRACT));
+              new ArrayList<TransactionDisplay>(ResponseParser.parseTransactions(restring, "Unnamed Address", getAddress(), TransactionDisplay.CONTRACT));
           if (isAdded()) {
-            ac.runOnUiThread(new Runnable() {
+            getAc().runOnUiThread(new Runnable() {
               @Override public void run() {
                 onComplete(w);
               }
@@ -89,7 +89,7 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
         }
       }, force);
     } catch (IOException e) {
-      if (ac != null) ((AddressDetailActivity) ac).snackError("Can't fetch account balances. No connection?");
+      if (getAc() != null) ((AddressDetailActivity) getAc()).snackError("Can't fetch account balances. No connection?");
       onItemsLoadComplete();
       e.printStackTrace();
     }
@@ -100,8 +100,8 @@ public class TransactionsFragment extends TransactionsAbstractFragment {
     addRequestCount();
     if (getRequestCount() >= 2) {
       onItemsLoadComplete();
-      nothingToShow.setVisibility(wallets.size() == 0 ? View.VISIBLE : View.GONE);
-      walletAdapter.notifyDataSetChanged();
+      getNothing_found().setVisibility(getWallets().size() == 0 ? View.VISIBLE : View.GONE);
+      getWalletAdapter().notifyDataSetChanged();
     }
   }
 

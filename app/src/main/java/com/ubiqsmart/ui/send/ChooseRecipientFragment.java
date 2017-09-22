@@ -19,7 +19,7 @@ import com.ubiqsmart.R;
 import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.ui.scanqr.QRScanActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
-import com.ubiqsmart.utils.WalletAdapter;
+import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 
 import java.util.*;
 

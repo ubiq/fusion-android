@@ -68,7 +68,7 @@
       android:fitsSystemWindows="true">
 
       <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fabmenu"
+        android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -86,7 +86,7 @@
         fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/requestTx"
+          android:id="@+id/request_transaction"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_action_request"
@@ -96,7 +96,7 @@
           fab:fab_label="@string/fab_request" />
 
         <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/newTransaction"
+          android:id="@+id/new_transaction"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_new_tx"

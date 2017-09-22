@@ -1,4 +1,4 @@
-package com.ubiqsmart.utils;
+package com.ubiqsmart.ui.main.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ubiqsmart.repository.data.TransactionDisplay;
+import com.ubiqsmart.utils.AddressNameConverter;
+import com.ubiqsmart.utils.Blockies;
+import com.ubiqsmart.utils.ExchangeCalculator;
 import me.grantland.widget.AutofitTextView;
 import com.ubiqsmart.R;
 import com.ubiqsmart.repository.data.Wallet;
@@ -37,8 +40,8 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
       super(view);
 
       walletaddress = view.findViewById(R.id.walletaddress);
-      walletname = view.findViewById(R.id.walletname);
-      walletbalance = view.findViewById(R.id.walletbalance);
+      walletname = view.findViewById(R.id.wallet_name);
+      walletbalance = view.findViewById(R.id.wallet_balance);
       addressimage = view.findViewById(R.id.addressimage);
       type = view.findViewById(R.id.type);
       container = view.findViewById(R.id.container);

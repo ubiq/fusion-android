@@ -29,7 +29,7 @@
         android:orientation="horizontal">
 
         <ImageView
-          android:id="@+id/my_addressicon"
+          android:id="@+id/my_address_icon"
           android:layout_width="18dp"
           android:layout_height="18dp"
           android:layout_gravity="bottom"
@@ -44,7 +44,7 @@
           android:orientation="horizontal">
 
           <TextView
-            android:id="@+id/walletname"
+            android:id="@+id/wallet_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -80,7 +80,7 @@
           android:orientation="horizontal">
 
           <TextView
-            android:id="@+id/plusminus"
+            android:id="@+id/plus_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -91,7 +91,7 @@
             android:textSize="16sp" />
 
           <TextView
-            android:id="@+id/walletbalance"
+            android:id="@+id/wallet_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -111,7 +111,7 @@
         android:orientation="horizontal">
 
         <ImageView
-          android:id="@+id/other_addressicon"
+          android:id="@+id/other_address_icon"
           android:layout_width="18dp"
           android:layout_height="18dp"
           android:layout_gravity="center"
@@ -137,7 +137,7 @@
         android:paddingLeft="30dp">
 
         <TextView
-          android:id="@+id/month"
+          android:id="@+id/month_view"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:gravity="top"
