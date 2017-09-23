@@ -16,7 +16,7 @@
       android:orientation="vertical">
 
       <LinearLayout
-        android:id="@+id/header"
+        android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -32,7 +32,7 @@
 
 
           <ImageView
-            android:id="@+id/addressimage"
+            android:id="@+id/address_image_view"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
@@ -79,7 +79,7 @@
                 android:textSize="26sp" />
 
               <TextView
-                android:id="@+id/currency"
+                android:id="@+id/currency_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="top"
@@ -90,7 +90,7 @@
 
 
             <TextView
-              android:id="@+id/ethaddress"
+              android:id="@+id/eth_address_view"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="8dp"
@@ -133,7 +133,7 @@
       android:fitsSystemWindows="true">
 
       <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fab_menu"
+        android:id="@+id/fab_menu_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

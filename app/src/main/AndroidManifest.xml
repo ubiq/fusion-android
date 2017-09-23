@@ -21,7 +21,8 @@
   <!-- Used for QR Code scanning -->
   <uses-permission android:name="android.permission.CAMERA" />
 
-  <!-- Used for optional Applock Feature --><uses-permission android:name="android.permission.USE_FINGERPRINT" />
+  <!-- Used for optional Applock Feature -->
+  <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
   <uses-feature
     android:name="android.hardware.camera"

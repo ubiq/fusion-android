@@ -8,12 +8,12 @@ import com.ubiqsmart.ui.main.MainActivity
 
 class SplashActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Handler().postDelayed({
-            finish()
-            startActivity(Intent(this, MainActivity::class.java))
-        }, 2000)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Handler().postDelayed({
+      finish()
+      startActivity(Intent(this, MainActivity::class.java))
+    }, 2000)
+  }
 
 }

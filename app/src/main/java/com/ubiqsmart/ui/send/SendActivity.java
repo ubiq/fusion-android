@@ -9,11 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-
+import com.ubiqsmart.R;
 import com.ubiqsmart.ui.base.SecureAppCompatActivity;
 import com.ubiqsmart.ui.scanqr.QRScanActivity;
 import com.ubiqsmart.ui.widgets.NonSwipeViewPager;
-import com.ubiqsmart.R;
 
 public class SendActivity extends SecureAppCompatActivity {
 
@@ -30,13 +29,13 @@ public class SendActivity extends SecureAppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_choose_recipient);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    title = (TextView) findViewById(R.id.toolbar_title);
+    title = findViewById(R.id.toolbar_title);
 
-    coord = (CoordinatorLayout) findViewById(R.id.main_content);
+    coord = findViewById(R.id.main_content);
 
     fragments = new Fragment[2];
     fragments[0] = new ChooseRecipientFragment();
@@ -51,7 +50,7 @@ public class SendActivity extends SecureAppCompatActivity {
 
     adapter = new FragmentAdapter(getSupportFragmentManager());
 
-    viewPager = (NonSwipeViewPager) findViewById(R.id.container);
+    viewPager = findViewById(R.id.container);
     viewPager.setPagingEnabled(false);
     viewPager.setAdapter(adapter);
 
@@ -99,8 +98,7 @@ public class SendActivity extends SecureAppCompatActivity {
   public void setTitle(String s) {
     if (title != null) {
       title.setText(s);
-      Snackbar mySnackbar =
-          Snackbar.make(coord, SendActivity.this.getResources().getString(R.string.detail_acc_name_changed_suc), Snackbar.LENGTH_SHORT);
+      Snackbar mySnackbar = Snackbar.make(coord, SendActivity.this.getResources().getString(R.string.detail_acc_name_changed_suc), Snackbar.LENGTH_SHORT);
       mySnackbar.show();
     }
   }

@@ -39,7 +39,7 @@
           android:textStyle="bold"
           android:textColor="#1f3651"
           android:gravity="center"
-          android:id="@+id/addressimage" />
+          android:id="@+id/address_image_view" />
 
       </LinearLayout>
 

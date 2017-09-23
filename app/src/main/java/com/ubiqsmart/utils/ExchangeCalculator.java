@@ -1,14 +1,14 @@
 package com.ubiqsmart.utils;
 
-import com.ubiqsmart.network.EtherscanAPI;
+import com.ubiqsmart.interfaces.NetworkUpdateListener;
+import com.ubiqsmart.repository.api.EtherscanAPI;
+import com.ubiqsmart.repository.data.Currency;
+import com.ubiqsmart.repository.data.Token;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.ubiqsmart.repository.data.Currency;
-import com.ubiqsmart.repository.data.Token;
-import com.ubiqsmart.interfaces.NetworkUpdateListener;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -103,8 +103,10 @@ public class ExchangeCalculator {
 
   /**
    * Converts given tokenbalance to ETH
+   *
    * @param tokenbalance native token balance
    * @param tokenusd price in USD for each token
+   *
    * @return Ether worth of given tokens
    */
   public double convertTokenToEther(double tokenbalance, double tokenusd) {
@@ -143,7 +145,9 @@ public class ExchangeCalculator {
 
   /**
    * Used for DetailFragmentOverview "Overall Balance"
+   *
    * @param token List of all tokens on an address
+   *
    * @return ether price of all tokens combined (exclusive ether balance itself)
    */
   public double sumUpTokenEther(List<Token> token) {

@@ -10,13 +10,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.ubiqsmart.R;
 import com.ubiqsmart.repository.data.TransactionDisplay;
+import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.Blockies;
 import com.ubiqsmart.utils.ExchangeCalculator;
 import me.grantland.widget.AutofitTextView;
-import com.ubiqsmart.R;
-import com.ubiqsmart.repository.data.Wallet;
 
 import java.util.*;
 
@@ -42,7 +42,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
       walletaddress = view.findViewById(R.id.walletaddress);
       walletname = view.findViewById(R.id.wallet_name);
       walletbalance = view.findViewById(R.id.wallet_balance);
-      addressimage = view.findViewById(R.id.addressimage);
+      addressimage = view.findViewById(R.id.address_image_view);
       type = view.findViewById(R.id.type);
       container = view.findViewById(R.id.container);
     }
@@ -81,8 +81,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
     holder.walletname.setText(walletname == null ? "New Wallet" : walletname);
     if (box.getType() != Wallet.CONTACT) {
       holder.walletbalance.setText(ExchangeCalculator.getInstance()
-          .displayBalanceNicely(
-              ExchangeCalculator.getInstance().convertRate(box.getBalance(), ExchangeCalculator.getInstance().getCurrent().getRate()))
+          .displayBalanceNicely(ExchangeCalculator.getInstance().convertRate(box.getBalance(), ExchangeCalculator.getInstance().getCurrent().getRate()))
           + " "
           + ExchangeCalculator.getInstance().getCurrencyShort());
     }

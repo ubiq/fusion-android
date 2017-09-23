@@ -17,9 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import com.ubiqsmart.R;
 import com.ubiqsmart.repository.data.Wallet;
+import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 import com.ubiqsmart.ui.scanqr.QRScanActivity;
 import com.ubiqsmart.utils.AddressNameConverter;
-import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 
 import java.util.*;
 

@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.ubiqsmart.BuildConfig;
 import com.ubiqsmart.R;
-import com.ubiqsmart.network.EtherscanAPI;
+import com.ubiqsmart.repository.api.EtherscanAPI;
 import com.ubiqsmart.services.TransactionService;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.Blockies;
@@ -142,7 +142,8 @@ public class SendFragment extends Fragment {
 
     spinner = rootView.findViewById(R.id.spinner);
 
-    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(ac, R.layout.address_spinner, WalletStorage.getInstance(ac).getFullOnly()) {
+    final WalletStorage walletStorage = WalletStorage.getInstance(getActivity(), null, null);
+    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(ac, R.layout.address_spinner, walletStorage.getFullOnly()) {
       @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         view.setPadding(0, view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
@@ -273,7 +274,8 @@ public class SendFragment extends Fragment {
   }
 
   private void setFromAddress(String from) {
-    ArrayList<String> fullwallets = WalletStorage.getInstance(ac).getFullOnly();
+    final WalletStorage walletStorage = WalletStorage.getInstance(getActivity(), null, null);
+    final List<String> fullwallets = walletStorage.getFullOnly();
     for (int i = 0; i < fullwallets.size(); i++) {
       if (fullwallets.get(i).equalsIgnoreCase(from)) {
         spinner.setSelection(i);

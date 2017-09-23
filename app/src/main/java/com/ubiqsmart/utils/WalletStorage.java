@@ -25,25 +25,21 @@ public class WalletStorage {
 
   private final Context context;
   private final SharedPreferences sharedPreferences;
-  private final WalletStorage walletStorage;
   private final AddressNameConverter addressNameConverter;
 
   private List<StorableWallet> mapdb;
   private String walletToExport; // Used as temp if users wants to export but still needs to grant write permission
 
-  public static WalletStorage getInstance(final Context context, final SharedPreferences preferences, final WalletStorage walletStorage,
-      final AddressNameConverter addressNameConverter) {
+  public static WalletStorage getInstance(final Context context, final SharedPreferences preferences, final AddressNameConverter addressNameConverter) {
     if (instance == null) {
-      instance = new WalletStorage(context, preferences, walletStorage, addressNameConverter);
+      instance = new WalletStorage(context, preferences, addressNameConverter);
     }
     return instance;
   }
 
-  private WalletStorage(final Context context, final SharedPreferences sharedPreferences, final WalletStorage walletStorage,
-      final AddressNameConverter addressNameConverter) {
+  private WalletStorage(final Context context, final SharedPreferences sharedPreferences, final AddressNameConverter addressNameConverter) {
     this.context = context.getApplicationContext();
     this.sharedPreferences = sharedPreferences;
-    this.walletStorage = walletStorage;
     this.addressNameConverter = addressNameConverter;
 
     try {
@@ -174,7 +170,7 @@ public class WalletStorage {
       return;
     }
 
-    DialogFactory.importWallets(c, walletStorage, foundImports);
+    DialogFactory.importWallets(c, this, foundImports);
   }
 
   public void setWalletForExport(String wallet) {
@@ -192,7 +188,7 @@ public class WalletStorage {
         copyFile(toImport.get(i), new File(context.getFilesDir(), address));
         toImport.get(i).delete();
 
-        walletStorage.add(new FullWallet("0x" + address, address));
+        add(new FullWallet("0x" + address, address));
         addressNameConverter.put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6), context);
 
         final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);

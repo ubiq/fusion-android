@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
@@ -18,11 +17,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.github.clans.fab.FloatingActionButton
-import com.github.clans.fab.FloatingActionMenu
-import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
+import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.repository.data.TransactionDisplay
 import com.ubiqsmart.ui.base.BaseFragment
 import com.ubiqsmart.ui.detail.AddressDetailActivity
@@ -37,226 +33,220 @@ import java.util.*
 
 abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListener, View.OnCreateContextMenuListener {
 
-    private val walletStorage: WalletStorage by with(this).instance()
-    private val addressNameConverter: AddressNameConverter by with(this).instance()
+  protected abstract val walletStorage: WalletStorage
+  protected abstract val addressNameConverter: AddressNameConverter
+  protected abstract val etherscanApi: EtherscanAPI
 
-    protected var walletAdapter: TransactionAdapter? = null
+  protected lateinit var walletAdapter: TransactionAdapter
 
-    @get:Synchronized
-    @set:Synchronized
-    protected var wallets: MutableList<TransactionDisplay> = ArrayList()
+  @get:Synchronized
+  @set:Synchronized
+  protected var wallets: MutableList<TransactionDisplay> = ArrayList()
 
-    protected var address: String? = null
-    protected var swipe_refresh_layout2: SwipeRefreshLayout? = null
+  protected var address: String? = null
 
-    @get:Synchronized
-    var requestCount = 0
-        protected set
+  @get:Synchronized
+  @set:Synchronized
+  protected var requestCount = 0
 
-    protected lateinit var send: FloatingActionButton
-    protected lateinit var fabmenu: FloatingActionMenu
+  override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val rootView = inflater!!.inflate(R.layout.fragment_transaction, container, false)
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater!!.inflate(R.layout.fragment_transaction, container, false)
-
-        if (arguments != null) {
-            address = arguments.getString("ADDRESS")
-            (rootView.findViewById<View>(R.id.infoText) as TextView).setText(R.string.trans_no_trans_found)
-        }
-
-        walletAdapter = TransactionAdapter(activity, wallets, this, this)
-
-        val mgr = LinearLayoutManager(activity.applicationContext)
-        val dividerItemDecoration = DividerItemDecoration(activity, mgr.orientation)
-
-        recycler_view.apply {
-            layoutManager = mgr
-            itemAnimator = DefaultItemAnimator()
-            adapter = walletAdapter
-            addItemDecoration(dividerItemDecoration)
-        }
-
-        swipe_refresh_layout2?.apply {
-            setColorSchemeColors(ContextCompat.getColor(context, R.color.primary))
-            setOnRefreshListener { update(true) }
-        }
-
-        send = rootView.findViewById(R.id.new_transaction)
-        fabmenu = rootView.findViewById(R.id.fab_menu)
-
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (address != null) {
-                    return
-                }
-
-                if (dy > 0) {
-                    fabmenu.hideMenu(true)
-                } else if (dy < 0) {
-                    fabmenu.showMenu(true)
-                }
-            }
-        })
-
-        request_transaction.setOnClickListener { openRequestActivity() }
-        send.setOnClickListener { openSendActivity() }
-
-        update(false)
-        walletAdapter?.notifyDataSetChanged()
-
-        return rootView
+    if (arguments != null) {
+      address = arguments.getString("ADDRESS")
+      (rootView.findViewById<View>(R.id.infoText) as TextView).setText(R.string.trans_no_trans_found)
     }
 
-    private fun openSendActivity() {
-        if (walletStorage.fullOnly.size == 0) {
-            DialogFactory.noFullWallet(activity)
-        } else {
-            val newTrans = Intent(context, SendActivity::class.java)
-            if (address != null) {
-                newTrans.putExtra("FROM_ADDRESS", address)
-            }
+    walletAdapter = TransactionAdapter(activity, wallets, this, this)
 
-            activity.startActivityForResult(newTrans, SendActivity.REQUEST_CODE)
-        }
+    val mgr = LinearLayoutManager(activity)
+    val dividerItemDecoration = DividerItemDecoration(activity, mgr.orientation)
+
+    recycler_view.apply {
+      layoutManager = mgr
+      itemAnimator = DefaultItemAnimator()
+      adapter = walletAdapter
+      addItemDecoration(dividerItemDecoration)
     }
 
-    private fun openRequestActivity() {
-        if (walletStorage.get().size == 0) {
-            DialogFactory.noWallet(activity)
-        } else {
-            val newTrans = Intent(context, RequestEtherActivity::class.java)
-
-            activity.startActivity(newTrans)
-        }
+    swipe_refresh_layout2?.apply {
+      setColorSchemeColors(ContextCompat.getColor(context, R.color.primary))
+      setOnRefreshListener { update(true) }
     }
 
-    fun notifyDataSetChanged() {
-        walletAdapter?.notifyDataSetChanged()
-    }
-
-    abstract fun update(force: Boolean)
-
-    @Synchronized
-    fun addRequestCount() {
-        requestCount++
-    }
-
-    @Synchronized
-    fun resetRequestCount() {
-        requestCount = 0
-    }
-
-    fun onItemsLoadComplete() {
-        if (swipe_refresh_layout2 == null) {
-            return
-        }
-        swipe_refresh_layout2!!.isRefreshing = false
-    }
-
-    @Synchronized
-    fun addToWallets(w: List<TransactionDisplay>) {
-        wallets.addAll(w)
-        Collections.sort(wallets) { o1, o2 -> o1.compareTo(o2) }
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
-        menu.setHeaderTitle(R.string.trans_menu_title)
-        menu.add(0, 100, 0, R.string.trans_menu_changename)//groupId, itemId, order, title
-        menu.add(0, 101, 0, R.string.trans_menu_viewreceiver)
-        menu.add(0, 102, 0, R.string.trans_menu_openinb)
-    }
-
-    override fun onContextItemSelected(item: MenuItem?): Boolean {
-        val position: Int
-
-        try {
-            position = walletAdapter?.position ?: 0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return super.onContextItemSelected(item)
+    recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        if (address != null) {
+          return
         }
 
-        when (item?.itemId) {
-            100 -> { // Change Address Name
-                setName(wallets[position].toAddress)
-            }
-
-            101 -> { // Open in AddressDetailActivity
-                val i = Intent(activity, AddressDetailActivity::class.java).apply {
-                    putExtra("ADDRESS", wallets[position].toAddress)
-                }
-
-                startActivity(i)
-            }
-
-            102 -> { // Open in Browser
-                val url = "https://etherscan.io/tx/" + wallets[position].txHash
-                val i = Intent(Intent.ACTION_VIEW)
-                i.data = Uri.parse(url)
-
-                startActivity(i)
-            }
+        if (dy > 0) {
+          fab_menu_view.hideMenu(true)
+        } else if (dy < 0) {
+          fab_menu_view.showMenu(true)
         }
+      }
+    })
 
-        return super.onContextItemSelected(item)
+    request_transaction.setOnClickListener { openRequestActivity() }
+    new_transaction.setOnClickListener { openSendActivity() }
+
+    update(false)
+    walletAdapter.notifyDataSetChanged()
+
+    return rootView
+  }
+
+  private fun openSendActivity() {
+    if (walletStorage.fullOnly.size == 0) {
+      DialogFactory.noFullWallet(activity)
+    } else {
+      val newTrans = Intent(context, SendActivity::class.java)
+      if (address != null) {
+        newTrans.putExtra("FROM_ADDRESS", address)
+      }
+
+      activity.startActivityForResult(newTrans, SendActivity.REQUEST_CODE)
+    }
+  }
+
+  private fun openRequestActivity() {
+    if (walletStorage.get().size == 0) {
+      DialogFactory.noWallet(activity)
+    } else {
+      val newTrans = Intent(context, RequestEtherActivity::class.java)
+
+      activity.startActivity(newTrans)
+    }
+  }
+
+  fun notifyDataSetChanged() {
+    walletAdapter.notifyDataSetChanged()
+  }
+
+  abstract fun update(force: Boolean)
+
+  @Synchronized
+  fun addRequestCount() {
+    requestCount++
+  }
+
+  @Synchronized
+  fun resetRequestCount() {
+    requestCount = 0
+  }
+
+  fun onItemsLoadComplete() {
+    if (swipe_refresh_layout2 == null) {
+      return
+    }
+    swipe_refresh_layout2!!.isRefreshing = false
+  }
+
+  @Synchronized
+  fun addToWallets(w: List<TransactionDisplay>) {
+    wallets.addAll(w)
+    Collections.sort(wallets) { o1, o2 -> o1.compareTo(o2) }
+  }
+
+  override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
+    menu.setHeaderTitle(R.string.trans_menu_title)
+    menu.add(0, 100, 0, R.string.trans_menu_changename)//groupId, itemId, order, title
+    menu.add(0, 101, 0, R.string.trans_menu_viewreceiver)
+    menu.add(0, 102, 0, R.string.trans_menu_openinb)
+  }
+
+  override fun onContextItemSelected(item: MenuItem?): Boolean {
+    val position: Int
+
+    try {
+      position = walletAdapter.position
+    } catch (e: Exception) {
+      e.printStackTrace()
+      return super.onContextItemSelected(item)
     }
 
-    fun setName(address: String) {
-        val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
-        builder.setTitle(R.string.name_other_address)
+    when (item?.itemId) {
+      100 -> { // Change Address Name
+        setName(wallets[position].toAddress)
+      }
 
-        val input = EditText(activity).apply {
-            setText(addressNameConverter.get(address))
-            inputType = InputType.TYPE_CLASS_TEXT
-            setSingleLine()
-            setSelection(text.length)
-            inputType = InputType.TYPE_CLASS_TEXT
-            onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    val inputMgr = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-                }
-            }
+      101 -> { // Open in AddressDetailActivity
+        val i = Intent(activity, AddressDetailActivity::class.java).apply {
+          putExtra("ADDRESS", wallets[position].toAddress)
         }
 
-        val activity = activity
+        startActivity(i)
+      }
 
-        val container = FrameLayout(activity)
-        val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-            leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            topMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            bottomMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-        }
+      102 -> { // Open in Browser
+        val url = "https://etherscan.io/tx/" + wallets[position].txHash
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
 
-        input.layoutParams = params
-
-        container.addView(input)
-
-        builder.apply {
-            setView(container)
-            setPositiveButton(R.string.button_ok) { dialog, _ ->
-                addressNameConverter.put(address, input.text.toString(), activity)
-                val inputMgr = input.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMgr.hideSoftInputFromWindow(input.windowToken, 0)
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            setNegativeButton(R.string.button_cancel) { dialog, which -> dialog.cancel() }
-        }
-        builder.show()
+        startActivity(i)
+      }
     }
 
-    override fun onClick(view: View) {
-        if (activity == null) {
-            return
-        }
+    return super.onContextItemSelected(item)
+  }
 
-        val itemPosition = recycler_view.getChildLayoutPosition(view)
-        if (itemPosition >= wallets.size) {
-            return
-        }
+  fun setName(address: String) {
+    val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
+    builder.setTitle(R.string.name_other_address)
 
-        DialogFactory.showTXDetails(activity, wallets[itemPosition])
+    val input = EditText(activity).apply {
+      setText(addressNameConverter.get(address))
+      inputType = InputType.TYPE_CLASS_TEXT
+      setSingleLine()
+      setSelection(text.length)
+      inputType = InputType.TYPE_CLASS_TEXT
+      onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        if (hasFocus) {
+          val inputMgr = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+          inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        }
+      }
     }
+
+    val activity = activity
+
+    val container = FrameLayout(activity)
+    val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+      leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+      topMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+      bottomMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+      rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+    }
+
+    input.layoutParams = params
+
+    container.addView(input)
+
+    builder.apply {
+      setView(container)
+      setPositiveButton(R.string.button_ok) { dialog, _ ->
+        addressNameConverter.put(address, input.text.toString(), activity)
+        val inputMgr = input.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMgr.hideSoftInputFromWindow(input.windowToken, 0)
+        notifyDataSetChanged()
+        dialog.dismiss()
+      }
+      setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+    }
+    builder.show()
+  }
+
+  override fun onClick(view: View) {
+    if (activity == null) {
+      return
+    }
+
+    val itemPosition = recycler_view.getChildLayoutPosition(view)
+    if (itemPosition >= wallets.size) {
+      return
+    }
+
+    DialogFactory.showTXDetails(activity, wallets[itemPosition])
+  }
 }

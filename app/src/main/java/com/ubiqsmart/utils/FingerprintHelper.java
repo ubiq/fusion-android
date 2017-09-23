@@ -4,7 +4,6 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.support.annotation.RequiresApi;
-
 import com.ubiqsmart.interfaces.FingerprintListener;
 
 @RequiresApi(api = Build.VERSION_CODES.M) public class FingerprintHelper extends FingerprintManager.AuthenticationCallback {

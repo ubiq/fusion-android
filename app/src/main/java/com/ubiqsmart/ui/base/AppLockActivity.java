@@ -14,12 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import com.ubiqsmart.utils.AppLockUtils;
-import me.zhanghai.android.patternlock.PatternUtils;
-import me.zhanghai.android.patternlock.PatternView;
 import com.ubiqsmart.R;
 import com.ubiqsmart.interfaces.FingerprintListener;
+import com.ubiqsmart.utils.AppLockUtils;
 import com.ubiqsmart.utils.FingerprintHelper;
+import me.zhanghai.android.patternlock.PatternUtils;
+import me.zhanghai.android.patternlock.PatternView;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -68,8 +68,7 @@ public class AppLockActivity extends BasePatternActivity implements PatternView.
     }
 
     // Ask for login if pw protection is enabled and last login is more than 4 minutes ago
-    if (preferences.getLong("APP_UNLOCKED", 0) <= System.currentTimeMillis() - 4 * 60 * 1000 && onResume && !pausedFirst && !preferences.getString(
-        "APP_LOCK_PATTERN", "").equals("")) {
+    if (preferences.getLong("APP_UNLOCKED", 0) <= System.currentTimeMillis() - 4 * 60 * 1000 && onResume && !pausedFirst && !preferences.getString("APP_LOCK_PATTERN", "").equals("")) {
       Intent patternLock = new Intent(c, AppLockActivity.class);
       c.startActivityForResult(patternLock, AppLockActivity.REQUEST_CODE);
     }
@@ -134,8 +133,7 @@ public class AppLockActivity extends BasePatternActivity implements PatternView.
 
   @RequiresApi(api = Build.VERSION_CODES.M) public boolean cipherInit() {
     try {
-      cipher =
-          Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+      cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
     } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
       e.printStackTrace();
     }
@@ -162,8 +160,11 @@ public class AppLockActivity extends BasePatternActivity implements PatternView.
       KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
 
       keyStore.load(null);
-      keyGenerator.init(new KeyGenParameterSpec.Builder("Lunary", KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT).setBlockModes(
-          KeyProperties.BLOCK_MODE_CBC).setUserAuthenticationRequired(true).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7).build());
+      keyGenerator.init(
+          new KeyGenParameterSpec.Builder("Lunary", KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+              .setUserAuthenticationRequired(true)
+              .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+              .build());
       keyGenerator.generateKey();
     } catch (Exception e) {
       e.printStackTrace();

@@ -27,10 +27,12 @@ public class ExternalStorageHandler {
   }
 
   public static boolean hasReadPermission(Context c) {
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || c.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+        || c.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static boolean hasPermission(Context c) {
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || c.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+        || c.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 }

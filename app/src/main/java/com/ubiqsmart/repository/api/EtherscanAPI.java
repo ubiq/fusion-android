@@ -1,4 +1,4 @@
-package com.ubiqsmart.network;
+package com.ubiqsmart.repository.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.interfaces.StorableWallet;
-import com.ubiqsmart.utils.Key;
 import com.ubiqsmart.utils.RequestCache;
 import com.ubiqsmart.utils.TokenIconCache;
 import okhttp3.Call;
@@ -45,10 +44,14 @@ public class EtherscanAPI {
   }
 
   /**
-   * Retrieve all internal transactions from address like contract calls, for normal transactions @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getNormalTransactions() )
+   * Retrieve all internal transactions from address like contract calls, for normal transactions @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getNormalTransactions()
+   * )
+   *
    * @param address Ether address
-   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
+   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see
+   * rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
+   *
    * @throws IOException Network exceptions
    */
   public void getInternalTransactions(String address, Callback b, boolean force) throws IOException {
@@ -64,34 +67,33 @@ public class EtherscanAPI {
           .build());
       return;
     }
-    get("http://api.etherscan.io/api?module=account&action=txlistinternal&address="
-        + address
-        + "&startblock=0&endblock=99999999&sort=asc&apikey="
-        + token, b);
+    get("http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token, b);
   }
 
   /**
-   * Retrieve all normal ether transactions from address (excluding contract calls etc, @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getInternalTransactions() )
+   * Retrieve all normal ether transactions from address (excluding contract calls etc, @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getInternalTransactions()
+   * )
+   *
    * @param address Ether address
-   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
+   * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see
+   * rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
+   *
    * @throws IOException Network exceptions
    */
   public void getNormalTransactions(String address, Callback b, boolean force) throws IOException {
     if (!force && RequestCache.getInstance().contains(RequestCache.TYPE_TXS_NORMAL, address)) {
       b.onResponse(null, new Response.Builder().code(200)
           .message("")
-          .request(new Request.Builder().url("http://api.etherscan.io/api?module=account&action=txlist&address="
-              + address
-              + "&startblock=0&endblock=99999999&sort=asc&apikey="
-              + token).build())
+          .request(new Request.Builder().url(
+              "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token)
+              .build())
           .protocol(Protocol.HTTP_1_0)
           .body(ResponseBody.create(MediaType.parse("JSON"), RequestCache.getInstance().get(RequestCache.TYPE_TXS_NORMAL, address)))
           .build());
       return;
     }
-    get("http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token,
-        b);
+    get("http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token, b);
   }
 
   public void getEtherPrice(Callback b) throws IOException {
@@ -104,9 +106,11 @@ public class EtherscanAPI {
 
   /**
    * Get token balances via ethplorer.io
+   *
    * @param address Ether address
    * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.DetailOverviewFragment#update()
    * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
+   *
    * @throws IOException Network exceptions
    */
   public void getTokenBalances(String address, Callback b, boolean force) throws IOException {
@@ -124,10 +128,13 @@ public class EtherscanAPI {
 
   /**
    * Download and save token icon in permanent image cache (TokenIconCache)
+   *
    * @param c Application context, used to load TokenIconCache if reinstanced
    * @param tokenName Name of token
-   * @param lastToken Boolean defining whether this is the last icon to download or not. If so callback is called to refresh recyclerview (notifyDataSetChanged)
+   * @param lastToken Boolean defining whether this is the last icon to download or not. If so callback is called to refresh recyclerview
+   * (notifyDataSetChanged)
    * @param callback Callback to @see rehanced.com.simpleetherwallet.fragments.DetailOverviewFragment#onLastIconDownloaded()
+   *
    * @throws IOException Network exceptions
    */
   public void loadTokenIcon(final Context c, String tokenName, final boolean lastToken, final LastIconLoaded callback) throws IOException {
@@ -153,10 +160,7 @@ public class EtherscanAPI {
   }
 
   public void getGasLimitEstimate(String to, Callback b) throws IOException {
-    get("https://api.etherscan.io/api?module=proxy&action=eth_estimateGas&to="
-        + to
-        + "&value=0xff22&gasPrice=0x051da038cc&gas=0xffffff&apikey="
-        + token, b);
+    get("https://api.etherscan.io/api?module=proxy&action=eth_estimateGas&to=" + to + "&value=0xff22&gasPrice=0x051da038cc&gas=0xffffff&apikey=" + token, b);
   }
 
   public void getBalance(String address, Callback b) throws IOException {
@@ -193,7 +197,7 @@ public class EtherscanAPI {
   }
 
   private EtherscanAPI() {
-    token = new Key("9ZUSL64LS9POL3J2MVKR0ES1MBQHSFUOKK").toString();
+    token = "9ZUSL64LS9POL3J2MVKR0ES1MBQHSFUOKK";
   }
 
 }

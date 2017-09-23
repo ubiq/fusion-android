@@ -6,5 +6,5 @@ import com.github.salomonbrys.kodein.LazyKodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
 
 abstract class BaseActivity : AppCompatActivity(), LazyKodeinAware {
-    override val kodein = LazyKodein(appKodein)
+  override val kodein = LazyKodein(appKodein)
 }

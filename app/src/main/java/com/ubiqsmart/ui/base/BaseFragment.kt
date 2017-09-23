@@ -7,6 +7,6 @@ import com.github.salomonbrys.kodein.android.appKodein
 
 abstract class BaseFragment : Fragment(), LazyKodeinAware {
 
-    override val kodein = LazyKodein(appKodein)
+  override val kodein = LazyKodein(appKodein)
 
 }

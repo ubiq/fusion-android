@@ -6,45 +6,55 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
 import com.ubiqsmart.utils.WalletStorage;
+
+import java.util.*;
 
 public class NotificationLauncher {
 
   private static NotificationLauncher instance;
 
-  private PendingIntent pintent;
-  private AlarmManager service;
+  private final Context context;
+  private final SharedPreferences preferences;
+  private final WalletStorage walletStorage;
+  private final AlarmManager alarmManager;
 
-  private NotificationLauncher() {
+  private PendingIntent pendingIntent;
+
+  public static NotificationLauncher getInstance(final Context c, final WalletStorage walletStorage) {
+    if (instance == null) {
+      instance = new NotificationLauncher(c, walletStorage);
+    }
+    return instance;
   }
 
-  public void start(Context c) {
-    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-    if (prefs.getBoolean("notifications_new_message", true) && WalletStorage.getInstance(c).get().size() >= 1) {
-      service = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+  private NotificationLauncher(final Context c, final WalletStorage walletStorage) {
+    this.context = c.getApplicationContext();
+    this.preferences = PreferenceManager.getDefaultSharedPreferences(c);
+    this.walletStorage = walletStorage;
+    this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+  }
 
-      final Intent i = new Intent(c, NotificationService.class);
-      pintent = PendingIntent.getService(c, 23, i, 0);
+  public void start() {
+    final boolean notificationsNewMessage = preferences.getBoolean("notifications_new_message", true);
 
-      int syncInt = Integer.parseInt(prefs.getString("sync_frequency", "4"));
+    if (notificationsNewMessage && walletStorage.get().size() >= 1) {
+      final Intent i = new Intent(context, NotificationService.class);
+      pendingIntent = PendingIntent.getService(context, 23, i, 0);
 
-      service.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_HOUR * syncInt, pintent);
+      final String syncFrequency = preferences.getString("sync_frequency", "4");
+      final int syncInt = Integer.parseInt(syncFrequency);
+
+      final Date now = new Date();
+      alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, now.getTime(), AlarmManager.INTERVAL_HOUR * syncInt, pendingIntent);
     }
   }
 
   public void stop() {
-    if (service == null || pintent == null) {
+    if (alarmManager == null || pendingIntent == null) {
       return;
     }
-    service.cancel(pintent);
-  }
-
-  public static NotificationLauncher getInstance() {
-    if (instance == null) {
-      instance = new NotificationLauncher();
-    }
-    return instance;
+    alarmManager.cancel(pendingIntent);
   }
 
 }

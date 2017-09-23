@@ -12,8 +12,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import com.ubiqsmart.R;
-import com.ubiqsmart.ui.transactions.TransactionsFragment;
 import com.ubiqsmart.ui.base.SecureAppCompatActivity;
+import com.ubiqsmart.ui.transactions.TransactionsFragment;
 import com.ubiqsmart.utils.AddressNameConverter;
 
 public class AddressDetailActivity extends SecureAppCompatActivity {
@@ -32,37 +32,41 @@ public class AddressDetailActivity extends SecureAppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     setContentView(R.layout.activity_main);
 
     address = getIntent().getStringExtra("ADDRESS");
     type = getIntent().getByteExtra("TYPE", SCANNED_WALLET);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    final Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    title = (TextView) findViewById(R.id.toolbar_title);
-    String walletname = AddressNameConverter.getInstance(this).get(address);
+
+    title = findViewById(R.id.toolbar_title);
+    final String walletname = AddressNameConverter.getInstance(this).get(address);
     title.setText(type == OWN_WALLET ? (walletname == null ? "Unnamed Wallet" : walletname) : "Address");
 
-    coord = (CoordinatorLayout) findViewById(R.id.main_content);
-    appbar = (AppBarLayout) findViewById(R.id.appbar);
+    coord = findViewById(R.id.main_content);
+    appbar = findViewById(R.id.appbar);
 
     fragments = new Fragment[3];
     fragments[0] = new DetailShareFragment();
     fragments[1] = new DetailOverviewFragment();
     fragments[2] = new TransactionsFragment();
-    Bundle bundle = new Bundle();
+
+    final Bundle bundle = new Bundle();
     bundle.putString("ADDRESS", address);
     bundle.putDouble("BALANCE", getIntent().getDoubleExtra("BALANCE", 0));
     bundle.putByte("TYPE", type);
+
     fragments[0].setArguments(bundle);
     fragments[1].setArguments(bundle);
     fragments[2].setArguments(bundle);
 
     sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-    viewPager = (ViewPager) findViewById(R.id.container);
+    viewPager = findViewById(R.id.container);
     viewPager.setAdapter(sectionsPagerAdapter);
 
     TabLayout tabLayout = null;//(TabLayout) findViewById(R.id.tabs);
@@ -92,8 +96,11 @@ public class AddressDetailActivity extends SecureAppCompatActivity {
   }
 
   public void snackError(String s) {
-    if (coord == null) return;
-    Snackbar mySnackbar = Snackbar.make(coord, s, Snackbar.LENGTH_SHORT);
+    if (coord == null) {
+      return;
+    }
+
+    final Snackbar mySnackbar = Snackbar.make(coord, s, Snackbar.LENGTH_SHORT);
     mySnackbar.show();
   }
 

@@ -298,7 +298,7 @@ For app usage statistics we use Google Analytics. More details about Google Anal
 
 <p><b>Privacy Policy for the use of Google Analytics</b></p>
 
-<p>This app uses Google Analytics, an analytics service provided by Google, Inc. (“Google”). Google Analytics uses “cookies”, which are text files placed on your device, to help analyze how users use it. The information generated about your use of this app (including your IP address) is sent to and stored at a Google server in the U.S.A. Google will use this information on behalf of the operator of this app for the purpose of evaluating your use of the app, compiling reports on activity for operators and providing them other services relating to app activity and usage. The IP-address, that your device conveys within the scope of Google Analytics, will not be associated with any other data held by Google. For more information about Google Analytics visit <a href="https://google.com/analytics/terms">https://google.com/analytics/terms</a></p>
+<p>This app uses Google Analytics, an analytics service provided by Google, Inc. (“Google”). Google Analytics uses “cookies”, which are text files placed on your device, to help analyze how users use it. The information generated about your use of this app (including your IP eth_address_view) is sent to and stored at a Google server in the U.S.A. Google will use this information on behalf of the operator of this app for the purpose of evaluating your use of the app, compiling reports on activity for operators and providing them other services relating to app activity and usage. The IP-eth_address_view, that your device conveys within the scope of Google Analytics, will not be associated with any other data held by Google. For more information about Google Analytics visit <a href="https://google.com/analytics/terms">https://google.com/analytics/terms</a></p>
 
 
 <p>By using this application you agree to our Privicy Policy and the processing of the collected information by Google, according to the above mentioned purposes. If you do not consent to such processing, please do not further access or use our applications.
@@ -310,13 +310,19 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="wallet">Wallet</string>
   <string name="transactions">Transactions</string>
   <string name="last_seven_days">Last 7 Days</string>
-  <string name="invalid_wallet">Invalid Ethereum address!</string>
+  <string name="invalid_wallet">Invalid Ethereum eth_address_view!</string>
   <string name="locked_for_one_minute">Locked for 1 minute!</string>
   <string name="zero_ubiqs">0.0000 UBQ</string>
   <string name="ubq">ETH</string>
   <string name="grant_camera_permission">Please grant camera permission in order to read QR codes</string>
   <string name="share_via">Share via</string>
   <string name="minimum_confirmations">%d / 12 Confirmations</string>
+  <string name="no_internet_connection">No internet connection</string>
+  <string name="unnamed_address">Unnamed Address</string>
+  <string name="cant_fetch_accounts">Can\'t fetch account balances. No connection?</string>
+  <string name="cant_connect_to_network">Can\'t connect to network, retry it later</string>
+  <string name="uknown_error">Unknown error occurred</string>
+  <string name="invalid_wallet_password">Invalid Wallet Password!</string>
 
 
 </resources>

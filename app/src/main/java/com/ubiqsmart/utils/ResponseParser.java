@@ -1,13 +1,13 @@
 package com.ubiqsmart.utils;
 
 import android.content.Context;
+import com.ubiqsmart.interfaces.LastIconLoaded;
+import com.ubiqsmart.interfaces.StorableWallet;
+import com.ubiqsmart.repository.api.EtherscanAPI;
 import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.repository.data.TransactionDisplay;
 import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.repository.data.WatchWallet;
-import com.ubiqsmart.interfaces.LastIconLoaded;
-import com.ubiqsmart.interfaces.StorableWallet;
-import com.ubiqsmart.network.EtherscanAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,13 +75,11 @@ public class ResponseParser {
     for (int i = 0; i < data.length(); i++) {
       JSONObject currentToken = data.getJSONObject(i);
       try {
-        display.add(
-            new Token(currentToken.getJSONObject("tokenInfo").getString("name"), currentToken.getJSONObject("tokenInfo").getString("symbol"),
+        display.add(new Token(currentToken.getJSONObject("tokenInfo").getString("name"), currentToken.getJSONObject("tokenInfo").getString("symbol"),
             new BigDecimal(currentToken.getString("balance")), currentToken.getJSONObject("tokenInfo").getInt("decimals"),
             currentToken.getJSONObject("tokenInfo").getJSONObject("price").getDouble("rate"), currentToken.getJSONObject("tokenInfo").getString("address"),
             currentToken.getJSONObject("tokenInfo").getString("totalSupply"), currentToken.getJSONObject("tokenInfo").getLong("holdersCount"),
-            currentToken.getJSONObject("tokenInfo").getLong("createdAt"))
-        );
+            currentToken.getJSONObject("tokenInfo").getLong("createdAt")));
       } catch (JSONException e) {
       }
 

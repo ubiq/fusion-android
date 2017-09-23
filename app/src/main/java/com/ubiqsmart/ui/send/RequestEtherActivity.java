@@ -19,12 +19,12 @@ import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.ubiqsmart.R;
-import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.interfaces.StorableWallet;
+import com.ubiqsmart.repository.data.Wallet;
 import com.ubiqsmart.ui.base.SecureAppCompatActivity;
+import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 import com.ubiqsmart.utils.AddressNameConverter;
 import com.ubiqsmart.utils.ExchangeCalculator;
-import com.ubiqsmart.ui.main.adapter.WalletAdapter;
 import com.ubiqsmart.utils.WalletStorage;
 import com.ubiqsmart.utils.qr.AddressEncoder;
 import com.ubiqsmart.utils.qr.Contents;
@@ -61,9 +61,8 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
     usdPrice = findViewById(R.id.usdPrice);
     walletAdapter = new WalletAdapter(wallets, this, this, this);
 
-    LinearLayoutManager mgr = new LinearLayoutManager(this.getApplicationContext());
-    RecyclerView.LayoutManager mLayoutManager = mgr;
-    recyclerView.setLayoutManager(mLayoutManager);
+    final LinearLayoutManager mgr = new LinearLayoutManager(this.getApplicationContext());
+    recyclerView.setLayoutManager(mgr);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(walletAdapter);
     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), mgr.getOrientation());
@@ -98,12 +97,14 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
 
   public void update() {
     wallets.clear();
-    ArrayList<Wallet> myAddresses = new ArrayList<Wallet>();
-    ArrayList<StorableWallet> storedAddresses = new ArrayList<StorableWallet>(WalletStorage.getInstance(this).get());
+
+    final List<Wallet> myAddresses = new ArrayList<>();
+    final WalletStorage walletStorage = WalletStorage.getInstance(this, null, null);
+
+    final List<StorableWallet> storedAddresses = new ArrayList<>(walletStorage.get());
     for (int i = 0; i < storedAddresses.size(); i++) {
       if (i == 0) selectedEtherAddress = storedAddresses.get(i).getPubKey();
-      myAddresses.add(
-          new Wallet(AddressNameConverter.getInstance(this).get(storedAddresses.get(i).getPubKey()), storedAddresses.get(i).getPubKey()));
+      myAddresses.add(new Wallet(AddressNameConverter.getInstance(this).get(storedAddresses.get(i).getPubKey()), storedAddresses.get(i).getPubKey()));
     }
 
     wallets.addAll(myAddresses);
@@ -111,8 +112,10 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
   }
 
   public void snackError(String s) {
-    if (coord == null) return;
-    Snackbar mySnackbar = Snackbar.make(coord, s, Snackbar.LENGTH_SHORT);
+    if (coord == null) {
+      return;
+    }
+    final Snackbar mySnackbar = Snackbar.make(coord, s, Snackbar.LENGTH_SHORT);
     mySnackbar.show();
   }
 
@@ -123,7 +126,8 @@ public class RequestEtherActivity extends SecureAppCompatActivity implements Vie
       iban += "?amount=" + amount.getText().toString();
     }
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
     QREncoder qrCodeEncoder;
     if (prefs.getBoolean("qr_encoding_erc", false)) {
       AddressEncoder temp = new AddressEncoder(selectedEtherAddress);

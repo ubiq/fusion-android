@@ -1,10 +1,9 @@
-package com.ubiqsmart.views;
+package com.ubiqsmart.ui.widgets.charts;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 public class WeekXFormatter implements IAxisValueFormatter {
 

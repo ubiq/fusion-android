@@ -1,6 +1,6 @@
 package com.ubiqsmart.utils.qr;
 
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 
 public class AddressEncoder {

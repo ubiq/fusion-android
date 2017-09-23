@@ -9,21 +9,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
+import com.ubiqsmart.R;
+import com.ubiqsmart.ui.base.BaseActivity;
 import com.ubiqsmart.utils.qr.AddressEncoder;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import com.ubiqsmart.R;
 
 import java.io.*;
 import java.util.*;
 
-public class QRScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class QRScanActivity extends BaseActivity implements ZXingScannerView.ResultHandler {
 
   public static final int REQUEST_CODE = 100;
   public static final int REQUEST_CAMERA_PERMISSION = 106;

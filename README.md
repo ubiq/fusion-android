@@ -19,7 +19,7 @@ As Lunary, this project will support the following features:
 * Token Balances  
 * Notification on incoming transactions  
 * Combined transaction history  
-* Addressbook and address naming  
+* Addressbook and eth_address_view naming
 * Importing / Exporting wallets  
 * Display amounts and token in ETH, USD or BTC  
 * No registration or sign up required  

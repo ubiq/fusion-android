@@ -19,14 +19,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ubiqsmart.ui.detail.AddressDetailActivity;
-import com.ubiqsmart.ui.main.MainActivity;
+import com.ubiqsmart.R;
 import com.ubiqsmart.repository.data.Token;
 import com.ubiqsmart.repository.data.TransactionDisplay;
 import com.ubiqsmart.repository.data.WatchWallet;
+import com.ubiqsmart.ui.detail.AddressDetailActivity;
+import com.ubiqsmart.ui.main.MainActivity;
 import com.ubiqsmart.ui.main.WalletsFragment;
 import me.grantland.widget.AutofitTextView;
-import com.ubiqsmart.R;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

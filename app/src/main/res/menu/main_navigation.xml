@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
     android:id="@+id/action_price"
-    android:icon="@drawable/ic_price"
     android:enabled="true"
+    android:icon="@drawable/ic_price"
     android:title="@string/exchange" />
   <item
     android:id="@+id/action_wallet"
-    android:icon="@drawable/ic_wallet"
     android:enabled="true"
+    android:icon="@drawable/ic_wallet"
     android:title="@string/wallet" />
   <item
-    android:icon="@drawable/ic_transactions"
     android:enabled="true"
+    android:icon="@drawable/ic_transactions"
     android:title="@string/transactions" />
 </menu>

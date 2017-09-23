@@ -19,7 +19,7 @@
 
   <string name="main_ac_wallet_added_suc">Your wallet was added successfully</string>
   <string name="main_ac_wallet_added_er">Wallet was already added</string>
-  <string name="main_ac_wallet_added_fatal">Err Not a valid ethereum address</string>
+  <string name="main_ac_wallet_added_fatal">Err Not a valid ethereum eth_address_view</string>
   <string name="detail_acc_name_changed_suc">Wallet successfully renamed</string>
   <string name="title_activity_settings">Settings</string>
 
@@ -127,7 +127,7 @@
   <string name="wallet_suc_exported">Wallet successfully exported</string>
   <string name="wallet_no_permission">Please grant write permission to export wallets</string>
   <string name="wallet_one_at_a_time">Not So Fast</string>
-  <string name="wallet_one_at_a_time_text">We are currently generating a wallet for you, you can see the progress in your notification bar. Don\'t worry, we will notify you as soon as your wallet generation is finished :-) If you really wish to generate another one please wait for the current wallet to be completed first.</string>
+  <string name="wallet_one_at_a_time_text">We are currently generating a wallet for you, you can see the progress in your notification bar. Don\'t worry, we will updateNotification you as soon as your wallet generation is finished :-) If you really wish to generate another one please wait for the current wallet to be completed first.</string>
   <string name="button_ok">OK</string>
   <string name="wallet_removal_title">ATTENTION: Wallet Removal</string>
   <string name="wallet_removal_sure">Are you sure you want to delete your watch only wallet?</string>
@@ -142,7 +142,7 @@
   <string name="trans_menu_changename">Change Address Name</string>
   <string name="trans_menu_viewreceiver">View Receiver Address</string>
   <string name="trans_menu_openinb">Open in Browser</string>
-  <string name="trans_no_trans_found">No transactions found for this address.</string>
+  <string name="trans_no_trans_found">No transactions found for this eth_address_view.</string>
   <string name="err_send_not_enough_ether">Not enough Ether on that Address</string>
   <string name="err_send_invalidamount">Invalid Amount</string>
   <string name="err_send_noreceiver">No receiver specified</string>
@@ -165,7 +165,7 @@
   <string name="dialog_nofullwallet">No Full Wallet</string>
   <string name="dialog_nofullwallet_text">In order to send funds you need a full wallet with a private key. Please generate or import one first.</string>
   <string name="dialog_no_wallets">No Wallets</string>
-  <string name="dialog_no_wallets_text">In order to request funds you need a wallet or a watch only address.</string>
+  <string name="dialog_no_wallets_text">In order to request funds you need a wallet or a watch only eth_address_view.</string>
   <string name="dialog_no_wallets_found">No Wallets Found</string>
   <string name="dialog_no_wallets_found_text">Please place the wallet you want to import inside the Lunary folder and make sure it is correctly named. When importing from Mist or other desktop client you don\'t have to rename your wallet.</string>
   <string name="notification_ticker">Incoming Ether Transaction…</string>
@@ -300,7 +300,7 @@ For app usage statistics we use Google Analytics. More details about Google Anal
 
 <p><b>Privacy Policy for the use of Google Analytics</b></p>
 
-<p>This app uses Google Analytics, an analytics service provided by Google, Inc. (“Google”). Google Analytics uses “cookies”, which are text files placed on your device, to help analyze how users use it. The information generated about your use of this app (including your IP address) is sent to and stored at a Google server in the U.S.A. Google will use this information on behalf of the operator of this app for the purpose of evaluating your use of the app, compiling reports on activity for operators and providing them other services relating to app activity and usage. The IP-address, that your device conveys within the scope of Google Analytics, will not be associated with any other data held by Google. For more information about Google Analytics visit <a href="https://google.com/analytics/terms">https://google.com/analytics/terms</a></p>
+<p>This app uses Google Analytics, an analytics service provided by Google, Inc. (“Google”). Google Analytics uses “cookies”, which are text files placed on your device, to help analyze how users use it. The information generated about your use of this app (including your IP eth_address_view) is sent to and stored at a Google server in the U.S.A. Google will use this information on behalf of the operator of this app for the purpose of evaluating your use of the app, compiling reports on activity for operators and providing them other services relating to app activity and usage. The IP-eth_address_view, that your device conveys within the scope of Google Analytics, will not be associated with any other data held by Google. For more information about Google Analytics visit <a href="https://google.com/analytics/terms">https://google.com/analytics/terms</a></p>
 
 
 <p>By using this application you agree to our Privicy Policy and the processing of the collected information by Google, according to the above mentioned purposes. If you do not consent to such processing, please do not further access or use our applications.
@@ -312,7 +312,7 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="unconfirmed">Unconfirmed</string>
   <string name="locked_one_minute">Locked for 1 minute!</string>
   <string name="last_seven_days">Last 7 Days</string>
-  <string name="invalid_wallet">Invalid Ethereum address!</string>
+  <string name="invalid_wallet">Invalid Ethereum eth_address_view!</string>
   <string name="invalid_private_key">Invalid private key!</string>
   <string name="locked_for_one_minute">Locked for 1 minute!</string>
   <string name="zero_ubiqs">0.0000 UBQ</string>
@@ -320,6 +320,11 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="grant_camera_permission">Please grant camera permission in order to read QR codes</string>
   <string name="share_via">Share via</string>
   <string name="minimum_confirmations">%d / 12 Confirmations</string>
-
+  <string name="no_internet_connection">No internet connection</string>
+  <string name="unnamed_address">Unnamed Address</string>
+  <string name="cant_fetch_accounts">Can\'t fetch account balances. No connection?</string>
+  <string name="cant_connect_to_network">Can\'t connect to network, retry it later</string>
+  <string name="uknown_error">Unknown error occurred</string>
+  <string name="invalid_wallet_password">Invalid Wallet Password!</string>
 
 </resources>
