@@ -6,6 +6,7 @@ import com.github.salomonbrys.kodein.android.KodeinBroadcastReceiver
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.services.NotificationLauncher
 
+@Deprecated("Replace behavior with android-job library")
 class BootReceiver : KodeinBroadcastReceiver() {
 
   private val notificationLauncher: NotificationLauncher by injector.instance()

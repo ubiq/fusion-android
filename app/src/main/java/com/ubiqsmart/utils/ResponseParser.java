@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+@Deprecated
 public class ResponseParser {
 
   public static List<TransactionDisplay> parseTransactions(String response, String walletname, String address, byte type) {

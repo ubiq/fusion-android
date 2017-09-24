@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+@Deprecated
 public class Settings {
 
   public static boolean showTransactionsWithZero = false;

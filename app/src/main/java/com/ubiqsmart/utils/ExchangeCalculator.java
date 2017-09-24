@@ -1,5 +1,6 @@
 package com.ubiqsmart.utils;
 
+import android.support.annotation.NonNull;
 import com.ubiqsmart.interfaces.NetworkUpdateListener;
 import com.ubiqsmart.repository.api.EtherscanAPI;
 import com.ubiqsmart.repository.data.Currency;
@@ -20,12 +21,14 @@ public class ExchangeCalculator {
 
   public static final BigDecimal ONE_ETHER = new BigDecimal("1000000000000000000");
 
+  private static final DecimalFormat FORMATTER_USD = new DecimalFormat("#,###,###.##");
+  private static final DecimalFormat FORMATTER_CRYPT = new DecimalFormat("#,###,###.####");
+  private static final DecimalFormat FORMATTER_CRYPT_EXACT = new DecimalFormat("#,###,###.#######");
+
   private static ExchangeCalculator instance;
+
   private long lastUpdateTimestamp = 0;
   private double rateForChartDisplay = 1;
-  private DecimalFormat formatterUsd = new DecimalFormat("#,###,###.##");
-  private DecimalFormat formatterCrypt = new DecimalFormat("#,###,###.####");
-  private DecimalFormat formatterCryptExact = new DecimalFormat("#,###,###.#######");
 
   private ExchangeCalculator() {
   }
@@ -90,15 +93,15 @@ public class ExchangeCalculator {
   }
 
   public String displayUsdNicely(double d) {
-    return formatterUsd.format(d);
+    return FORMATTER_USD.format(d);
   }
 
   public String displayEthNicely(double d) {
-    return formatterCrypt.format(d);
+    return FORMATTER_CRYPT.format(d);
   }
 
   public String displayEthNicelyExact(double d) {
-    return formatterCryptExact.format(d);
+    return FORMATTER_CRYPT_EXACT.format(d);
   }
 
   /**
@@ -115,8 +118,8 @@ public class ExchangeCalculator {
 
   public double convertRate(double balance, double rate) {
     if (index == 2) {
-      if (balance * rate >= 100000) // dont display cents if bigger than 100k
-      {
+      if (balance * rate >= 100000) {
+        // dont display cents if bigger than 100k
         return (int) Math.floor(balance * rate);
       }
       return Math.floor(balance * rate * 100) / 100;
@@ -153,7 +156,9 @@ public class ExchangeCalculator {
   public double sumUpTokenEther(List<Token> token) {
     double summedEther = 0;
     for (Token t : token) {
-      if (t.getShorty().equals("ETH")) continue;
+      if (t.getShorty().equals("ETH")) {
+        continue;
+      }
       summedEther += convertTokenToEther(t.getBalanceDouble(), t.getUsdprice());
     }
     return summedEther;
@@ -207,12 +212,12 @@ public class ExchangeCalculator {
 
     //Log.d("updateingn", "Initialize price update");
     EtherscanAPI.getInstance().getEtherPrice(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(@NonNull Call call, @NonNull IOException e) {
       }
 
-      @Override public void onResponse(Call call, final Response response) throws IOException {
+      @Override public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
         try {
-          JSONObject data = new JSONObject(response.body().string()).getJSONObject("result");
+          final JSONObject data = new JSONObject(response.body().string()).getJSONObject("result");
 
           conversionNames[1].setRate(data.getDouble("ethbtc"));
           conversionNames[2].setRate(data.getDouble("ethusd"));
@@ -231,10 +236,10 @@ public class ExchangeCalculator {
 
   private void convert(final String currency, final NetworkUpdateListener update) throws IOException {
     EtherscanAPI.getInstance().getPriceConversionRates("USD" + currency, new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(@NonNull Call call, @NonNull IOException e) {
       }
 
-      @Override public void onResponse(Call call, final Response response) throws IOException {
+      @Override public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
         rateForChartDisplay = ResponseParser.parsePriceConversionRate(response.body().string());
         conversionNames[2].setRate(Math.floor(conversionNames[2].getRate() * rateForChartDisplay * 100) / 100);
         update.onUpdate(response);

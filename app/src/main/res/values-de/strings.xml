@@ -324,6 +324,11 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="cant_connect_to_network">Can\'t connect to network, retry it later</string>
   <string name="uknown_error">Unknown error occurred</string>
   <string name="invalid_wallet_password">Invalid Wallet Password!</string>
+  <string name="invalid_recipient">Invalid Recipient</string>
+  <string name="new_wallet">New Wallet</string>
+  <string name="address">Address</string>
+  <string name="unnamed_wallet">Unnamed Wallet</string>
+  <string name="wallet_password">Wallet Password</string>
 
 
 </resources>

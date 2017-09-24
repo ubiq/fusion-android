@@ -89,7 +89,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
       preferences.edit().putInt("main_index", exchangeCalculator.index).apply()
     }
 
-    walletAdapter = WalletAdapter(wallets, ac, this, this)
+    walletAdapter = WalletAdapter(wallets, activity, this, this)
 
     val mgr = LinearLayoutManager(context.applicationContext)
     recycler_view.layoutManager = mgr

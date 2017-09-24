@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.*;
 import java.util.*;
 
+@Deprecated
 public class TokenIconCache {
 
   private Map<String, byte[]> cache;

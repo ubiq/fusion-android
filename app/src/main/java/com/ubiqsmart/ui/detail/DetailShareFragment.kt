@@ -22,7 +22,6 @@ import com.ubiqsmart.utils.qr.QREncoder
 
 class DetailShareFragment : BaseFragment() {
 
-
   private var ethaddress: String? = ""
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

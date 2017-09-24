@@ -183,7 +183,7 @@
   <string name="notification_click_to_view">Toca para ver más</string>
   <string name="ether_and_token">Ether and Token</string>
   <string name="prefs_lock_with_pw">Lock with Password</string>
-  <string name="prefs_lock_with_pw_sum">If enabled Lunary will ask you for a password before launching the app</string>
+  <string name="prefs_lock_with_pw_sum">If isPagingEnabled Lunary will ask you for a password before launching the app</string>
   <string name="prefs_set_pw">Set Password</string>
   <string name="prefs_set_pw_sum">Specify your login pattern</string>
   <string name="prefs_cat_security">Security</string>
@@ -323,6 +323,11 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="cant_connect_to_network">Can\'t connect to network, retry it later</string>
   <string name="uknown_error">Unknown error occurred</string>
   <string name="invalid_wallet_password">Invalid Wallet Password!</string>
+  <string name="invalid_recipient">Invalid Recipient</string>
+  <string name="new_wallet">New Wallet</string>
+  <string name="address">Address</string>
+  <string name="unnamed_wallet">Unnamed Wallet</string>
+  <string name="wallet_password">Wallet Password</string>
 
 
 </resources>

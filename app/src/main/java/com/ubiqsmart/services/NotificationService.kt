@@ -29,17 +29,12 @@ import java.math.BigInteger
 class NotificationService : KodeinIntentService(NotificationService::class.java.simpleName) {
 
   private val notificationManager: NotificationManager by with(applicationContext).instance()
-
+  private val walletStorage: WalletStorage by with(applicationContext).instance()
+  private val etherscanApi: EtherscanAPI by instance()
+  private val notificationLauncher: NotificationLauncher by with(applicationContext).instance()
   private val preferences: SharedPreferences by withContext(this).instance()
 
-  private val etherscanApi: EtherscanAPI by instance()
-  private val walletStorage: WalletStorage by with(applicationContext).instance()
-
   override fun onHandleIntent(intent: Intent?) {
-    val context = applicationContext
-
-    val notificationLauncher = NotificationLauncher.getInstance(context, null)
-
     val notificationsNewMessage = preferences.getBoolean("notifications_new_message", true)
 
     if (!notificationsNewMessage || walletStorage.get().size <= 0) {

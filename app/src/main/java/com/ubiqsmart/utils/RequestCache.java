@@ -1,11 +1,13 @@
 package com.ubiqsmart.utils;
 
+import kotlin.Deprecated;
+
 import java.util.*;
 
 /**
  * Used for temporary caching of responses. Clears once android garbage collects
  */
-public class RequestCache {
+@Deprecated(message = "Going to be removed in favor of RxJavaCache") public class RequestCache {
 
   public static final String TYPE_TOKEN = "TOKEN_";
   public static final String TYPE_TXS_NORMAL = "TXS_NORMAL_";
