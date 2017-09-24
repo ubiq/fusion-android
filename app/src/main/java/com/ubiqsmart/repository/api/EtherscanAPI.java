@@ -8,6 +8,7 @@ import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.utils.RequestCache;
 import com.ubiqsmart.utils.TokenIconCache;
+import kotlin.Deprecated;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+@Deprecated(message = "Migrate this to specific repositories with retrofit")
 public class EtherscanAPI {
 
   private String token;

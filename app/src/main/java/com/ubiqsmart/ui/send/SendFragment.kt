@@ -134,7 +134,7 @@ class SendFragment : Fragment() {
 
     spinner = rootView.findViewById(R.id.spinner)
 
-    val walletStorage = WalletStorage.getInstance(activity, null, null)
+    val walletStorage = WalletStorage.getInstance(activity, null)
     val spinnerArrayAdapter = object : ArrayAdapter<String>(ac!!, R.layout.address_spinner, walletStorage.fullOnly) {
       override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent)
@@ -247,7 +247,7 @@ class SendFragment : Fragment() {
   }
 
   private fun setFromAddress(from: String?) {
-    val walletStorage = WalletStorage.getInstance(activity, null, null)
+    val walletStorage = WalletStorage.getInstance(activity, null)
     val fullwallets = walletStorage.fullOnly
     for (i in fullwallets.indices) {
       if (fullwallets[i].equals(from!!, ignoreCase = true)) {

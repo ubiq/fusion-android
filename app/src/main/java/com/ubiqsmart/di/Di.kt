@@ -1,5 +1,6 @@
 package com.ubiqsmart.di
 
+import android.app.Application
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.androidContextScope
 import com.squareup.moshi.KotlinJsonAdapterFactory
@@ -18,7 +19,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object Modules {
 
-  val networkingModule = Kodein.Module {
+  val Networking = Kodein.Module {
 
     // Parsing
     bind<Moshi>() with singleton {
@@ -49,23 +50,23 @@ object Modules {
     }
 
     bind<CryptoCompareApi>() with singleton {
-      val retrofit: Retrofit = instance()
-      retrofit.create(CryptoCompareApi::class.java)
+      instance<Retrofit>().create(CryptoCompareApi::class.java)
     }
 
   }
 
-  val toDeprecateModule = Kodein.Module {
+  fun Deprecated(app: Application) = Kodein.Module {
 
     bind<ExchangeCalculator>() with singleton { ExchangeCalculator.getInstance() }
 
-    bind<WalletStorage>() with scopedSingleton(androidContextScope) { WalletStorage.getInstance(it, instance(), instance()) }
-
-    bind<NotificationLauncher>() with scopedSingleton(androidContextScope) { NotificationLauncher.getInstance(it, instance()) }
-
-    bind<AddressNameConverter>() with scopedSingleton(androidContextScope) { AddressNameConverter.getInstance(it) }
-
     bind<EtherscanAPI>() with singleton { EtherscanAPI.getInstance() }
+
+    bind<WalletStorage>() with singleton { WalletStorage.getInstance(app, instance()) }
+
+    bind<AddressNameConverter>() with singleton { AddressNameConverter.getInstance(app) }
+
+    bind<NotificationLauncher>() with singleton { NotificationLauncher.getInstance(app, instance()) }
+
   }
 
 }

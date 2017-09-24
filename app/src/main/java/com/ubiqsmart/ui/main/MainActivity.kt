@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.Menu
 import android.view.MenuItem
 import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
 import com.ubiqsmart.interfaces.NetworkUpdateListener
 import com.ubiqsmart.repository.data.WatchWallet
@@ -39,11 +38,11 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
 
   lateinit var fragments: List<BaseFragment>
 
-  private val preferences: SharedPreferences by with(this).instance()
+  private val preferences: SharedPreferences by instance()
   private val exchangeCalculator: ExchangeCalculator by instance()
-  private val walletStorage: WalletStorage by with(this).instance()
-  private val notificationLauncher: NotificationLauncher by with(this).instance()
-  private val addressNameConverter: AddressNameConverter by with(this).instance()
+  private val walletStorage: WalletStorage by instance()
+  private val notificationLauncher: NotificationLauncher by instance()
+  private val addressNameConverter: AddressNameConverter by instance()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -90,7 +90,7 @@ class RequestEtherActivity : SecureAppCompatActivity(), View.OnClickListener {
     wallets.clear()
 
     val myAddresses = ArrayList<Wallet>()
-    val walletStorage = WalletStorage.getInstance(this, null, null)
+    val walletStorage = WalletStorage.getInstance(this, null)
 
     val storedAddresses = ArrayList(walletStorage.get())
     for (i in storedAddresses.indices) {

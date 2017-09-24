@@ -5,6 +5,7 @@ import com.ubiqsmart.interfaces.NetworkUpdateListener;
 import com.ubiqsmart.repository.api.EtherscanAPI;
 import com.ubiqsmart.repository.data.Currency;
 import com.ubiqsmart.repository.data.Token;
+import kotlin.Deprecated;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -17,6 +18,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
+@Deprecated(message = "Replace this with a general purpose calculator")
 public class ExchangeCalculator {
 
   public static final BigDecimal ONE_ETHER = new BigDecimal("1000000000000000000");

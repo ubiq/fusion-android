@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import com.ubiqsmart.interfaces.StorableWallet;
 import com.ubiqsmart.repository.data.FullWallet;
 import com.ubiqsmart.repository.data.WatchWallet;
 import com.ubiqsmart.ui.main.MainActivity;
+import kotlin.Deprecated;
 import org.json.JSONException;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
@@ -19,6 +21,7 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.*;
 
+@Deprecated(message = "Replace this with a repository with Room")
 public class WalletStorage {
 
   private static WalletStorage instance;
@@ -30,9 +33,10 @@ public class WalletStorage {
   private List<StorableWallet> mapdb;
   private String walletToExport; // Used as temp if users wants to export but still needs to grant write permission
 
-  public static WalletStorage getInstance(final Context context, final SharedPreferences preferences, final AddressNameConverter addressNameConverter) {
+  public static WalletStorage getInstance(final Context context, final AddressNameConverter addressNameConverter) {
     if (instance == null) {
-      instance = new WalletStorage(context, preferences, addressNameConverter);
+      final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+      instance = new WalletStorage(context, sharedPreferences, addressNameConverter);
     }
     return instance;
   }
