@@ -37,7 +37,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
   protected abstract val addressNameConverter: AddressNameConverter
   protected abstract val etherscanApi: EtherscanAPI
 
-  protected lateinit var walletAdapter: TransactionAdapter
+  protected var walletAdapter: TransactionAdapter? = null
 
   @get:Synchronized
   @set:Synchronized
@@ -50,11 +50,13 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
   protected var requestCount = 0
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val rootView = inflater!!.inflate(R.layout.fragment_transaction, container, false)
+    return inflater!!.inflate(R.layout.fragment_transaction, container, false)
+  }
 
+  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
     if (arguments != null) {
       address = arguments.getString("ADDRESS")
-      (rootView.findViewById<View>(R.id.infoText) as TextView).setText(R.string.trans_no_trans_found)
+      (view?.findViewById<View>(R.id.infoText) as TextView).setText(R.string.trans_no_trans_found)
     }
 
     walletAdapter = TransactionAdapter(activity, wallets, this, this)
@@ -92,9 +94,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
     new_transaction.setOnClickListener { openSendActivity() }
 
     update(false)
-    walletAdapter.notifyDataSetChanged()
-
-    return rootView
+    walletAdapter?.notifyDataSetChanged()
   }
 
   private fun openSendActivity() {
@@ -121,7 +121,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
   }
 
   fun notifyDataSetChanged() {
-    walletAdapter.notifyDataSetChanged()
+    walletAdapter?.notifyDataSetChanged()
   }
 
   abstract fun update(force: Boolean)
@@ -160,7 +160,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
     val position: Int
 
     try {
-      position = walletAdapter.position
+      position = walletAdapter?.position ?: 0
     } catch (e: Exception) {
       e.printStackTrace()
       return super.onContextItemSelected(item)

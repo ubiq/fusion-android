@@ -14,9 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
-import com.github.salomonbrys.kodein.android.withContext
 import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
 import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.repository.data.Wallet
@@ -36,15 +34,15 @@ import java.util.*
 
 class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateContextMenuListener {
 
-  private val preferences: SharedPreferences by withContext(this).instance()
+  private val preferences: SharedPreferences by instance()
 
   private val exchangeCalculator: ExchangeCalculator by instance()
   private val etherscanApi: EtherscanAPI by instance()
-  private val addressNameConverter: AddressNameConverter by with(this).instance()
-  private val walletStorage: WalletStorage by with(this).instance()
+  private val addressNameConverter: AddressNameConverter by instance()
+  private val walletStorage: WalletStorage by instance()
 
-  private lateinit var walletAdapter: WalletAdapter
   private var wallets = ArrayList<Wallet>()
+  private var walletAdapter: WalletAdapter? = null
 
   private var ac: MainActivity? = null
 
@@ -54,12 +52,16 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
     get() = wallets.size
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val rootView = inflater!!.inflate(R.layout.fragment_wallets, container, false)
+    return inflater!!.inflate(R.layout.fragment_wallets, container, false)
+  }
 
+  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
     ac = this.activity as MainActivity
 
-    swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(context, R.color.primary))
-    swipe_refresh_layout.setOnRefreshListener {
+    walletAdapter = WalletAdapter(wallets, activity, this, this)
+
+    swipe_refresh_layout?.setColorSchemeColors(ContextCompat.getColor(context, R.color.primary))
+    swipe_refresh_layout?.setOnRefreshListener {
       balance = 0.0
       try {
         update()
@@ -73,25 +75,23 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
 
     exchangeCalculator.index = preferences.getInt("main_index", 0)
 
-    left_arrow.setOnClickListener {
+    left_arrow?.setOnClickListener {
       val (name, rate) = exchangeCalculator.previous()
       balance_view.text = String.format("%s %s", exchangeCalculator.displayBalanceNicely(exchangeCalculator.convertRate(balance, rate)), name)
       ac!!.broadCastDataSetChanged()
-      walletAdapter.notifyDataSetChanged()
+      walletAdapter?.notifyDataSetChanged()
       preferences.edit().putInt("main_index", exchangeCalculator.index).apply()
     }
 
-    right_arrow.setOnClickListener {
+    right_arrow?.setOnClickListener {
       val (name, rate) = exchangeCalculator.next()
       balance_view.text = String.format("%s %s", exchangeCalculator.displayBalanceNicely(exchangeCalculator.convertRate(balance, rate)), name)
       ac!!.broadCastDataSetChanged()
-      walletAdapter.notifyDataSetChanged()
+      walletAdapter?.notifyDataSetChanged()
       preferences.edit().putInt("main_index", exchangeCalculator.index).apply()
     }
 
-    walletAdapter = WalletAdapter(wallets, activity, this, this)
-
-    val mgr = LinearLayoutManager(context.applicationContext)
+    val mgr = LinearLayoutManager(activity)
     recycler_view.layoutManager = mgr
     recycler_view.itemAnimator = DefaultItemAnimator()
     recycler_view.adapter = walletAdapter
@@ -99,7 +99,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
     val dividerItemDecoration = DividerItemDecoration(context, mgr.orientation)
     recycler_view.addItemDecoration(dividerItemDecoration)
 
-    walletAdapter.notifyDataSetChanged()
+    walletAdapter?.notifyDataSetChanged()
 
     gen_fab.setOnClickListener { generateDialog() }
 
@@ -129,8 +129,6 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
     } catch (e: IOException) {
       ac?.snackError("Can't fetch account balances. No connection?")
     }
-
-    return rootView
   }
 
   @Throws(IOException::class)
@@ -157,7 +155,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
 
           ac?.runOnUiThread {
             wallets.addAll(w)
-            walletAdapter.notifyDataSetChanged()
+            walletAdapter?.notifyDataSetChanged()
             onItemsLoadComplete()
           }
         }
@@ -174,7 +172,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
 
           ac?.runOnUiThread {
             wallets.addAll(w)
-            walletAdapter.notifyDataSetChanged()
+            walletAdapter?.notifyDataSetChanged()
             wallets.indices.forEach { i -> balance += wallets[i].balance }
             balance_view.text = String.format("%s %s",
                 exchangeCalculator.displayBalanceNicely(exchangeCalculator.convertRate(balance, exchangeCalculator.current.rate)),
@@ -198,7 +196,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
   override fun onContextItemSelected(item: MenuItem?): Boolean {
     val position: Int
     try {
-      position = walletAdapter.position
+      position = walletAdapter?.position ?: 0
     } catch (e: Exception) {
       e.printStackTrace()
       return super.onContextItemSelected(item)
@@ -346,8 +344,10 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
   }
 
   fun notifyDataSetChanged() {
-    walletAdapter.notifyDataSetChanged()
-    updateBalanceText()
+    walletAdapter?.apply {
+      notifyDataSetChanged()
+      updateBalanceText()
+    }
   }
 
   fun updateBalanceText() {

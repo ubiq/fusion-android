@@ -16,7 +16,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IFillFormatter
-import com.github.salomonbrys.kodein.android.withContext
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
 import com.ubiqsmart.repository.api.EtherscanAPI
@@ -37,7 +36,7 @@ import java.util.*
 
 class PriceFragment : BaseFragment() {
 
-  private val preferences: SharedPreferences by withContext(this).instance()
+  private val preferences: SharedPreferences by instance()
   private val exchangeCalculator: ExchangeCalculator by instance()
   private val etherscanApi: EtherscanAPI by instance()
 
@@ -47,8 +46,10 @@ class PriceFragment : BaseFragment() {
   private var displayInUsd = true // True = USD, False = BTC
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val rootView = inflater!!.inflate(R.layout.fragment_price, container, false)
+    return inflater!!.inflate(R.layout.fragment_price, container, false)
+  }
 
+  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
     ac = activity as MainActivity
 
     TITLE_TEXTS = arrayOf(getString(R.string.last_24_hours), getString(R.string.last_7_days), getString(R.string.last_30_days), getString(R.string.last_year))
@@ -79,8 +80,6 @@ class PriceFragment : BaseFragment() {
 
     price_chart.visibility = View.INVISIBLE
     swipe_refresh_layout2.isRefreshing = true
-
-    return rootView
   }
 
   private operator fun next() {

@@ -3,7 +3,6 @@ package com.ubiqsmart.ui.main
 import android.view.View
 import android.view.View.GONE
 import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
 import com.ubiqsmart.interfaces.StorableWallet
 import com.ubiqsmart.repository.api.EtherscanAPI
@@ -23,8 +22,8 @@ import java.util.*
 
 class TransactionsAllFragment : TransactionsAbstractFragment() {
 
-  override val walletStorage: WalletStorage by with(this).instance()
-  override val addressNameConverter: AddressNameConverter by with(this).instance()
+  override val walletStorage: WalletStorage by instance()
+  override val addressNameConverter: AddressNameConverter by instance()
   override val etherscanApi: EtherscanAPI by instance()
 
   private var unconfirmed: TransactionDisplay? = null
@@ -134,7 +133,7 @@ class TransactionsAllFragment : TransactionsAbstractFragment() {
       }
 
       nothing_found.visibility = if (wallets.size == 0) View.VISIBLE else GONE
-      walletAdapter.notifyDataSetChanged()
+      walletAdapter?.notifyDataSetChanged()
     }
   }
 

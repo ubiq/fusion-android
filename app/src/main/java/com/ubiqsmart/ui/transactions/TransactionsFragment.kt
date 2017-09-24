@@ -115,7 +115,7 @@ class TransactionsFragment : TransactionsAbstractFragment() {
     if (requestCount >= 2) {
       onItemsLoadComplete()
       nothing_found?.visibility = if (wallets.size == 0) View.VISIBLE else View.GONE
-      walletAdapter.notifyDataSetChanged()
+      walletAdapter?.notifyDataSetChanged()
     }
   }
 
