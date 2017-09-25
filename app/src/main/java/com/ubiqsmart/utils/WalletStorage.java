@@ -193,7 +193,7 @@ public class WalletStorage {
         toImport.get(i).delete();
 
         add(new FullWallet("0x" + address, address));
-        addressNameConverter.put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6), context);
+        addressNameConverter.put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6));
 
         final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         final Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object

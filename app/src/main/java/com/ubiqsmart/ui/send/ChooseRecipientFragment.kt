@@ -83,7 +83,7 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener, View.OnCreateC
 
     when (item!!.itemId) {
       400 -> { // Remove
-        AddressNameConverter.getInstance(activity).put(wallets[position].publicKey, null, activity)
+        AddressNameConverter.getInstance(activity).put(wallets[position].publicKey, null)
         wallets.removeAt(position)
         if (walletAdapter != null) walletAdapter!!.notifyDataSetChanged()
       }

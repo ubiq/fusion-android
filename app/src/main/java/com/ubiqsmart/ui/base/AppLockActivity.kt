@@ -17,7 +17,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.ubiqsmart.R
 import com.ubiqsmart.interfaces.FingerprintListener
-import com.ubiqsmart.utils.AppLockUtils
 import com.ubiqsmart.utils.FingerprintHelper
 import me.zhanghai.android.patternlock.PatternUtils
 import me.zhanghai.android.patternlock.PatternView
@@ -57,7 +56,7 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
     //patternView.setInStealthMode(true);
     patternView.setOnPatternListener(this)
     fingerprintcontainer = findViewById(R.id.fingerprint_container)
-    hasFingerprintSupport = AppLockUtils.hasDeviceFingerprintSupport(this)
+    hasFingerprintSupport = hasFingerprintSupport()
 
     if (hasFingerprintSupport()) {
       sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)

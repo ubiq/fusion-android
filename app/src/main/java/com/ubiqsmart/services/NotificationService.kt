@@ -8,9 +8,7 @@ import android.graphics.Color
 import android.provider.Settings
 import android.support.v4.app.NotificationCompat
 import com.github.salomonbrys.kodein.android.KodeinIntentService
-import com.github.salomonbrys.kodein.android.withContext
 import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
 import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.ui.main.MainActivity
@@ -28,11 +26,11 @@ import java.math.BigInteger
 
 class NotificationService : KodeinIntentService(NotificationService::class.java.simpleName) {
 
-  private val notificationManager: NotificationManager by with(applicationContext).instance()
-  private val walletStorage: WalletStorage by with(applicationContext).instance()
+  private val notificationManager: NotificationManager by instance()
+  private val walletStorage: WalletStorage by instance()
   private val etherscanApi: EtherscanAPI by instance()
-  private val notificationLauncher: NotificationLauncher by with(applicationContext).instance()
-  private val preferences: SharedPreferences by withContext(this).instance()
+  private val notificationLauncher: NotificationLauncher by instance()
+  private val preferences: SharedPreferences by instance()
 
   override fun onHandleIntent(intent: Intent?) {
     val notificationsNewMessage = preferences.getBoolean("notifications_new_message", true)

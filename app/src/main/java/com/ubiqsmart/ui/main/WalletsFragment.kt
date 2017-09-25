@@ -324,7 +324,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
     }
 
     builder.setPositiveButton(R.string.button_ok) { dialog, _ ->
-      addressNameConverter.put(address, input.text.toString(), context)
+      addressNameConverter.put(address, input.text.toString())
       val inputMgr = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
       inputMgr.hideSoftInputFromWindow(input.windowToken, 0)
       notifyDataSetChanged()

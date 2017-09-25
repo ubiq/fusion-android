@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,10 +16,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.BuildConfig
 import com.ubiqsmart.R
 import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.services.TransactionService
+import com.ubiqsmart.ui.base.BaseFragment
 import com.ubiqsmart.utils.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -31,7 +32,7 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.*
 
-class SendFragment : Fragment() {
+class SendFragment : BaseFragment() {
 
   private var ac: SendActivity? = null
   private var send: Button? = null
@@ -60,10 +61,14 @@ class SendFragment : Fragment() {
   private var curAvailable = BigDecimal.ZERO
   private var curTxCost = BigDecimal("0.000252")
   private var curAmount = BigDecimal.ZERO
-  private val exchange = ExchangeCalculator.getInstance()
   private var expertMode: LinearLayout? = null
   private var data: EditText? = null
   private var userGasLimit: EditText? = null
+
+  private val exchangeCalculator: ExchangeCalculator by instance()
+  private val addressNameConverter: AddressNameConverter by instance()
+  private val walletStorage: WalletStorage by instance()
+  private val etherscanapi: EtherscanAPI by instance()
 
   private val curTotalCost: BigDecimal
     get() = curAmount.add(curTxCost)
@@ -111,7 +116,7 @@ class SendFragment : Fragment() {
     val arguments = arguments
 
     if (arguments.containsKey("TO_ADDRESS")) {
-      setToAddress(arguments.getString("TO_ADDRESS"), ac)
+      setToAddress(arguments.getString("TO_ADDRESS"))
     }
 
     if (arguments.containsKey("AMOUNT")) {
@@ -134,7 +139,6 @@ class SendFragment : Fragment() {
 
     spinner = rootView.findViewById(R.id.spinner)
 
-    val walletStorage = WalletStorage.getInstance(activity, null)
     val spinnerArrayAdapter = object : ArrayAdapter<String>(ac!!, R.layout.address_spinner, walletStorage.fullOnly) {
       override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent)
@@ -148,7 +152,7 @@ class SendFragment : Fragment() {
     spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
         try {
-          EtherscanAPI.getInstance().getBalance(spinner!!.selectedItem.toString(), object : Callback {
+          etherscanapi.getBalance(spinner!!.selectedItem.toString(), object : Callback {
             override fun onFailure(call: Call, e: IOException) {
               ac!!.runOnUiThread { ac!!.snackError("Cant fetch your account balance", Snackbar.LENGTH_LONG) }
             }
@@ -171,7 +175,7 @@ class SendFragment : Fragment() {
         }
 
         fromicon!!.setImageBitmap(Blockies.createIcon(spinner!!.selectedItem.toString().toLowerCase()))
-        fromName!!.text = AddressNameConverter.getInstance(ac).get(spinner!!.selectedItem.toString().toLowerCase())
+        fromName!!.text = addressNameConverter.get(spinner!!.selectedItem.toString().toLowerCase())
       }
 
       override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -191,8 +195,8 @@ class SendFragment : Fragment() {
     currencySpinner = rootView.findViewById(R.id.currency_spinner)
 
     val currencyList = ArrayList<String>()
-    currencyList.add("ETH")
-    currencyList.add(ExchangeCalculator.getInstance().mainCurreny.name ?: "")
+    currencyList.add(getString(R.string.currency_eth))
+    currencyList.add(exchangeCalculator.mainCurreny.name ?: "")
 
     val curAdapter = ArrayAdapter(ac!!, android.R.layout.simple_spinner_item, currencyList)
     curAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -210,7 +214,7 @@ class SendFragment : Fragment() {
     }
 
     send!!.setOnClickListener(View.OnClickListener {
-      if ((amount!!.text.length <= 0 || BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) <= 0) && data!!.text.length <= 0) {
+      if ((amount!!.text.isEmpty() || BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) <= 0) && data!!.text.isEmpty()) {
         ac!!.snackError(getString(R.string.err_send_noamount))
         return@OnClickListener
       }
@@ -264,17 +268,17 @@ class SendFragment : Fragment() {
   }
 
   private fun updateAvailableDisplay() {
-    exchange.index = 2
+    exchangeCalculator.index = 2
 
     availableEth!!.text = curAvailable.toString()
-    availableFiat!!.text = exchange.convertRateExact(curAvailable, exchange.usdPrice)
-    availableFiatSymbol!!.text = exchange.current.shorty
+    availableFiat!!.text = exchangeCalculator.convertRateExact(curAvailable, exchangeCalculator.usdPrice)
+    availableFiatSymbol!!.text = exchangeCalculator.current.shorty
   }
 
   private fun updateAmount(str: String) {
     curAmount = try {
       val origA = BigDecimal(str)
-      if (amountInEther) origA else origA.divide(BigDecimal(exchange.usdPrice), 7, RoundingMode.FLOOR)
+      if (amountInEther) origA else origA.divide(BigDecimal(exchangeCalculator.usdPrice), 7, RoundingMode.FLOOR)
     } catch (e: NumberFormatException) {
       BigDecimal.ZERO
     }
@@ -283,31 +287,31 @@ class SendFragment : Fragment() {
   private fun updateAmountDisplay() {
     val price: String
     if (amountInEther) {
-      price = exchange.convertRateExact(curAmount, exchange.usdPrice) + " " + exchange.mainCurreny.name
+      price = exchangeCalculator.convertRateExact(curAmount, exchangeCalculator.usdPrice) + " " + exchangeCalculator.mainCurreny.name
     } else {
-      exchange.index = 0
-      price = curAmount.toPlainString() + " " + exchange.current.shorty
+      exchangeCalculator.index = 0
+      price = curAmount.toPlainString() + " " + exchangeCalculator.current.shorty
     }
 
     usdPrice!!.text = price
   }
 
   private fun updateTxCostDisplay() {
-    exchange.index = 2
+    exchangeCalculator.index = 2
 
     txCost!!.text = curTxCost.toString()
-    txCostFiat!!.text = exchange.convertRateExact(curTxCost, exchange.usdPrice)
-    txCostFiatSymbol!!.text = exchange.current.shorty
+    txCostFiat!!.text = exchangeCalculator.convertRateExact(curTxCost, exchangeCalculator.usdPrice)
+    txCostFiatSymbol!!.text = exchangeCalculator.current.shorty
   }
 
   private fun updateTotalCostDisplay() {
-    exchange.index = 2
+    exchangeCalculator.index = 2
 
     val curTotalCost = curTotalCost
 
     totalCost!!.text = curTotalCost.toString()
-    totalCostFiat!!.text = exchange.convertRateExact(curTotalCost, exchange.usdPrice)
-    totalCostFiatSymbol!!.text = exchange.current.shorty
+    totalCostFiat!!.text = exchangeCalculator.convertRateExact(curTotalCost, exchangeCalculator.usdPrice)
+    totalCostFiatSymbol!!.text = exchangeCalculator.current.shorty
   }
 
   private fun getEstimatedGasPriceLimit() {
@@ -411,14 +415,14 @@ class SendFragment : Fragment() {
     ac!!.finish()
   }
 
-  fun setToAddress(to: String?, c: Context?) {
+  fun setToAddress(to: String?) {
     if (toAddress == null) {
       return
     }
     toAddress!!.text = to
-    val name = AddressNameConverter.getInstance(c).get(to)
-    toName!!.text = name ?: to!!.substring(0, 10)
-    toicon!!.setImageBitmap(Blockies.createIcon(to!!.toLowerCase()))
+    val name = addressNameConverter.get(to!!)
+    toName!!.text = name ?: to.substring(0, 10)
+    toicon!!.setImageBitmap(Blockies.createIcon(to.toLowerCase()))
     getEstimatedGasPriceLimit()
   }
 }

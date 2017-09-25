@@ -271,7 +271,7 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
               this@MainActivity.resources.getString(if (suc) R.string.main_ac_wallet_added_suc else R.string.main_ac_wallet_added_er),
               Snackbar.LENGTH_SHORT)
           if (suc) {
-            addressNameConverter.put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6), this@MainActivity)
+            addressNameConverter.put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6))
           }
 
           mySnackbar.show()

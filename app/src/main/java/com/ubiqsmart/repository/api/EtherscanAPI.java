@@ -4,16 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.NonNull;
 import com.ubiqsmart.interfaces.LastIconLoaded;
 import com.ubiqsmart.interfaces.StorableWallet;
-import com.ubiqsmart.utils.RequestCache;
 import com.ubiqsmart.utils.TokenIconCache;
 import kotlin.Deprecated;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -22,8 +20,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-@Deprecated(message = "Migrate this to specific repositories with retrofit")
-public class EtherscanAPI {
+@Deprecated(message = "Migrate this to specific repositories with retrofit") public class EtherscanAPI {
 
   private String token;
 
@@ -52,23 +49,10 @@ public class EtherscanAPI {
    * @param address Ether address
    * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see
    * rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
-   * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    *
    * @throws IOException Network exceptions
    */
-  public void getInternalTransactions(String address, Callback b, boolean force) throws IOException {
-    if (!force && RequestCache.getInstance().contains(RequestCache.TYPE_TXS_INTERNAL, address)) {
-      b.onResponse(null, new Response.Builder().code(200)
-          .message("")
-          .request(new Request.Builder().url("http://api.etherscan.io/api?module=account&action=txlistinternal&address="
-              + address
-              + "&startblock=0&endblock=99999999&sort=asc&apikey="
-              + token).build())
-          .protocol(Protocol.HTTP_1_0)
-          .body(ResponseBody.create(MediaType.parse("JSON"), RequestCache.getInstance().get(RequestCache.TYPE_TXS_INTERNAL, address)))
-          .build());
-      return;
-    }
+  public void getInternalTransactions(String address, Callback b) throws IOException {
     get("http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token, b);
   }
 
@@ -79,22 +63,10 @@ public class EtherscanAPI {
    * @param address Ether address
    * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.TransactionsFragment#update() or @see
    * rehanced.com.simpleetherwallet.fragments.TransactionsAllFragment#update()
-   * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    *
    * @throws IOException Network exceptions
    */
-  public void getNormalTransactions(String address, Callback b, boolean force) throws IOException {
-    if (!force && RequestCache.getInstance().contains(RequestCache.TYPE_TXS_NORMAL, address)) {
-      b.onResponse(null, new Response.Builder().code(200)
-          .message("")
-          .request(new Request.Builder().url(
-              "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token)
-              .build())
-          .protocol(Protocol.HTTP_1_0)
-          .body(ResponseBody.create(MediaType.parse("JSON"), RequestCache.getInstance().get(RequestCache.TYPE_TXS_NORMAL, address)))
-          .build());
-      return;
-    }
+  public void getNormalTransactions(String address, Callback b) throws IOException {
     get("http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=" + token, b);
   }
 
@@ -111,20 +83,10 @@ public class EtherscanAPI {
    *
    * @param address Ether address
    * @param b Network callback to @see rehanced.com.simpleetherwallet.fragments.DetailOverviewFragment#update()
-   * @param force Whether to force (true) a network call or use cache (false). Only true if user uses swiperefreshlayout
    *
    * @throws IOException Network exceptions
    */
-  public void getTokenBalances(String address, Callback b, boolean force) throws IOException {
-    if (!force && RequestCache.getInstance().contains(RequestCache.TYPE_TOKEN, address)) {
-      b.onResponse(null, new Response.Builder().code(200)
-          .message("")
-          .request(new Request.Builder().url("https://api.ethplorer.io/getAddressInfo/" + address + "?apiKey=freekey").build())
-          .protocol(Protocol.HTTP_1_0)
-          .body(ResponseBody.create(MediaType.parse("JSON"), RequestCache.getInstance().get(RequestCache.TYPE_TOKEN, address)))
-          .build());
-      return;
-    }
+  public void getTokenBalances(String address, Callback b) throws IOException {
     get("https://api.ethplorer.io/getAddressInfo/" + address + "?apiKey=freekey", b);
   }
 
@@ -140,15 +102,20 @@ public class EtherscanAPI {
    * @throws IOException Network exceptions
    */
   public void loadTokenIcon(final Context c, String tokenName, final boolean lastToken, final LastIconLoaded callback) throws IOException {
-    if (tokenName.indexOf(" ") > 0) tokenName = tokenName.substring(0, tokenName.indexOf(" "));
-    if (TokenIconCache.getInstance(c).contains(tokenName)) return;
+    if (tokenName.indexOf(" ") > 0) {
+      tokenName = tokenName.substring(0, tokenName.indexOf(" "));
+    }
+
+    if (TokenIconCache.getInstance(c).contains(tokenName)) {
+      return;
+    }
 
     final String tokenNamef = tokenName;
-    get("https://etherscan.io//token/images/" + tokenNamef + ".PNG", new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+    get("https://etherscan.io/token/images/" + tokenNamef + ".PNG", new Callback() {
+      @Override public void onFailure(@NonNull Call call, @NonNull IOException e) {
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
         if (c == null) return;
         ResponseBody in = response.body();
         InputStream inputStream = in.byteStream();

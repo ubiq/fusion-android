@@ -197,7 +197,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
           e.printStackTrace()
         }
 
-        val (name, rate) = ExchangeCalculator.getInstance().current
+        val (name, rate) = exchangeCalculator.current
 
         activity.runOnUiThread {
           balance_view!!.text = exchangeCalculator.convertRateExact(balanceDouble, rate) + ""
@@ -219,14 +219,12 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
       override fun onResponse(call: Call, response: Response) {
         try {
           val restring = response.body()!!.string()
-          if (restring != null && restring.length > 2) {
-            RequestCache.getInstance().put(RequestCache.TYPE_TOKEN, ethaddress, restring)
-          }
+
           token.addAll(ResponseParser.parseTokens(context, restring, this@DetailOverviewFragment))
 
-          balanceDouble = balanceDouble.add(BigDecimal(ExchangeCalculator.getInstance().sumUpTokenEther(token)))
+          balanceDouble = balanceDouble.add(BigDecimal(exchangeCalculator.sumUpTokenEther(token)))
 
-          val (name, rate) = ExchangeCalculator.getInstance().current
+          val (name, rate) = exchangeCalculator.current
           activity.runOnUiThread {
             balance_view!!.text = exchangeCalculator.convertRateExact(balanceDouble, rate) + ""
             currency_view!!.text = name
@@ -238,7 +236,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
         }
 
       }
-    }, force)
+    })
   }
 
   fun setName() {
@@ -252,7 +250,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
     val activity = activity
 
     val input = EditText(activity)
-    input.setText(AddressNameConverter.getInstance(activity).get(ethaddress))
+    input.setText(addressNameConverter.get(ethaddress!!))
     input.inputType = InputType.TYPE_CLASS_TEXT
     input.setSingleLine()
 
@@ -277,7 +275,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
     builder.setPositiveButton(R.string.button_ok) { _, _ ->
       val inputMgr = input.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
       inputMgr.hideSoftInputFromWindow(input.windowToken, 0)
-      addressNameConverter.put(ethaddress, input.text.toString(), context)
+      addressNameConverter.put(ethaddress!!, input.text.toString())
       getActivity().title = input.text.toString()
     }
     builder.setNegativeButton(R.string.button_cancel) { dialog, _ ->
@@ -306,7 +304,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
       return   // if clicked on Ether
     }
 
-    DialogFactory.showTokenetails(activity, token[itemPosition])
+    DialogFactory.showTokenDetails(activity, token[itemPosition])
   }
 
   override fun onLastIconDownloaded() {

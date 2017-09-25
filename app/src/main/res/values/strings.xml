@@ -331,5 +331,8 @@ More details about this topic can be found in Google\'s Privacy Policies:
   <string name="address">Address</string>
   <string name="unnamed_wallet">Unnamed Wallet</string>
   <string name="wallet_password">Wallet Password</string>
+  <string name="currency_eth">ETH</string>
+  <string name="scan_address">Scan Address</string>
+  <string name="add_wallet">ADD WALLET</string>
 
 </resources>

@@ -40,7 +40,7 @@ class AddressDetailActivity : SecureAppCompatActivity() {
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     title = findViewById(R.id.toolbar_title)
-    val walletName = AddressNameConverter.getInstance(this).get(address)
+    val walletName = AddressNameConverter.getInstance(this).get(address!!)
     title!!.text = if (type == OWN_WALLET) walletName ?: getString(R.string.unnamed_wallet) else getString(R.string.address)
 
     coord = findViewById(R.id.main_content)

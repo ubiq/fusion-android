@@ -12,7 +12,6 @@ import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.repository.data.TransactionDisplay
 import com.ubiqsmart.ui.detail.AddressDetailActivity
 import com.ubiqsmart.utils.AddressNameConverter
-import com.ubiqsmart.utils.RequestCache
 import com.ubiqsmart.utils.ResponseParser
 import com.ubiqsmart.utils.WalletStorage
 import kotlinx.android.synthetic.main.fragment_transaction.*
@@ -32,7 +31,7 @@ class TransactionsFragment : TransactionsAbstractFragment() {
     val rootView = super.onCreateView(inflater, container, savedInstanceState)
 
     new_transaction.visibility = GONE
-    request_transaction?.setVisibility(GONE)
+    request_transaction?.visibility = GONE
     fab_menu_view.visibility = View.GONE
 
     return rootView
@@ -65,16 +64,12 @@ class TransactionsFragment : TransactionsAbstractFragment() {
         override fun onResponse(call: Call, response: Response) {
           val restring = response.body()!!.string()
 
-          if (restring != null && restring.length > 2) {
-            RequestCache.getInstance().put(RequestCache.TYPE_TXS_NORMAL, address, restring)
-          }
-
           val w = ArrayList(ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), address, TransactionDisplay.NORMAL))
           if (isAdded) {
             activity.runOnUiThread { onComplete(w) }
           }
         }
-      }, force)
+      })
 
       etherscanApi.getInternalTransactions(address, object : Callback {
         override fun onFailure(call: Call, e: IOException) {
@@ -89,14 +84,12 @@ class TransactionsFragment : TransactionsAbstractFragment() {
         @Throws(IOException::class)
         override fun onResponse(call: Call, response: Response) {
           val restring = response.body()!!.string()
-          if (restring != null && restring.length > 2) RequestCache.getInstance().put(RequestCache.TYPE_TXS_INTERNAL, address, restring)
-          val w = ArrayList(
-              ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), address, TransactionDisplay.CONTRACT))
+          val w = ArrayList(ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), address, TransactionDisplay.CONTRACT))
           if (isAdded) {
             activity.runOnUiThread { onComplete(w) }
           }
         }
-      }, force)
+      })
     } catch (e: IOException) {
       if (activity != null) {
         (activity as AddressDetailActivity).snackError(getString(R.string.cant_fetch_accounts))

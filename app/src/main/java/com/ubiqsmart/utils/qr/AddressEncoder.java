@@ -21,7 +21,7 @@ public class AddressEncoder {
     } else if (s.startsWith("iban:XE") || s.startsWith("IBAN:XE")) {
       return decodeICAP(s);
     } else {
-      return decodeLegacyLunary(s);
+      throw new IOException("No valid data passed");
     }
   }
 

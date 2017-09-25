@@ -29,7 +29,9 @@ import com.ubiqsmart.interfaces.FingerprintListener;
   }
 
   public void cancel() {
-    if (cancellationSignal != null) cancellationSignal.cancel();
+    if (cancellationSignal != null) {
+      cancellationSignal.cancel();
+    }
   }
 
   @Override public void onAuthenticationError(int errMsgId, CharSequence errString) {

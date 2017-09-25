@@ -34,8 +34,9 @@ import java.util.*;
 
 public class DialogFactory {
 
-  public static void showTokenetails(final Activity c, final Token tok) {
-    MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_token_detail, true).show();
+  public static void showTokenDetails(final Activity c, final Token tok) {
+    final MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_token_detail, true).show();
+
     View view = dialog.getCustomView();
     ImageView contractIcon = view.findViewById(R.id.my_address_icon);
     TextView tokenname = view.findViewById(R.id.wallet_name);
@@ -78,7 +79,8 @@ public class DialogFactory {
   }
 
   public static void showTXDetails(final Activity c, final TransactionDisplay tx) {
-    MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_tx_detail, true).show();
+    final MaterialDialog dialog = new MaterialDialog.Builder(c).customView(R.layout.dialog_tx_detail, true).show();
+
     final View view = dialog.getCustomView();
     final ImageView myicon = view.findViewById(R.id.my_address_icon);
     final ImageView othericon = view.findViewById(R.id.other_address_icon);
@@ -129,11 +131,11 @@ public class DialogFactory {
     myicon.setImageBitmap(Blockies.createIcon(tx.getFromAddress().toLowerCase()));
     othericon.setImageBitmap(Blockies.createIcon(tx.getToAddress().toLowerCase()));
 
-    String myName = AddressNameConverter.getInstance(c).get(tx.getFromAddress().toLowerCase());
+    String myName = AddressNameConverter.Companion.getInstance(c).get(tx.getFromAddress().toLowerCase());
     if (myName == null) {
       myName = shortName(tx.getFromAddress().toLowerCase());
     }
-    String otherName = AddressNameConverter.getInstance(c).get(tx.getToAddress().toLowerCase());
+    String otherName = AddressNameConverter.Companion.getInstance(c).get(tx.getToAddress().toLowerCase());
     if (otherName == null) {
       otherName = shortName(tx.getToAddress().toLowerCase());
     }
@@ -165,13 +167,8 @@ public class DialogFactory {
   }
 
   public static void addWatchOnly(final MainActivity c, final WalletStorage walletStorage) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    // Otherwise buttons on 7.0+ are nearly invisible
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_watch_only_title);
 
     final EditText input = new EditText(c);
@@ -212,7 +209,7 @@ public class DialogFactory {
                 }
               }
               c.snackError(c.getResources().getString(suc ? R.string.main_ac_wallet_added_suc : R.string.main_ac_wallet_added_er));
-              if (suc) AddressNameConverter.getInstance(c).put(input.getText().toString(), "Watch " + input.getText().toString().substring(0, 6), c);
+              if (suc) AddressNameConverter.Companion.getInstance(c).put(input.getText().toString(), "Watch " + input.getText().toString().substring(0, 6));
             }
           }, 100);
         } else {
@@ -244,29 +241,26 @@ public class DialogFactory {
     });
 
     builder.show();
-
   }
 
   public static void importWallets(final MainActivity c, final WalletStorage walletStorage, final List<File> files) {
-    String addresses = "";
-    for (int i = 0; i < files.size() && i < 3; i++)
-      addresses += WalletStorage.stripWalletName(files.get(i).getName()) + "\n";
+    final StringBuilder addresses = new StringBuilder();
 
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
+    for (int i = 0; i < files.size() && i < 3; i++) {
+      addresses.append(WalletStorage.stripWalletName(files.get(i).getName())).append("\n");
     }
+
+    AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_importing_wallets_title);
-    builder.setMessage(String.format(c.getString(R.string.dialog_importing_wallets_text), files.size(), files.size() > 1 ? "s" : "", addresses));
+    builder.setMessage(String.format(c.getString(R.string.dialog_importing_wallets_text), files.size(), files.size() > 1 ? "s" : "", addresses.toString()));
     builder.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int which) {
         try {
           walletStorage.importWallets(files);
           c.snackError("Wallet" + (files.size() > 1 ? "s" : "") + " successfully imported!");
-          if (c.getFragments() != null && c.getFragments().get(1) != null) ((WalletsFragment) c.getFragments().get(1)).update();
+          if (c.getFragments() != null && c.getFragments().get(1) != null) {
+            ((WalletsFragment) c.getFragments().get(1)).update();
+          }
         } catch (Exception e) {
           c.snackError("Error while importing wallets");
           e.printStackTrace();
@@ -284,13 +278,7 @@ public class DialogFactory {
   }
 
   public static void cantExportNonWallet(Context c) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_ex_nofull_title);
     builder.setMessage(R.string.dialog_ex_nofull_text);
     builder.setNeutralButton(R.string.button_ok, new DialogInterface.OnClickListener() {
@@ -303,13 +291,7 @@ public class DialogFactory {
   }
 
   public static void exportWallet(Context c, DialogInterface.OnClickListener yes) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_exporting_title);
     builder.setMessage(R.string.dialog_exporting_text);
     builder.setPositiveButton(R.string.button_ok, yes);
@@ -318,17 +300,12 @@ public class DialogFactory {
         dialog.dismiss();
       }
     });
+
     builder.show();
   }
 
   public static void noFullWallet(Context c) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_nofullwallet);
     builder.setMessage(R.string.dialog_nofullwallet_text);
     builder.setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
@@ -341,13 +318,7 @@ public class DialogFactory {
   }
 
   public static void noWallet(Context c) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_no_wallets);
     builder.setMessage(R.string.dialog_no_wallets_text);
     builder.setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
@@ -360,13 +331,7 @@ public class DialogFactory {
   }
 
   public static void noImportWalletsFound(Context c) {
-    AlertDialog.Builder builder;
-    if (Build.VERSION.SDK_INT >= 24) // Otherwise buttons on 7.0+ are nearly invisible
-    {
-      builder = new AlertDialog.Builder(c, R.style.AlertDialogTheme);
-    } else {
-      builder = new AlertDialog.Builder(c);
-    }
+    final AlertDialog.Builder builder = Build.VERSION.SDK_INT >= 24 ? new AlertDialog.Builder(c, R.style.AlertDialogTheme) : new AlertDialog.Builder(c);
     builder.setTitle(R.string.dialog_no_wallets_found);
     builder.setMessage(R.string.dialog_no_wallets_found_text);
     builder.setNeutralButton(R.string.button_cancel, new DialogInterface.OnClickListener() {

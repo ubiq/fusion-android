@@ -83,7 +83,7 @@ class SendActivity : SecureAppCompatActivity() {
   fun nextStage(toAddress: String) {
     viewPager!!.currentItem = 1
 
-    (fragments[1] as SendFragment).setToAddress(toAddress, this)
+    (fragments[1] as SendFragment).setToAddress(toAddress)
   }
 
   internal inner class FragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

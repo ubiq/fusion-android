@@ -16,8 +16,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-@Deprecated
-public class ResponseParser {
+@Deprecated public class ResponseParser {
 
   public static List<TransactionDisplay> parseTransactions(String response, String walletname, String address, byte type) {
     try {
@@ -63,7 +62,7 @@ public class ResponseParser {
           break;
         }
       }
-      String walletname = AddressNameConverter.getInstance(context).get(storedwallets.get(i).getPubKey());
+      String walletname = AddressNameConverter.Companion.getInstance(context).get(storedwallets.get(i).getPubKey());
       display.add(new Wallet(walletname == null ? "New Wallet" : walletname, storedwallets.get(i).getPubKey(), balance,
           storedwallets.get(i) instanceof WatchWallet ? Wallet.WATCH_ONLY : Wallet.NORMAL));
     }

@@ -175,8 +175,7 @@ public class ExchangeCalculator {
   }
 
   public void updateExchangeRates(final String currency, final NetworkUpdateListener update) throws IOException {
-    if (lastUpdateTimestamp + 40 * 60 * 1000 > System.currentTimeMillis() && currency.equals(
-        conversionNames[2].getName())) { // Dont refresh if not older than 40 min and currency hasnt changed
+    if (lastUpdateTimestamp + 40 * 60 * 1000 > System.currentTimeMillis() && currency.equals(conversionNames[2].getName())) { // Dont refresh if not older than 40 min and currency hasnt changed
       return;
     }
     if (!currency.equals(conversionNames[2].getName())) {

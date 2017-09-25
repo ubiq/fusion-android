@@ -40,7 +40,7 @@ class QRScanActivity : BaseActivity(), ZXingScannerView.ResultHandler {
 
     val title = findViewById<TextView>(R.id.toolbar_title)
     type = intent.getByteExtra("TYPE", SCAN_ONLY)
-    title.text = if (type == SCAN_ONLY) "Scan Address" else "ADD WALLET"
+    title.text = if (type == SCAN_ONLY) getString(R.string.scan_address) else getString(R.string.add_wallet)
 
     barCode = findViewById(R.id.barcode)
 
@@ -74,7 +74,7 @@ class QRScanActivity : BaseActivity(), ZXingScannerView.ResultHandler {
     }
   }
 
-  fun hasPermission(c: Context): Boolean {
+  private fun hasPermission(c: Context): Boolean {
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || c.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
   }
 

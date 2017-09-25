@@ -226,7 +226,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
     builder.apply {
       setView(container)
       setPositiveButton(R.string.button_ok) { dialog, _ ->
-        addressNameConverter.put(address, input.text.toString(), activity)
+        addressNameConverter.put(address, input.text.toString())
         val inputMgr = input.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMgr.hideSoftInputFromWindow(input.windowToken, 0)
         notifyDataSetChanged()

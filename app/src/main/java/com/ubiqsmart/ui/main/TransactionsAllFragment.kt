@@ -9,7 +9,6 @@ import com.ubiqsmart.repository.api.EtherscanAPI
 import com.ubiqsmart.repository.data.TransactionDisplay
 import com.ubiqsmart.ui.transactions.TransactionsAbstractFragment
 import com.ubiqsmart.utils.AddressNameConverter
-import com.ubiqsmart.utils.RequestCache
 import com.ubiqsmart.utils.ResponseParser
 import com.ubiqsmart.utils.WalletStorage
 import kotlinx.android.synthetic.main.fragment_transaction.*
@@ -63,15 +62,13 @@ class TransactionsAllFragment : TransactionsAbstractFragment() {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
               val restring = response.body()!!.string()
-              if (restring != null && restring.length > 2) {
-                RequestCache.getInstance().put(RequestCache.TYPE_TXS_NORMAL, currentWallet.pubKey, restring)
-              }
+
               val w = ArrayList(ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), currentWallet.pubKey, TransactionDisplay.NORMAL))
               if (isAdded) {
                 activity.runOnUiThread { onComplete(w, storedWallets) }
               }
             }
-          }, force)
+          })
 
           etherscanApi.getInternalTransactions(currentWallet.pubKey, object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -86,16 +83,13 @@ class TransactionsAllFragment : TransactionsAbstractFragment() {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
               val restring = response.body()!!.string()
-              if (restring != null && restring.length > 2) {
-                RequestCache.getInstance().put(RequestCache.TYPE_TXS_INTERNAL, currentWallet.pubKey, restring)
-              }
-              val w = ArrayList(
-                  ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), currentWallet.pubKey, TransactionDisplay.CONTRACT))
+
+              val w = ArrayList(ResponseParser.parseTransactions(restring, getString(R.string.unnamed_address), currentWallet.pubKey, TransactionDisplay.CONTRACT))
               if (isAdded) {
                 activity.runOnUiThread { onComplete(w, storedWallets) }
               }
             }
-          }, force)
+          })
         } catch (e: IOException) {
           if (isAdded) {
             (activity as MainActivity).snackError(getString(R.string.cant_fetch_accounts))

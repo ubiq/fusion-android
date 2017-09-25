@@ -18,14 +18,13 @@ public class OwnWalletUtils extends WalletUtils {
 
   public static String generateNewWalletFile(String password, File destinationDirectory, boolean useFullScrypt)
       throws CipherException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    final ECKeyPair ecKeyPair = Keys.createEcKeyPair();
 
-    ECKeyPair ecKeyPair = Keys.createEcKeyPair();
     return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
   }
 
   public static String generateWalletFile(String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
       throws CipherException, IOException {
-
     WalletFile walletFile;
     if (useFullScrypt) {
       walletFile = Wallet.createStandard(password, ecKeyPair);
@@ -33,10 +32,10 @@ public class OwnWalletUtils extends WalletUtils {
       walletFile = Wallet.createLight(password, ecKeyPair);
     }
 
-    String fileName = getWalletFileName(walletFile);
-    File destination = new File(destinationDirectory, fileName);
+    final String fileName = getWalletFileName(walletFile);
+    final File destination = new File(destinationDirectory, fileName);
 
-    ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+    final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
     objectMapper.writeValue(destination, walletFile);
 
     return fileName;

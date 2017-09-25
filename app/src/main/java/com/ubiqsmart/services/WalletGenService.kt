@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.github.salomonbrys.kodein.android.KodeinIntentService
 import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
 import com.ubiqsmart.repository.data.FullWallet
 import com.ubiqsmart.ui.main.MainActivity
@@ -23,10 +22,9 @@ import java.security.NoSuchProviderException
 
 class WalletGenService : KodeinIntentService(WalletGenService::class.java.simpleName) {
 
-  private val notificationManager: NotificationManager by with(applicationContext).instance()
-
-  private val walletStorage: WalletStorage by with(applicationContext).instance()
-  private val addressNameConverter: AddressNameConverter by with(applicationContext).instance()
+  private val notificationManager: NotificationManager by instance()
+  private val walletStorage: WalletStorage by instance()
+  private val addressNameConverter: AddressNameConverter by instance()
 
   private lateinit var builder: NotificationCompat.Builder
 
@@ -52,7 +50,7 @@ class WalletGenService : KodeinIntentService(WalletGenService::class.java.simple
       }
 
       walletStorage.add(FullWallet("0x" + walletAddress, walletAddress))
-      addressNameConverter.put("0x" + walletAddress, "Wallet " + ("0x" + walletAddress).substring(0, 6), this)
+      addressNameConverter.put("0x" + walletAddress, "Wallet " + ("0x" + walletAddress).substring(0, 6))
       Settings.walletBeingGenerated = false
 
       finished("0x" + walletAddress)
