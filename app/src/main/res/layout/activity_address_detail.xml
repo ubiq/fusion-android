@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".ui.main.MainActivity">
+  tools:context=".app.ui.main.MainActivity">
 
   <android.support.design.widget.AppBarLayout
     android:id="@+id/appbar"
@@ -38,7 +38,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical">
 
-    <com.ubiqsmart.ui.widgets.NonSwipeViewPager
+    <com.ubiqsmart.app.ui.widgets.NonSwipeViewPager
       android:id="@+id/view_pager"
       android:layout_width="match_parent"
       android:layout_height="0dp"

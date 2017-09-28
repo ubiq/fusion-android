@@ -61,7 +61,7 @@
     android:supportsRtl="true"
     android:theme="@style/Ubiq">
     <activity
-      android:name=".ui.splash.SplashActivity"
+      android:name="com.ubiqsmart.app.ui.splash.SplashActivity"
       android:noHistory="true"
       android:theme="@style/Ubiq.Splash">
       <intent-filter>
@@ -71,50 +71,50 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="com.ubiqsmart.ui.onboarding.AppIntroActivity" />
+    <activity android:name="com.ubiqsmart.app.ui.onboarding.OnBoardingActivity" />
 
     <activity
-      android:name="com.ubiqsmart.ui.main.MainActivity"
+      android:name="com.ubiqsmart.app.ui.main.MainActivity"
       android:configChanges="orientation|screenSize" />
 
     <activity
-      android:name="com.ubiqsmart.ui.detail.AddressDetailActivity"
+      android:name="com.ubiqsmart.app.ui.detail.AddressDetailActivity"
       android:configChanges="orientation|screenSize" />
 
     <activity
-      android:name="com.ubiqsmart.ui.scanqr.QRScanActivity"
+      android:name="com.ubiqsmart.app.ui.scanqr.QRScanActivity"
       android:configChanges="orientation|screenSize" />
 
     <activity
-      android:name="com.ubiqsmart.ui.settings.SettingsActivity"
+      android:name="com.ubiqsmart.app.ui.settings.SettingsActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings" />
 
     <activity
-      android:name="com.ubiqsmart.ui.wallet.WalletGenActivity"
+      android:name="com.ubiqsmart.app.ui.wallet.WalletGenActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings" />
 
     <activity
-      android:name="com.ubiqsmart.ui.send.RequestEtherActivity"
+      android:name="com.ubiqsmart.app.ui.send.RequestEtherActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings" />
 
     <activity
-      android:name="com.ubiqsmart.ui.send.SendActivity"
+      android:name="com.ubiqsmart.app.ui.send.SendActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
       android:windowSoftInputMode="stateHidden|adjustResize" />
 
 
     <activity
-      android:name="com.ubiqsmart.ui.base.AppLockActivity"
+      android:name="com.ubiqsmart.app.ui.base.AppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
       android:screenOrientation="portrait" />
 
     <activity
-      android:name="com.ubiqsmart.ui.settings.SetAppLockActivity"
+      android:name="com.ubiqsmart.app.ui.settings.SetAppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
       android:screenOrientation="portrait">
@@ -125,7 +125,7 @@
     </activity>
 
     <receiver
-      android:name="com.ubiqsmart.receiver.BootReceiver"
+      android:name="com.ubiqsmart.app.receiver.BootReceiver"
       android:enabled="true"
       android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
       <intent-filter>
@@ -137,14 +137,14 @@
     </receiver>
 
     <service
-      android:name="com.ubiqsmart.services.NotificationService"
+      android:name="com.ubiqsmart.app.services.NotificationService"
       android:exported="false" />
 
     <service
-      android:name="com.ubiqsmart.services.WalletGenService"
+      android:name="com.ubiqsmart.app.services.WalletGenService"
       android:exported="false" />
     <service
-      android:name="com.ubiqsmart.services.TransactionService"
+      android:name="com.ubiqsmart.app.services.TransactionService"
       android:exported="false" />
   </application>
 
