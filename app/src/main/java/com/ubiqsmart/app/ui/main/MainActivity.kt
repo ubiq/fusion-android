@@ -21,7 +21,9 @@ import com.ubiqsmart.app.services.WalletGenService
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity
-import com.ubiqsmart.app.ui.onboarding.OnBoardingActivity
+import com.ubiqsmart.app.ui.main.fragments.PriceFragment
+import com.ubiqsmart.app.ui.main.fragments.TransactionsAllFragment
+import com.ubiqsmart.app.ui.main.fragments.WalletsFragment
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.ui.send.SendActivity
 import com.ubiqsmart.app.ui.settings.SettingsActivity
@@ -166,7 +168,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
       QRScanActivity.REQUEST_CODE -> handleOnQrScanResult(resultCode, data)
       WalletGenActivity.REQUEST_CODE -> handleWalletGenerationResult(resultCode, data)
       SendActivity.REQUEST_CODE -> handleSendResult(resultCode, data)
-      OnBoardingActivity.REQUEST_CODE -> handleAppIntroResult(resultCode)
       SettingsActivity.REQUEST_CODE -> handleSettingsUpdateResult()
     }
   }
@@ -186,17 +187,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
         (fragments[1] as WalletsFragment).notifyDataSetChanged()
         (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
       }, 950)
-    }
-  }
-
-  private fun handleAppIntroResult(resultCode: Int) {
-    if (resultCode != Activity.RESULT_OK) {
-      finish()
-    } else {
-      preferences.edit().apply {
-        putLong("APP_INSTALLED", System.currentTimeMillis())
-        commit()
-      }
     }
   }
 
@@ -330,7 +320,7 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
 
   companion object {
 
-    fun getStartIntent(context: Context) = Intent(context, this::class.java)
+    fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
 
   }
 }

@@ -25,7 +25,7 @@ import com.ubiqsmart.domain.models.TransactionDisplay;
 import com.ubiqsmart.domain.models.WatchWallet;
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity;
 import com.ubiqsmart.app.ui.main.MainActivity;
-import com.ubiqsmart.app.ui.main.WalletsFragment;
+import com.ubiqsmart.app.ui.main.fragments.WalletsFragment;
 import me.grantland.widget.AutofitTextView;
 
 import java.io.*;

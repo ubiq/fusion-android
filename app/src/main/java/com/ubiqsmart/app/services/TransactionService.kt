@@ -9,10 +9,10 @@ import com.github.salomonbrys.kodein.android.KodeinIntentService
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.with
 import com.ubiqsmart.R
-import com.ubiqsmart.datasource.api.EtherscanAPI
 import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.utils.ExchangeCalculator
 import com.ubiqsmart.app.utils.WalletStorage
+import com.ubiqsmart.datasource.api.EtherscanAPI
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -103,7 +103,7 @@ class TransactionService : KodeinIntentService(TransactionService::javaClass.nam
             }
             onError(errorMessage) // f.E Insufficient funds
           } catch (e1: JSONException) {
-            onError(getString(R.string.uknown_error))
+            onError(getString(R.string.unknown_error))
           }
         }
       }

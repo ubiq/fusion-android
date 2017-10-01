@@ -17,11 +17,18 @@
     <item name="android:windowSharedElementsUseOverlay">false</item>
     <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
     <item name="android:actionBarStyle">@style/ThemeOverlay.Ubiq.Dark</item>
-    <item name="patternViewStyle">@style/PatternView</item>
+    <item name="patternViewStyle">@style/Widget.Ubiq.PatternView</item>
   </style>
 
   <style name="Ubiq.Splash">
     <item name="android:windowBackground">@drawable/background_splash</item>
+  </style>
+
+  <style name="Ubiq.OnBoarding">
+    <item name="android:navigationBarColor">@color/background_super_dark</item>
+    <item name="android:statusBarColor">@color/background_super_dark</item>
+    <item name="android:windowBackground">@color/background_super_dark</item>
+    <item name="android:checkboxStyle">@style/Widget.Ubiq.CheckStyle.Light</item>
   </style>
 
   <style name="ThemeOverlay.Ubiq.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -44,29 +51,30 @@
     <item name="colorAccent">@color/accent</item>
   </style>
 
-  <style name="WhiteCheck">
-    <item name="colorAccent">#fff</item>
+  <style name="Widget.Ubiq.CheckStyle.Light" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+    <item name="android:buttonTint">@color/white</item>
+    <item name="android:textColor">@color/primary_text_color</item>
   </style>
 
   <style name="Widget.Ubiq.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
     <item name="fontPath">@string/regular_font</item>
   </style>
 
-  <style name="Base.PatternView" parent="">
+  <style name="Widget.Ubiq.BasePatternView" parent="">
     <item name="pl_rowCount">3</item>
     <item name="pl_columnCount">3</item>
     <item name="pl_aspect">square</item>
   </style>
 
-  <style name="PatternView" parent="Base.PatternView">
-    <item name="pl_regularColor">#FFFFFF</item>
-    <item name="pl_errorColor">#d73300</item>
-    <item name="pl_successColor">#FFFFFF</item>
+  <style name="Widget.Ubiq.PatternView" parent="Widget.Ubiq.BasePatternView">
+    <item name="pl_regularColor">@color/primary_text_color</item>
+    <item name="pl_errorColor">@color/pattern_view_error</item>
+    <item name="pl_successColor">@color/accent</item>
   </style>
 
-  <style name="PatternView.Light" parent="Base.PatternView">
+  <style name="Widget.Ubiq.PatternView.Light">
     <item name="pl_regularColor">?colorControlNormal</item>
-    <item name="pl_errorColor">#d73300</item>
-    <item name="pl_successColor">?colorControlActivated</item>
+    <item name="pl_errorColor">@color/pattern_view_error</item>
+    <item name="pl_successColor">@color/accent</item>
   </style>
 </resources>

@@ -1,10 +1,11 @@
-package com.ubiqsmart.app.ui.main
+package com.ubiqsmart.app.ui.main.fragments
 
 import android.view.View
 import android.view.View.GONE
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
 import com.ubiqsmart.app.interfaces.StorableWallet
+import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.datasource.api.EtherscanAPI
 import com.ubiqsmart.domain.models.TransactionDisplay
 import com.ubiqsmart.app.ui.transactions.TransactionsAbstractFragment

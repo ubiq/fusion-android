@@ -71,7 +71,9 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="com.ubiqsmart.app.ui.onboarding.OnBoardingActivity" />
+    <activity
+      android:name="com.ubiqsmart.app.ui.onboarding.OnBoardingActivity"
+      android:theme="@style/Ubiq.OnBoarding" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.main.MainActivity"
@@ -105,7 +107,6 @@
       android:configChanges="orientation|screenSize"
       android:label="@string/title_activity_settings"
       android:windowSoftInputMode="stateHidden|adjustResize" />
-
 
     <activity
       android:name="com.ubiqsmart.app.ui.base.AppLockActivity"

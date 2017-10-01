@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.github.salomonbrys.kodein.android.appKodein
+import com.ubiqsmart.app.ui.onboarding.OnBoardingViewModel
 import com.ubiqsmart.app.ui.splash.SplashViewModel
 
 class ViewModelFactory private constructor(
     private val application: Application
 ) : ViewModelProvider.NewInstanceFactory() {
 
+  @Suppress("UNCHECKED_CAST")
   override fun <T : ViewModel> create(modelClass: Class<T>) =
       with(modelClass) {
         when {
-          isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application, application.appKodein.invoke())
+          isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application)
+          isAssignableFrom(OnBoardingViewModel::class.java) -> OnBoardingViewModel(application)
           else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
       } as T

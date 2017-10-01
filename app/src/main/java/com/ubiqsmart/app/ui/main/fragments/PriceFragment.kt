@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.ui.main
+package com.ubiqsmart.app.ui.main.fragments
 
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -20,6 +20,7 @@ import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
 import com.ubiqsmart.datasource.api.EtherscanAPI
 import com.ubiqsmart.app.ui.base.BaseFragment
+import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.ui.widgets.charts.DontShowNegativeFormatter
 import com.ubiqsmart.app.ui.widgets.charts.HourXFormatter
 import com.ubiqsmart.app.ui.widgets.charts.WeekXFormatter

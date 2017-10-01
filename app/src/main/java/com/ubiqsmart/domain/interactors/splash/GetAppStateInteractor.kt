@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 class GetAppStateInteractor(private val repository: AppStateRepository) {
 
-  fun getAppState(): Single<AppState> {
+  fun execute(): Single<AppState> {
     return repository.getAppState()
   }
 

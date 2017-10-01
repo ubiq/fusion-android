@@ -1,13 +1,15 @@
 package com.ubiqsmart.di
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.AndroidViewModel
 import com.github.salomonbrys.kodein.*
+import com.github.salomonbrys.kodein.android.AndroidInjector
+import com.github.salomonbrys.kodein.android.AndroidScope
 import com.github.salomonbrys.kodein.android.androidContextScope
-import com.github.salomonbrys.kodein.bindings.Scope
-import com.github.salomonbrys.kodein.bindings.ScopeRegistry
+import com.github.salomonbrys.kodein.bindings.InstanceBinding
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import com.ubiqsmart.App
 import com.ubiqsmart.app.db.AppDatabase
 import com.ubiqsmart.app.services.NotificationLauncher
 import com.ubiqsmart.app.utils.AddressNameConverter
@@ -15,50 +17,32 @@ import com.ubiqsmart.app.utils.ExchangeCalculator
 import com.ubiqsmart.app.utils.WalletStorage
 import com.ubiqsmart.datasource.api.CryptoCompareApi
 import com.ubiqsmart.datasource.api.EtherscanAPI
+import com.ubiqsmart.datasource.db.AppStateDbDataSource
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.*
 
-interface IViewModelScope<in T> : Scope<T> {
+interface ViewModelInjector : AndroidInjector<AndroidViewModel, AndroidScope<AndroidViewModel>> {
 
-  fun removeFromScope(viewModel: T): ScopeRegistry?
-}
+  override val kodeinScope: AndroidScope<AndroidViewModel> get() = ViewModelScope
 
-object ViewModelScope : IViewModelScope<ViewModel> {
+  override fun initializeInjector() {
+    val viewModelModule = Kodein.Module {
+      Bind<KodeinInjected>(erased()) with InstanceBinding(erased(), this@ViewModelInjector)
+      import(provideOverridingModule(), allowOverride = true)
+    }
 
-  private val scopes = WeakHashMap<ViewModel, ScopeRegistry>()
+    val appKodein = kodeinComponent.getApplication<App>().kodein
 
-  override fun getRegistry(context: ViewModel): ScopeRegistry = synchronized(scopes) { scopes.getOrPut(context) { ScopeRegistry() } }
+    val kodein = Kodein {
+      extend(appKodein, allowOverride = true)
+      import(viewModelModule, allowOverride = true)
+    }
 
-  override fun removeFromScope(viewModel: ViewModel): ScopeRegistry? = scopes.remove(viewModel)
-
-}
-
-private fun _inject(injector: KodeinInjected, componentModule: Kodein.Module, superKodein: Kodein) {
-  val kodein = Kodein {
-    extend(superKodein, allowOverride = true)
-    import(componentModule, allowOverride = true)
+    injector.inject(kodein)
   }
-
-  injector.inject(kodein)
-}
-
-interface ViewModelInjector<T, out S : IViewModelScope<T>> : KodeinInjected {
-
-  @Suppress("UNCHECKED_CAST")
-  val kodeinComponent: T
-    get() = this as T
-
-  val kodeinScope: S
-
-  fun initializeInjector() {
-    _inject(this, fragmentModule, (parent as KodeinInjected).injector.kodein().value)
-  }
-
-  fun destroyInjector() = kodeinScope.removeFromScope(kodeinComponent)
 
 }
 
@@ -104,6 +88,7 @@ object Modules {
 
     bind<AppDatabase>() with eagerSingleton { AppDatabase.get(app) }
 
+    bind< AppStateDbDataSource>() with eagerSingleton { instance<AppDatabase>().appStateDbDataSource() }
   }
 
   fun Deprecated(app: Application) = Kodein.Module {

@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 class SaveAppStateInteractor(private val repository: AppStateRepository) {
 
-  fun saveAppState(appState: AppState): Single<AppState> {
+  fun execute(appState: AppState): Single<AppState> {
     return repository.saveAppState(appState)
   }
 

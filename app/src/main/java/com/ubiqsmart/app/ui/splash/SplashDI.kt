@@ -12,9 +12,7 @@ object SplashDI {
 
   val Module = Kodein.Module {
 
-    bind<AppStateRepository>() with scopedSingleton(ViewModelScope) { AppStateRepository() }
-
-    bind<GetAppStateInteractor>() with scopedSingleton(ViewModelScope) { GetAppStateInteractor(instance()) }
+    bind<GetAppStateInteractor>() with scopedSingleton(ViewModelScope) {  GetAppStateInteractor(AppStateRepository(instance())) }
 
   }
 

@@ -15,6 +15,8 @@
 
   <color name="hint_disabled_dark">#43000000</color>
 
+  <color name="pattern_view_error">#d73300</color>
+
   <color name="ether_received">#d22a8031</color>
   <color name="ether_spent">#d2a63f40</color>
   <color name="normal_black">#222222</color>

@@ -6,11 +6,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 object Schedulers {
 
   fun io(): Scheduler {
-    return Schedulers.io()
+    return io.reactivex.schedulers.Schedulers.io()
   }
 
   fun computation(): Scheduler {
-    return Schedulers.computation()
+    return io.reactivex.schedulers.Schedulers.computation()
   }
 
   fun ui(): Scheduler {
@@ -18,7 +18,7 @@ object Schedulers {
   }
 
   fun direct(): Scheduler {
-    return Schedulers.direct()
+    return io.reactivex.schedulers.Schedulers.from({ it.run() })
   }
 
 }

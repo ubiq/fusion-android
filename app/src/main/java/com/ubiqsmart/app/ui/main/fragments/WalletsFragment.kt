@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.ui.main
+package com.ubiqsmart.app.ui.main.fragments
 
 import android.content.*
 import android.os.Build
@@ -20,6 +20,7 @@ import com.ubiqsmart.datasource.api.EtherscanAPI
 import com.ubiqsmart.domain.models.Wallet
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity
+import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.ui.wallet.WalletGenActivity

@@ -2,57 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#49627e"
+  android:background="@color/background_super_dark"
   android:orientation="vertical">
 
   <TextView
-    android:id="@+id/title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginTop="50dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="48dp"
     android:gravity="center"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:text="Legal"
+    android:text="@string/app_intro_legal"
     android:textColor="@android:color/white"
     android:textSize="28sp" />
 
-  <LinearLayout
+  <WebView
+    android:id="@+id/tos_webview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="0dp"
+    android:layout_weight="1" />
 
-    <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_marginTop="10dp"
-      android:layout_weight="1">
-
-      <TextView
-        android:id="@+id/tostext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/tos"
-        android:textColor="#ffffff"
-        android:textSize="14sp" />
-    </ScrollView>
-
-    <CheckBox
-      android:id="@+id/checkBox"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-
-      android:layout_marginBottom="50dp"
-      android:layout_marginLeft="10dp"
-      android:layout_marginRight="10dp"
-      android:layout_marginTop="5dp"
-      android:text="@string/app_intro_iagree"
-      android:textColor="#fff"
-      android:theme="@style/WhiteCheck" />
-  </LinearLayout>
+  <android.support.v7.widget.AppCompatCheckBox
+    android:id="@+id/read_checkbox_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="68dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="8dp"
+    android:text="@string/app_intro_legal_i_agree" />
 
 </LinearLayout>
