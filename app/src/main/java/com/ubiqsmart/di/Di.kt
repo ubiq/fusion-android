@@ -2,6 +2,7 @@ package com.ubiqsmart.di
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.AndroidInjector
 import com.github.salomonbrys.kodein.android.AndroidScope
@@ -10,6 +11,7 @@ import com.github.salomonbrys.kodein.bindings.InstanceBinding
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import com.ubiqsmart.App
+import com.ubiqsmart.BuildConfig
 import com.ubiqsmart.app.db.AppDatabase
 import com.ubiqsmart.app.services.NotificationLauncher
 import com.ubiqsmart.app.utils.AddressNameConverter
@@ -67,6 +69,11 @@ object Modules {
     bind<OkHttpClient>() with singleton {
       OkHttpClient.Builder()
           .cache(instance())
+          .apply {
+            if (BuildConfig.DEBUG) {
+              addNetworkInterceptor(StethoInterceptor())
+            }
+          }
           .build()
     }
 
@@ -88,7 +95,7 @@ object Modules {
 
     bind<AppDatabase>() with eagerSingleton { AppDatabase.get(app) }
 
-    bind< AppStateDbDataSource>() with eagerSingleton { instance<AppDatabase>().appStateDbDataSource() }
+    bind<AppStateDbDataSource>() with eagerSingleton { instance<AppDatabase>().appStateDbDataSource() }
   }
 
   fun Deprecated(app: Application) = Kodein.Module {

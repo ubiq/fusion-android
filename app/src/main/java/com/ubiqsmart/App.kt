@@ -1,9 +1,9 @@
 package com.ubiqsmart
 
 import android.support.multidex.MultiDexApplication
-import com.chibatching.kotpref.Kotpref
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.facebook.stetho.Stetho
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.android.autoAndroidModule
@@ -26,13 +26,15 @@ class App : MultiDexApplication(), KodeinAware {
 
   override fun onCreate() {
     super.onCreate()
-    onSetupKotPref()
+    onSetupStetho()
     onSetupCalligraphy()
     onSetupCrashlytics()
   }
 
-  private fun onSetupKotPref() {
-    Kotpref.init(this)
+  private fun onSetupStetho() {
+    if (BuildConfig.DEBUG) {
+      Stetho.initializeWithDefaults(this)
+    }
   }
 
   private fun onSetupCalligraphy() {
