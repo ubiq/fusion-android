@@ -7,7 +7,7 @@ import io.reactivex.Single
 class AppStateRepository(private val dataSource: AppStateDbDataSource) {
 
   fun getAppState(): Single<AppState> {
-    return dataSource.getAppState().map { it.toDomain() }.onErrorReturnItem(AppState())
+    return dataSource.getAppState().map { it.toDomain() }.onErrorReturnItem(AppState.default())
   }
 
   fun saveAppState(appState: AppState): Single<AppState> {

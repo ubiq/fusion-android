@@ -42,7 +42,7 @@ class SplashViewModel(app: Application) : BaseViewModel(app) {
 
   private fun onNavigateTo(appState: AppState) {
     when {
-      appState.firstRun -> onNavigateToCommand.value = SplashNavigator.ONBOARDING_SCREEN
+      appState.firstRun!! -> onNavigateToCommand.value = SplashNavigator.ONBOARDING_SCREEN
       else -> onNavigateToCommand.value = SplashNavigator.MAIN_SCREEN
     }
   }

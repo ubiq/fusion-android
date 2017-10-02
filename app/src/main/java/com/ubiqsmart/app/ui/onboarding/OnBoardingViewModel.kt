@@ -9,7 +9,6 @@ import com.ubiqsmart.domain.models.AppState
 import com.ubiqsmart.domain.repositories.AppStateRepository
 import com.ubiqsmart.lifecycle.SingleLiveEvent
 import com.ubiqsmart.rx.Schedulers
-import java.util.concurrent.TimeUnit
 
 class OnBoardingViewModel(app: Application) : BaseViewModel(app) {
 
@@ -23,9 +22,8 @@ class OnBoardingViewModel(app: Application) : BaseViewModel(app) {
   val onErrorCommand = SingleLiveEvent<Throwable>()
 
   fun saveMarkOnBoardingAsPassed() {
-    val state = AppState(true)
+    val state = AppState(false)
     saveAppStateInteractor.execute(state)
-        .delay(1, TimeUnit.SECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.ui())
         .subscribe({ appState: AppState?, throwable: Throwable? ->

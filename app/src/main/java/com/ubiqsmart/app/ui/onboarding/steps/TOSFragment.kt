@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.ubiqsmart.R
 import com.ubiqsmart.app.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.tos_layout.*
@@ -25,6 +26,12 @@ class TOSFragment : BaseFragment() {
       loadUrl("file:///android_asset/html/license.html")
       setBackgroundColor(Color.TRANSPARENT)
       setLayerType(WebView.LAYER_TYPE_SOFTWARE, null)
+      webViewClient = object : WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+          progress_bar_view.visibility = View.GONE
+          tos_webview.visibility = View.VISIBLE
+        }
+      }
     }
 
     read_checkbox_view.setOnClickListener {
