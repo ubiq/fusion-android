@@ -16,8 +16,6 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
-import com.ubiqsmart.datasource.api.EtherscanAPI
-import com.ubiqsmart.domain.models.Wallet
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity
 import com.ubiqsmart.app.ui.main.MainActivity
@@ -25,6 +23,8 @@ import com.ubiqsmart.app.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.ui.wallet.WalletGenActivity
 import com.ubiqsmart.app.utils.*
+import com.ubiqsmart.datasource.api.EtherscanAPI
+import com.ubiqsmart.domain.models.Wallet
 import kotlinx.android.synthetic.main.fragment_wallets.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -112,6 +112,14 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
     }
 
     add_fab.setOnClickListener { DialogFactory.addWatchOnly(ac, walletStorage) }
+
+    import_fab.setOnClickListener {
+      try {
+        walletStorage.importingWalletsDetector(activity as MainActivity)
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
+    }
 
     //if (ac != null && ac.getAppBar() != null) {
     //  ac.getAppBar().addOnOffsetChangedListener(new AppBarStateChangeListener() {

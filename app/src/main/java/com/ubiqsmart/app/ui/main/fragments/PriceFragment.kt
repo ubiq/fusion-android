@@ -18,7 +18,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
-import com.ubiqsmart.datasource.api.EtherscanAPI
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.ui.widgets.charts.DontShowNegativeFormatter
@@ -26,6 +25,7 @@ import com.ubiqsmart.app.ui.widgets.charts.HourXFormatter
 import com.ubiqsmart.app.ui.widgets.charts.WeekXFormatter
 import com.ubiqsmart.app.ui.widgets.charts.YearXFormatter
 import com.ubiqsmart.app.utils.ExchangeCalculator
+import com.ubiqsmart.datasource.api.EtherscanAPI
 import kotlinx.android.synthetic.main.fragment_price.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -97,7 +97,7 @@ class PriceFragment : BaseFragment() {
     price_chart.visibility = View.INVISIBLE
     chart_title.text = TITLE_TEXTS!![displayType]
 
-    color_padding.setBackgroundColor(ContextCompat.getColor(context, R.color.color_primary_little_darker))
+//    color_padding.setBackgroundColor(ContextCompat.getColor(context, R.color.color_primary_little_darker))
 
     preferences.edit().putInt("displaytype_chart", displayType).apply()
 
@@ -134,7 +134,7 @@ class PriceFragment : BaseFragment() {
             price_chart.visibility = View.VISIBLE
             onItemsLoadComplete()
             if (isAdded) {
-              setupChart(price_chart, getData(yVals), ContextCompat.getColor(context, R.color.color_primary_little_darker))
+//              setupChart(price_chart, getData(yVals), ContextCompat.getColor(context, R.color.color_primary_little_darker))
               update()
             }
           }
@@ -214,7 +214,7 @@ class PriceFragment : BaseFragment() {
     set1.color = Color.argb(240, 255, 255, 255)
     set1.setCircleColor(Color.WHITE)
     set1.highLightColor = Color.WHITE
-    set1.fillColor = ContextCompat.getColor(context, R.color.chart_filled)
+//    set1.fillColor = ContextCompat.getColor(context, R.color.chart_filled)
     set1.setDrawCircles(false)
     set1.setDrawValues(false)
     set1.setDrawFilled(true)
@@ -225,7 +225,7 @@ class PriceFragment : BaseFragment() {
 
   private fun updateExchangeRates() {
     try {
-      exchangeCalculator.updateExchangeRates(preferences.getString("maincurrency", "USD"), ac)
+      exchangeCalculator.updateExchangeRates(preferences.getString("maincurrency", "USD"), activity)
       update()
       onItemsLoadComplete()
     } catch (e: IOException) {

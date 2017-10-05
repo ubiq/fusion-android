@@ -3,7 +3,6 @@ package com.ubiqsmart.app.ui.main
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
@@ -15,8 +14,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
-import com.ubiqsmart.app.interfaces.NetworkUpdateListener
-import com.ubiqsmart.app.services.NotificationLauncher
 import com.ubiqsmart.app.services.WalletGenService
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
@@ -30,21 +27,20 @@ import com.ubiqsmart.app.ui.settings.SettingsActivity
 import com.ubiqsmart.app.ui.wallet.WalletGenActivity
 import com.ubiqsmart.app.utils.*
 import com.ubiqsmart.domain.models.WatchWallet
+import com.ubiqsmart.extensions.obtainViewModel
 import com.ubiqsmart.extensions.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.Response
 import java.io.IOException
 import java.math.BigDecimal
 
-class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
+class MainActivity : SecureAppCompatActivity() {
 
   lateinit var fragments: List<BaseFragment>
 
-  private val preferences: SharedPreferences by instance()
-  private val exchangeCalculator: ExchangeCalculator by instance()
   private val walletStorage: WalletStorage by instance()
-  private val notificationLauncher: NotificationLauncher by instance()
   private val addressNameConverter: AddressNameConverter by instance()
+
+  private lateinit var viewModel: MainViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -60,19 +56,17 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
     setupViewPager()
     setupBottomNavigationView()
 
-    fetchCurrentExchangeRate()
-
-    Settings.initiate(this)
-    notificationLauncher.start()
+    onCreateViewModel()
+    viewModel.onViewCreated()
   }
 
-  private fun fetchCurrentExchangeRate() {
-    try {
-      val currency = preferences.getString("maincurrency", "USD")
-      exchangeCalculator.updateExchangeRates(currency, this)
-    } catch (e: IOException) {
-      e.printStackTrace()
-    }
+  override fun onDestroy() {
+    viewModel.onDestroyView()
+    super.onDestroy()
+  }
+
+  private fun onCreateViewModel() {
+    viewModel = obtainViewModel(MainViewModel::class.java)
   }
 
   private fun setupBottomNavigationView() {
@@ -104,14 +98,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-
-    R.id.action_import_wallet -> try {
-      walletStorage.importingWalletsDetector(this)
-      true
-    } catch (e: Exception) {
-      e.printStackTrace()
-      false
-    }
 
     R.id.action_settings -> {
       val settings = Intent(this, SettingsActivity::class.java)
@@ -168,27 +154,27 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
       QRScanActivity.REQUEST_CODE -> handleOnQrScanResult(resultCode, data)
       WalletGenActivity.REQUEST_CODE -> handleWalletGenerationResult(resultCode, data)
       SendActivity.REQUEST_CODE -> handleSendResult(resultCode, data)
-      SettingsActivity.REQUEST_CODE -> handleSettingsUpdateResult()
+//      SettingsActivity.REQUEST_CODE -> handleSettingsUpdateResult()
     }
   }
 
-  private fun handleSettingsUpdateResult() {
-    val currency = preferences.getString("maincurrency", "USD")
-    if (currency != exchangeCalculator.mainCurreny.name) {
-      try {
-        exchangeCalculator.updateExchangeRates(currency, this)
-      } catch (e: IOException) {
-        e.printStackTrace()
-      }
-
-      Handler().postDelayed({
-        (fragments[0] as PriceFragment).update()
-        (fragments[1] as WalletsFragment).updateBalanceText()
-        (fragments[1] as WalletsFragment).notifyDataSetChanged()
-        (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
-      }, 950)
-    }
-  }
+//  private fun handleSettingsUpdateResult() {
+//    val currency = preferences.getString("maincurrency", "USD")
+//    if (currency != exchangeCalculator.mainCurreny.name) {
+//      try {
+//        exchangeCalculator.updateExchangeRates(currency, this)
+//      } catch (e: IOException) {
+//        e.printStackTrace()
+//      }
+//
+//      Handler().postDelayed({
+//        (fragments[0] as PriceFragment).update()
+//        (fragments[1] as WalletsFragment).updateBalanceText()
+//        (fragments[1] as WalletsFragment).notifyDataSetChanged()
+//        (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
+//      }, 950)
+//    }
+//  }
 
   private fun handleSendResult(resultCode: Int, data: Intent?) {
     when (resultCode) {
@@ -264,7 +250,10 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
         }
       } else if (type == QRScanActivity.PRIVATE_KEY) {
         if (OwnWalletUtils.isValidPrivateKey(data.getStringExtra("ADDRESS"))) {
-          importPrivateKey(data.getStringExtra("ADDRESS"))
+          val genI = Intent(this, WalletGenActivity::class.java).apply {
+            putExtra("PRIVATE_KEY", data.getStringExtra("ADDRESS"))
+          }
+          startActivityForResult(genI, WalletGenActivity.REQUEST_CODE)
         } else {
           this.snackError(getString(com.ubiqsmart.R.string.invalid_private_key))
         }
@@ -273,13 +262,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
       val mySnackbar = Snackbar.make(main_content!!, this@MainActivity.resources.getString(R.string.main_ac_wallet_added_fatal), Snackbar.LENGTH_SHORT)
       mySnackbar.show()
     }
-  }
-
-  fun importPrivateKey(privatekey: String) {
-    val genI = Intent(this, WalletGenActivity::class.java).apply {
-      putExtra("PRIVATE_KEY", privatekey)
-    }
-    startActivityForResult(genI, WalletGenActivity.REQUEST_CODE)
   }
 
   @JvmOverloads
@@ -294,13 +276,6 @@ class MainActivity : SecureAppCompatActivity(), NetworkUpdateListener {
   fun broadCastDataSetChanged() {
     (fragments[1] as WalletsFragment).notifyDataSetChanged()
     (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
-  }
-
-  override fun onUpdate(s: Response) {
-    runOnUiThread {
-      broadCastDataSetChanged()
-      (fragments[0] as PriceFragment).update()
-    }
   }
 
   private inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

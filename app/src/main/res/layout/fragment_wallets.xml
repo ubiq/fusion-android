@@ -148,6 +148,17 @@
         fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
+          android:id="@+id/import_fab"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_wallet"
+          fab:fab_label="@string/import_title"
+          fab:menu_colorNormal="@color/accent"
+          fab:menu_colorPressed="@color/accent_2"
+          fab:menu_colorRipple="@color/accent"
+          />
+
+        <com.github.clans.fab.FloatingActionButton
           android:id="@+id/gen_fab"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import com.ubiqsmart.app.ui.main.MainViewModel
 import com.ubiqsmart.app.ui.onboarding.OnBoardingViewModel
 import com.ubiqsmart.app.ui.splash.SplashViewModel
 
@@ -17,6 +18,7 @@ class ViewModelFactory private constructor(
         when {
           isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application)
           isAssignableFrom(OnBoardingViewModel::class.java) -> OnBoardingViewModel(application)
+          isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application)
           else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
       } as T

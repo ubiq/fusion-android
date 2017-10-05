@@ -86,7 +86,11 @@ object Modules {
     }
 
     bind<CryptoCompareApi>() with singleton {
-      instance<Retrofit>().create(CryptoCompareApi::class.java)
+      instance<Retrofit>()
+          .newBuilder()
+          .baseUrl(BuildConfig.CRYPTOCOMPARE_API_ENDPOINT)
+          .build()
+          .create(CryptoCompareApi::class.java)
     }
 
   }
