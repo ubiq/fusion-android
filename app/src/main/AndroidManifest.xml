@@ -13,15 +13,9 @@
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
-
-  <!-- Used for Importing / Exporting Wallets -->
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-  <!-- Used for QR Code scanning -->
   <uses-permission android:name="android.permission.CAMERA" />
-
-  <!-- Used for optional Applock Feature -->
   <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
   <uses-feature
@@ -76,7 +70,7 @@
       android:theme="@style/Ubiq.OnBoarding" />
 
     <activity
-      android:name="com.ubiqsmart.app.ui.main.MainActivity"
+      android:name="com.ubiqsmart.app.ui.main.MainActivity2"
       android:configChanges="orientation|screenSize" />
 
     <activity
@@ -90,53 +84,44 @@
     <activity
       android:name="com.ubiqsmart.app.ui.settings.SettingsActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings" />
+      android:label="@string/settings"
+      android:theme="@style/Ubiq.Preferences" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.wallet.WalletGenActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings" />
+      android:label="@string/settings" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.send.RequestEtherActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings" />
+      android:label="@string/settings" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.send.SendActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/title_activity_settings"
+      android:label="@string/settings"
       android:windowSoftInputMode="stateHidden|adjustResize" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.base.AppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
-      android:screenOrientation="portrait" />
+      android:screenOrientation="portrait"
+      android:theme="@style/Ubiq.Dark" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.settings.SetAppLockActivity"
       android:configChanges="orientation"
       android:label="@string/title_activity_main"
-      android:screenOrientation="portrait">
+      android:screenOrientation="portrait"
+      android:theme="@style/Ubiq.Dark">
       <intent-filter>
         <action android:name="rehanced.com.simpleetherwallet.activities.SetAppLockActivity" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-
-    <receiver
-      android:name="com.ubiqsmart.app.receiver.BootReceiver"
-      android:enabled="true"
-      android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-      <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </receiver>
-
+    
     <service
       android:name="com.ubiqsmart.app.services.NotificationService"
       android:exported="false" />
@@ -144,6 +129,7 @@
     <service
       android:name="com.ubiqsmart.app.services.WalletGenService"
       android:exported="false" />
+
     <service
       android:name="com.ubiqsmart.app.services.TransactionService"
       android:exported="false" />

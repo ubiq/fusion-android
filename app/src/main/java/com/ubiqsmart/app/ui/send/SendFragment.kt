@@ -195,7 +195,7 @@ class SendFragment : BaseFragment() {
     currencySpinner = rootView.findViewById(R.id.currency_spinner)
 
     val currencyList = ArrayList<String>()
-    currencyList.add(getString(R.string.currency_eth))
+    currencyList.add(getString(R.string.ubq))
     currencyList.add(exchangeCalculator.mainCurreny.name ?: "")
 
     val curAdapter = ArrayAdapter(ac!!, android.R.layout.simple_spinner_item, currencyList)
@@ -337,7 +337,7 @@ class SendFragment : BaseFragment() {
   }
 
   private fun askForPasswordAndDecode(fromAddress: String) {
-    val builder = AlertDialog.Builder(ac!!, R.style.AlertDialogTheme)
+    val builder = AlertDialog.Builder(ac!!, R.style.Ubiq_Dialog_Alert)
     builder.setTitle(R.string.wallet_password)
 
     val input = EditText(ac)

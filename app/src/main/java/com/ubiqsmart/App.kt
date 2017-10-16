@@ -14,7 +14,6 @@ import org.spongycastle.jce.provider.BouncyCastleProvider
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import java.security.Security
 
-
 class App : MultiDexApplication(), KodeinAware {
 
   override val kodein by Kodein.lazy {
@@ -47,11 +46,11 @@ class App : MultiDexApplication(), KodeinAware {
   }
 
   private fun onSetupCrashlytics() {
-    val crashlyticsKit = Crashlytics.Builder()
+    val kit = Crashlytics.Builder()
         .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
         .build()
 
-    Fabric.with(this, crashlyticsKit)
+    Fabric.with(this, kit)
   }
 
   companion object {

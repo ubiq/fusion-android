@@ -1,63 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout android:id="@+id/linearLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/primary"
   android:orientation="vertical"
-  android:showDividers="middle">
+  tools:background="@color/background_super_dark">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:orientation="vertical">
-
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:layout_marginTop="35dp"
-      android:gravity="center"
-      android:text="@string/app_name"
-      android:textAppearance="?android:textAppearanceMedium"
-      android:textColor="#FFFFFF"
-      android:textSize="40sp" />
-
-    <TextView
-      android:id="@+id/pl_message_text"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:textAppearance="?android:textAppearanceMedium"
-      android:textColor="#F2F2F2" />
-
-    <me.zhanghai.android.patternlock.PatternView
-      android:id="@+id/pl_pattern"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center"
-      android:layout_marginLeft="25dp"
-      android:layout_marginRight="25dp"
-      android:layout_marginTop="40dp" />
-
-  </LinearLayout>
-
-  <LinearLayout
-    android:id="@+id/fingerprint_container"
-    android:layout_width="match_parent"
+  <TextView
+    android:id="@+id/pl_message_tv"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="40dp"
-    android:layout_marginTop="40sp"
-    android:orientation="vertical">
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:gravity="center"
+    android:text="@string/pl_draw_pattern_to_unlock"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:textColor="@color/primary_text_color"
+    app:layout_constraintBottom_toTopOf="@+id/pl_pattern_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-      android:layout_width="55dp"
-      android:layout_height="55dp"
-      android:layout_gravity="center"
-      android:background="@drawable/circular_fingerprint_background"
-      android:src="@drawable/ic_fingerprint"
-      android:contentDescription="@null" />
+  <me.zhanghai.android.patternlock.PatternView
+    android:id="@+id/pl_pattern_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-  </LinearLayout>
-</LinearLayout>
+  <ImageView
+    android:id="@+id/fingerprint_iv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:contentDescription="@null"
+    android:src="@drawable/ic_fingerprint"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/pl_pattern_view" />
+
+</android.support.constraint.ConstraintLayout>

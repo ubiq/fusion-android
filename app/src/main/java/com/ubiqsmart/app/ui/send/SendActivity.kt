@@ -11,11 +11,11 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import com.ubiqsmart.R
-import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
+import com.ubiqsmart.app.ui.base.SecureActivity
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.ui.widgets.NonSwipeViewPager
 
-class SendActivity : SecureAppCompatActivity() {
+class SendActivity : SecureActivity() {
 
   private lateinit var fragments: List<Fragment>
   private lateinit var adapter: FragmentAdapter
@@ -30,7 +30,7 @@ class SendActivity : SecureAppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_choose_recipient)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    val toolbar = findViewById<Toolbar>(R.id.toolbar_view)
     setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayShowTitleEnabled(false)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)

@@ -7,20 +7,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.Menu
 import android.view.MenuItem
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
 import com.ubiqsmart.app.services.WalletGenService
-import com.ubiqsmart.app.ui.base.BaseFragment
-import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
+import com.ubiqsmart.app.ui.base.SecureActivity
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity
-import com.ubiqsmart.app.ui.main.fragments.PriceFragment
-import com.ubiqsmart.app.ui.main.fragments.TransactionsAllFragment
-import com.ubiqsmart.app.ui.main.fragments.WalletsFragment
+import com.ubiqsmart.app.ui.main.adapter.MainActivityPagerAdapter
+import com.ubiqsmart.app.ui.main.fragments.price.PriceFragment
+import com.ubiqsmart.app.ui.main.fragments.transactions.TransactionsAllFragment
+import com.ubiqsmart.app.ui.main.fragments.wallets.WalletsFragment
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.ui.send.SendActivity
 import com.ubiqsmart.app.ui.settings.SettingsActivity
@@ -33,12 +30,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.math.BigDecimal
 
-class MainActivity : SecureAppCompatActivity() {
-
-  lateinit var fragments: List<BaseFragment>
+@Deprecated("Moving logic to MainActivity2 for easy refactoring")
+class MainActivity : SecureActivity() {
 
   private val walletStorage: WalletStorage by instance()
   private val addressNameConverter: AddressNameConverter by instance()
+
+  private lateinit var viewPagerAdapter: MainActivityPagerAdapter
 
   private lateinit var viewModel: MainViewModel
 
@@ -47,17 +45,15 @@ class MainActivity : SecureAppCompatActivity() {
 
     setContentView(R.layout.activity_main)
 
-    setupActionBar(toolbar) {
-      title = ""
-      setDisplayHomeAsUpEnabled(false)
-      setDisplayHomeAsUpEnabled(false)
-    }
-    setupFragments()
+    setupActionBar()
     setupViewPager()
     setupBottomNavigationView()
-
     onCreateViewModel()
-    viewModel.onViewCreated()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    broadCastDataSetChanged()
   }
 
   override fun onDestroy() {
@@ -65,8 +61,19 @@ class MainActivity : SecureAppCompatActivity() {
     super.onDestroy()
   }
 
-  private fun onCreateViewModel() {
-    viewModel = obtainViewModel(MainViewModel::class.java)
+  private fun setupActionBar() {
+    setupActionBar(R.id.toolbar_view) {
+      title = ""
+      setDisplayHomeAsUpEnabled(false)
+      setDisplayHomeAsUpEnabled(false)
+    }
+  }
+
+  private fun setupViewPager() {
+    val fragments = arrayListOf(PriceFragment(), WalletsFragment(), TransactionsAllFragment())
+    viewPagerAdapter = MainActivityPagerAdapter(supportFragmentManager, fragments)
+    view_pager.adapter = viewPagerAdapter
+    view_pager.offscreenPageLimit = 3
   }
 
   private fun setupBottomNavigationView() {
@@ -83,13 +90,9 @@ class MainActivity : SecureAppCompatActivity() {
     bottom_navigation_view.selectedItemId = R.id.action_wallet
   }
 
-  private fun setupFragments() {
-    fragments = arrayListOf(PriceFragment(), WalletsFragment(), TransactionsAllFragment())
-  }
-
-  private fun setupViewPager() {
-    view_pager.adapter = SectionsPagerAdapter(supportFragmentManager)
-    view_pager.offscreenPageLimit = 3
+  private fun onCreateViewModel() {
+    viewModel = obtainViewModel(MainViewModel::class.java)
+    viewModel.onViewCreated()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -100,8 +103,7 @@ class MainActivity : SecureAppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 
     R.id.action_settings -> {
-      val settings = Intent(this, SettingsActivity::class.java)
-      startActivityForResult(settings, SettingsActivity.REQUEST_CODE)
+      startActivityForResult(SettingsActivity.getStartIntent(this), SettingsActivity.REQUEST_CODE)
       true
     }
 
@@ -113,7 +115,7 @@ class MainActivity : SecureAppCompatActivity() {
 
       ExternalStorageHandler.REQUEST_WRITE_STORAGE -> {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          (fragments[1] as WalletsFragment).export()
+          (viewPagerAdapter.fragments[1] as WalletsFragment).export()
         } else {
           snackError(getString(R.string.main_grant_permission_export))
         }
@@ -130,20 +132,6 @@ class MainActivity : SecureAppCompatActivity() {
         } else {
           snackError(getString(R.string.main_grant_permission_import))
         }
-      }
-    }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    broadCastDataSetChanged()
-
-    // Update wallets if activity resumed and a new wallet was found (finished generation or added as watch only address)
-    if (walletStorage.get().size != (fragments[1] as WalletsFragment).displayedWalletCount) {
-      try {
-        (fragments[1] as WalletsFragment).update()
-      } catch (e: IOException) {
-        e.printStackTrace()
       }
     }
   }
@@ -184,83 +172,81 @@ class MainActivity : SecureAppCompatActivity() {
         val rawAmount = data.getStringExtra("AMOUNT")
         val amount = BigDecimal("-" + rawAmount).multiply(BigDecimal("1000000000000000000")).toBigInteger()
 
-        (fragments[2] as TransactionsAllFragment).addUnconfirmedTransaction(from, to, amount)
-        //if (tabLayout != null) {
-        //  tabLayout.getTabAt(2).select();
-        //}
+        (viewPagerAdapter.fragments[2] as TransactionsAllFragment).addUnconfirmedTransaction(from, to, amount)
+        view_pager.currentItem = 2
       }
     }
   }
 
   private fun handleWalletGenerationResult(resultCode: Int, data: Intent?) {
     if (resultCode == Activity.RESULT_OK) {
-      val generatingService = Intent(this, WalletGenService::class.java).apply {
+      val generatingService = WalletGenService.getStartIntent(this).apply {
         putExtra("PASSWORD", data?.getStringExtra("PASSWORD"))
         val hasPrivateKey = data?.hasExtra("PRIVATE_KEY") ?: false
-        if (hasPrivateKey) putExtra("PRIVATE_KEY", data?.getStringExtra("PRIVATE_KEY"))
+        if (hasPrivateKey) {
+          putExtra("PRIVATE_KEY", data?.getStringExtra("PRIVATE_KEY"))
+        }
       }
       startService(generatingService)
     }
   }
 
   private fun handleOnQrScanResult(resultCode: Int, data: Intent?) {
-    if (resultCode == Activity.RESULT_OK) {
-      val type = data?.getByteExtra("TYPE", QRScanActivity.SCAN_ONLY)
-      if (type == QRScanActivity.SCAN_ONLY) {
-        if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
-          snackError(getString(R.string.invalid_wallet))
-          return
-        }
-        val watch = Intent(this, AddressDetailActivity::class.java)
-        watch.putExtra("ADDRESS", data.getStringExtra("ADDRESS"))
-        startActivity(watch)
-      } else if (type == QRScanActivity.ADD_TO_WALLETS) {
-        if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
-          snackError(getString(R.string.invalid_wallet))
-          return
-        }
-        val suc = walletStorage.add(WatchWallet(data.getStringExtra("ADDRESS")))
-        Handler().postDelayed({
-          try {
-            (fragments[1] as WalletsFragment).update()
-          } catch (e: IOException) {
-            e.printStackTrace()
+    when (resultCode) {
+      Activity.RESULT_OK -> {
+        val type = data?.getByteExtra("TYPE", QRScanActivity.SCAN_ONLY)
+        if (type == QRScanActivity.SCAN_ONLY) {
+          if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
+            snackError(getString(R.string.invalid_wallet))
+            return
           }
-          //if (tabLayout != null) {
-          //  tabLayout.getTabAt(1).select();
-          //}
-          val mySnackbar = Snackbar.make(main_content,
-              this@MainActivity.resources.getString(if (suc) R.string.main_ac_wallet_added_suc else R.string.main_ac_wallet_added_er),
-              Snackbar.LENGTH_SHORT)
-          if (suc) {
-            addressNameConverter.put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6))
-          }
-
-          mySnackbar.show()
-        }, 100)
-      } else if (type == QRScanActivity.REQUEST_PAYMENT) {
-        if (walletStorage.fullOnly.size == 0) {
-          DialogFactory.noFullWallet(this)
-        } else {
-          val watch = Intent(this, SendActivity::class.java).apply {
-            putExtra("TO_ADDRESS", data.getStringExtra("ADDRESS"))
-            putExtra("AMOUNT", data.getStringExtra("AMOUNT"))
-          }
+          val watch = Intent(this, AddressDetailActivity::class.java)
+          watch.putExtra("ADDRESS", data.getStringExtra("ADDRESS"))
           startActivity(watch)
-        }
-      } else if (type == QRScanActivity.PRIVATE_KEY) {
-        if (OwnWalletUtils.isValidPrivateKey(data.getStringExtra("ADDRESS"))) {
-          val genI = Intent(this, WalletGenActivity::class.java).apply {
-            putExtra("PRIVATE_KEY", data.getStringExtra("ADDRESS"))
+        } else if (type == QRScanActivity.ADD_TO_WALLETS) {
+          if (data.getStringExtra("ADDRESS").length != 42 || !data.getStringExtra("ADDRESS").startsWith("0x")) {
+            snackError(getString(R.string.invalid_wallet))
+            return
           }
-          startActivityForResult(genI, WalletGenActivity.REQUEST_CODE)
-        } else {
-          this.snackError(getString(com.ubiqsmart.R.string.invalid_private_key))
+          val suc = walletStorage.add(WatchWallet(data.getStringExtra("ADDRESS")))
+          Handler().postDelayed({
+            try {
+              (viewPagerAdapter.fragments[1] as WalletsFragment).update()
+            } catch (e: IOException) {
+              e.printStackTrace()
+            }
+            view_pager.currentItem = 1
+            val mySnackbar = Snackbar.make(main_content,
+                this@MainActivity.resources.getString(if (suc) R.string.main_ac_wallet_added_suc else R.string.main_ac_wallet_added_er),
+                Snackbar.LENGTH_SHORT)
+            if (suc) {
+              addressNameConverter.put(data.getStringExtra("ADDRESS"), "Watch " + data.getStringExtra("ADDRESS").substring(0, 6))
+            }
+
+            mySnackbar.show()
+          }, 100)
+        } else if (type == QRScanActivity.REQUEST_PAYMENT) {
+          if (walletStorage.fullOnly.size == 0) {
+            DialogFactory.noFullWallet(this)
+          } else {
+            val watch = Intent(this, SendActivity::class.java).apply {
+              putExtra("TO_ADDRESS", data.getStringExtra("ADDRESS"))
+              putExtra("AMOUNT", data.getStringExtra("AMOUNT"))
+            }
+            startActivity(watch)
+          }
+        } else if (type == QRScanActivity.PRIVATE_KEY) {
+          if (OwnWalletUtils.isValidPrivateKey(data.getStringExtra("ADDRESS"))) {
+            val genI = Intent(this, WalletGenActivity::class.java).apply {
+              putExtra("PRIVATE_KEY", data.getStringExtra("ADDRESS"))
+            }
+            startActivityForResult(genI, WalletGenActivity.REQUEST_CODE)
+          } else {
+            this.snackError(getString(com.ubiqsmart.R.string.invalid_private_key))
+          }
         }
       }
-    } else {
-      val mySnackbar = Snackbar.make(main_content!!, this@MainActivity.resources.getString(R.string.main_ac_wallet_added_fatal), Snackbar.LENGTH_SHORT)
-      mySnackbar.show()
+      else -> Snackbar.make(main_content!!, this@MainActivity.resources.getString(R.string.main_ac_wallet_added_fatal), Snackbar.LENGTH_SHORT).show()
     }
   }
 
@@ -269,28 +255,12 @@ class MainActivity : SecureAppCompatActivity() {
     if (main_content == null) {
       return
     }
-    val mySnackbar = Snackbar.make(main_content!!, s, length)
-    mySnackbar.show()
+    Snackbar.make(main_content!!, s, length).show()
   }
 
   fun broadCastDataSetChanged() {
-    (fragments[1] as WalletsFragment).notifyDataSetChanged()
-    (fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
-  }
-
-  private inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-
-    override fun getItem(position: Int): Fragment {
-      return fragments[position]
-    }
-
-    override fun getCount(): Int {
-      return fragments.size
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-      return ""
-    }
+    (viewPagerAdapter.fragments[1] as WalletsFragment).notifyDataSetChanged()
+    (viewPagerAdapter.fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
   }
 
   companion object {

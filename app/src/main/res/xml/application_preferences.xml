@@ -1,0 +1,46 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <SwitchPreference
+    android:defaultValue="false"
+    android:key="zero_amount_switch"
+    android:summary="@string/pref_description_social_recommendations"
+    android:title="@string/pref_title_social_recommendations" />
+
+  <SwitchPreference
+    android:defaultValue="true"
+    android:key="notifications_new_message"
+    android:summary="@string/pref_title_new_message_notifications_sum"
+    android:title="@string/pref_title_new_message_notifications" />
+
+  <ListPreference
+    android:defaultValue="3"
+    android:entries="@array/pref_sync_frequency_titles"
+    android:entryValues="@array/pref_sync_frequency_values"
+    android:key="sync_frequency"
+    android:negativeButtonText="@null"
+    android:positiveButtonText="@null"
+    android:summary="@string/pref_sum_sync_frequency"
+    android:title="@string/pref_title_sync_frequency" />
+
+  <ListPreference
+    android:entries="@array/currencies"
+    android:entryValues="@array/currencies"
+    android:key="main_currency"
+    android:negativeButtonText="@null"
+    android:positiveButtonText="@null"
+    android:summary="%s"
+    android:title="@string/pref_currencies_title" />
+
+  <SwitchPreference
+    android:defaultValue="false"
+    android:key="use_app_lock"
+    android:summary="@string/prefs_lock_with_pw_sum"
+    android:title="@string/prefs_lock_with_pw" />
+
+  <PreferenceScreen
+    android:summary="@string/prefs_set_pw_sum"
+    android:title="@string/prefs_set_pw">
+    <intent android:action="rehanced.com.simpleetherwallet.activities.SetAppLockActivity" />
+  </PreferenceScreen>
+
+</PreferenceScreen>

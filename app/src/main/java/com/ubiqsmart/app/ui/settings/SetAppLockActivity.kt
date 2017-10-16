@@ -19,4 +19,5 @@ class SetAppLockActivity : SetPatternActivity() {
     editor.putString("APP_LOCK_PATTERN", patternSha1)
     editor.apply()
   }
+
 }

@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.ui.main.fragments
+package com.ubiqsmart.app.ui.main.fragments.transactions
 
 import android.view.View
 import android.view.View.GONE
@@ -6,12 +6,12 @@ import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
 import com.ubiqsmart.app.interfaces.StorableWallet
 import com.ubiqsmart.app.ui.main.MainActivity
-import com.ubiqsmart.datasource.api.EtherscanAPI
-import com.ubiqsmart.domain.models.TransactionDisplay
 import com.ubiqsmart.app.ui.transactions.TransactionsAbstractFragment
 import com.ubiqsmart.app.utils.AddressNameConverter
 import com.ubiqsmart.app.utils.ResponseParser
 import com.ubiqsmart.app.utils.WalletStorage
+import com.ubiqsmart.datasource.api.EtherscanAPI
+import com.ubiqsmart.domain.models.TransactionDisplay
 import kotlinx.android.synthetic.main.fragment_transaction.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -20,6 +20,7 @@ import java.io.IOException
 import java.math.BigInteger
 import java.util.*
 
+@Deprecated("Moving logic to TransactionsAllFragment for easy refactoring")
 class TransactionsAllFragment : TransactionsAbstractFragment() {
 
   override val walletStorage: WalletStorage by instance()

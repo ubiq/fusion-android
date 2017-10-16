@@ -9,10 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.ubiqsmart.R
-import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
+import com.ubiqsmart.app.ui.base.SecureActivity
 import com.ubiqsmart.app.utils.Settings
 
-class WalletGenActivity : SecureAppCompatActivity() {
+class WalletGenActivity : SecureActivity() {
 
   private var password: EditText? = null
   private var passwordConfirm: EditText? = null

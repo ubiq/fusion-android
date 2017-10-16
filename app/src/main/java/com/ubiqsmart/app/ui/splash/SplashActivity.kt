@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.ubiqsmart.R
 import com.ubiqsmart.app.ui.base.BaseActivity
-import com.ubiqsmart.app.ui.main.MainActivity
+import com.ubiqsmart.app.ui.main.MainActivity2
 import com.ubiqsmart.app.ui.onboarding.OnBoardingActivity
 import com.ubiqsmart.extensions.obtainViewModel
 
@@ -45,8 +45,9 @@ class SplashActivity : BaseActivity(), SplashNavigator {
   }
 
   override fun openMainScreen() {
-    val intent = MainActivity.getStartIntent(this@SplashActivity)
+    val intent = MainActivity2.getStartIntent(this@SplashActivity)
     startActivity(intent)
+    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
   }
 
   override fun openOnBoardingScreen() {

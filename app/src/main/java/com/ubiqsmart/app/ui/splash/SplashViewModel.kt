@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit
 
 class SplashViewModel(app: Application) : BaseViewModel(app) {
 
-  override fun provideOverridingModule() = Kodein.Module {
-    import(SplashDI.Module)
-  }
-
   private val getAppStateInteractor: GetAppStateInteractor by injector.with(this@SplashViewModel).instance()
 
   val onNavigateToCommand = SingleLiveEvent<Int>()
   val onErrorCommand = SingleLiveEvent<Throwable>()
+
+  override fun provideOverridingModule() = Kodein.Module {
+    import(SplashDI.Module)
+  }
 
   override fun onViewCreated() {
     super.onViewCreated()

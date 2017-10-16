@@ -1,5 +1,7 @@
 <resources>
 
+  <!-- <General Styles> -->
+
   <style name="Ubiq" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="android:colorPrimary">@color/primary</item>
     <item name="android:colorPrimaryDark">@color/primary_dark</item>
@@ -15,9 +17,14 @@
     <item name="android:windowAllowEnterTransitionOverlap">true</item>
     <item name="android:windowAllowReturnTransitionOverlap">true</item>
     <item name="android:windowSharedElementsUseOverlay">false</item>
-    <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+    <item name="android:alertDialogTheme">@style/Ubiq.Dialog.Alert</item>
     <item name="android:actionBarStyle">@style/ThemeOverlay.Ubiq.Dark</item>
     <item name="patternViewStyle">@style/Widget.Ubiq.PatternView</item>
+  </style>
+
+  <style name="Ubiq.Dark">
+    <item name="android:windowBackground">@color/background_super_dark</item>
+    <item name="android:textViewStyle">@style/Widget.Ubiq.TextViewStyle.Dark</item>
   </style>
 
   <style name="Ubiq.Splash">
@@ -31,7 +38,14 @@
     <item name="android:checkboxStyle">@style/Widget.Ubiq.CheckStyle.Light</item>
   </style>
 
-  <style name="ThemeOverlay.Ubiq.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+  <style name="Ubiq.Preferences">
+    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material.Fix</item>
+    <item name="preferenceDialog_messageAppearance">@style/PreferenceFixTheme.TextAppearanceDialogMessage</item>
+  </style>
+
+  <!-- </General Styles> -->
+
+  <!-- <Toolbar> -->
 
   <style name="ThemeOverlay.Ubiq.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     <item name="android:background">@color/background_super_dark</item>
@@ -45,10 +59,28 @@
     <item name="android:textColor">@color/primary_text_color</item>
   </style>
 
-  <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+  <style name="ThemeOverlay.Ubiq.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+  <!-- </Toolbar> -->
+
+  <!-- <Dialogs> -->
+
+  <style name="Ubiq.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
     <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/primary_dark</item>
     <item name="colorAccent">@color/accent</item>
+  </style>
+
+  <!-- </Dialogs> -->
+
+  <!-- <Widgets> -->
+
+  <style name="Widget.Ubiq" parent="" />
+
+  <style name="Widget.Ubiq.TextViewStyle" parent="" />
+
+  <style name="Widget.Ubiq.TextViewStyle.Dark">
+    <item name="android:textColor">@color/primary_text_color</item>
   </style>
 
   <style name="Widget.Ubiq.CheckStyle.Light" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
@@ -60,13 +92,10 @@
     <item name="fontPath">@string/regular_font</item>
   </style>
 
-  <style name="Widget.Ubiq.BasePatternView" parent="">
+  <style name="Widget.Ubiq.PatternView">
     <item name="pl_rowCount">3</item>
     <item name="pl_columnCount">3</item>
     <item name="pl_aspect">square</item>
-  </style>
-
-  <style name="Widget.Ubiq.PatternView" parent="Widget.Ubiq.BasePatternView">
     <item name="pl_regularColor">@color/primary_text_color</item>
     <item name="pl_errorColor">@color/pattern_view_error</item>
     <item name="pl_successColor">@color/accent</item>
@@ -77,4 +106,7 @@
     <item name="pl_errorColor">@color/pattern_view_error</item>
     <item name="pl_successColor">@color/accent</item>
   </style>
+
+  <!-- </Widgets> -->
+
 </resources>

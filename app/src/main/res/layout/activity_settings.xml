@@ -9,10 +9,8 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:elevation="1dp"
-    android:outlineProvider="none"
     android:theme="@style/ThemeOverlay.Ubiq.Dark"
-    android:title="@string/app_name"
+    android:title="@string/settings"
     android:titleTextAppearance="@style/TextAppearance.Ubiq.ToolbarTitle"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 

@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.ui.main.fragments
+package com.ubiqsmart.app.ui.main.fragments.wallets
 
 import android.content.*
 import android.os.Build
@@ -33,6 +33,7 @@ import java.io.IOException
 import java.math.BigInteger
 import java.util.*
 
+@Deprecated("Moving logic to WalletsFragment for easy refactoring")
 class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateContextMenuListener {
 
   private val preferences: SharedPreferences by instance()
@@ -262,7 +263,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
       val intent = Intent(ac, WalletGenActivity::class.java)
       activity.startActivityForResult(intent, WalletGenActivity.REQUEST_CODE)
     } else {
-      val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
+      val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.Ubiq_Dialog_Alert) else AlertDialog.Builder(activity)
       builder.setTitle(R.string.wallet_one_at_a_time)
       builder.setMessage(R.string.wallet_one_at_a_time_text)
       builder.setNeutralButton(R.string.button_ok) { dialog, _ -> dialog.dismiss() }
@@ -271,7 +272,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
   }
 
   fun confirmDelete(address: String, type: Byte) {
-    val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
+    val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.Ubiq_Dialog_Alert) else AlertDialog.Builder(activity)
     builder.setTitle(R.string.wallet_removal_title)
 
     when (type) {
@@ -301,7 +302,7 @@ class WalletsFragment : BaseFragment(), View.OnClickListener, View.OnCreateConte
 
   fun setName(address: String) {
     val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= 24) {
-      AlertDialog.Builder(activity, R.style.AlertDialogTheme)
+      AlertDialog.Builder(activity, R.style.Ubiq_Dialog_Alert)
     } else {
       AlertDialog.Builder(activity)
     }

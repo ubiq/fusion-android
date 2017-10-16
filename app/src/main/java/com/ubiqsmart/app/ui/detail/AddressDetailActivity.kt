@@ -11,11 +11,11 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import com.ubiqsmart.R
-import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
+import com.ubiqsmart.app.ui.base.SecureActivity
 import com.ubiqsmart.app.ui.transactions.TransactionsFragment
 import com.ubiqsmart.app.utils.AddressNameConverter
 
-class AddressDetailActivity : SecureAppCompatActivity() {
+class AddressDetailActivity : SecureActivity() {
 
   private lateinit var fragments: List<Fragment>
 
@@ -34,7 +34,7 @@ class AddressDetailActivity : SecureAppCompatActivity() {
     address = intent.getStringExtra("ADDRESS")
     type = intent.getByteExtra("TYPE", SCANNED_WALLET)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    val toolbar = findViewById<Toolbar>(R.id.toolbar_view)
     setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayShowTitleEnabled(false)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)

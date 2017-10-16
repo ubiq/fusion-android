@@ -13,11 +13,14 @@ import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.ubiqsmart.R
 import com.ubiqsmart.app.interfaces.FingerprintListener
 import com.ubiqsmart.app.utils.FingerprintHelper
+import com.ubiqsmart.extensions.hasDeviceFingerprintSupport
+import kotlinx.android.synthetic.main.app_lock_activity.*
 import me.zhanghai.android.patternlock.PatternUtils
 import me.zhanghai.android.patternlock.PatternView
 import java.security.KeyStore
@@ -27,13 +30,9 @@ import javax.crypto.KeyGenerator
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 
-class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, FingerprintListener {
+class AppLockActivity : BaseActivity(), PatternView.OnPatternListener, FingerprintListener {
 
   private var numFailedAttempts = 0
-
-  private var hasFingerprintSupport: Boolean = false
-
-  private var fingerprintcontainer: LinearLayout? = null
 
   private var fingerprintHelper: FingerprintHelper? = null
   private var keyStore: KeyStore? = null
@@ -45,39 +44,48 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
 
   private var sharedPreferences: SharedPreferences? = null
 
-  override fun onBackPressed() {
-    unlockedFirst = false
-  }
+  private lateinit var patternView: PatternView
+  private var buttonContainer: LinearLayout? = null
+  private var leftButton: Button? = null
+  private var rightButton: Button? = null
+
+  private val clearPatternRunnable = Runnable { patternView.clearPattern() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    messageText.setText(R.string.pl_draw_pattern_to_unlock)
-    //patternView.setInStealthMode(true);
-    patternView.setOnPatternListener(this)
-    fingerprintcontainer = findViewById(R.id.fingerprint_container)
-    hasFingerprintSupport = hasFingerprintSupport()
+    setContentView(R.layout.app_lock_activity)
 
-    if (hasFingerprintSupport()) {
+    patternView = findViewById(R.id.pl_pattern_view)
+    buttonContainer = findViewById(R.id.pl_button_container)
+    leftButton = findViewById(R.id.pl_left_button)
+    rightButton = findViewById(R.id.pl_right_button)
+
+    patternView.setOnPatternListener(this)
+
+    if (hasDeviceFingerprintSupport()) {
       sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
       setupFingerprintStuff()
     }
 
-    fingerprintcontainer!!.visibility = if (hasFingerprintSupport) View.VISIBLE else View.GONE
+    fingerprint_iv.visibility = if (hasDeviceFingerprintSupport()) View.VISIBLE else View.GONE
 
     numFailedAttempts = savedInstanceState?.getInt("num_failed_attempts") ?: 0
   }
 
+  override fun onBackPressed() {
+    unlockedFirst = false
+  }
+
   @RequiresApi(api = Build.VERSION_CODES.M)
-  fun setupFingerprintStuff() {
+  private fun setupFingerprintStuff() {
     fingerprintManager = this.getSystemService(Context.FINGERPRINT_SERVICE) as FingerprintManager
     fingerprintHelper = FingerprintHelper(this)
     try {
       generateKey()
-
       if (cipherInit()) {
         cryptoObject = FingerprintManager.CryptoObject(cipher!!)
-        fingerprintHelper!!.startAuth(fingerprintManager, cryptoObject)
+        fingerprintHelper!!.startAuth(fingerprintManager!!, cryptoObject!!)
       }
 
     } catch (ex: Exception) {
@@ -87,7 +95,7 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
-  fun cipherInit(): Boolean {
+  private fun cipherInit(): Boolean {
     try {
       cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7)
     } catch (e: NoSuchAlgorithmException) {
@@ -108,7 +116,7 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
 
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.M) protected fun generateKey() {
+  @RequiresApi(api = Build.VERSION_CODES.M) private fun generateKey() {
     try {
       keyStore = KeyStore.getInstance("AndroidKeyStore")
     } catch (e: Exception) {
@@ -139,7 +147,7 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
 
   override fun onPatternDetected(pattern: List<PatternView.Cell>) {
     if (sharedPreferences!!.getLong("WRONG_PATTERN_LOCK", 0) != 0L && sharedPreferences!!.getLong("WRONG_PATTERN_LOCK", 0) > System.currentTimeMillis() - 60 * 1000) {
-      messageText.setText(R.string.locked_for_one_minute)
+      pl_message_tv.setText(R.string.locked_for_one_minute)
       postClearPatternRunnable()
       return
     }
@@ -149,21 +157,17 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
       numFailedAttempts = 0
       onConfirmed()
     } else {
-      messageText.setText(R.string.pl_wrong_pattern)
+      pl_message_tv.setText(R.string.pl_wrong_pattern)
       patternView.displayMode = PatternView.DisplayMode.Wrong
       postClearPatternRunnable()
       onWrongPattern()
     }
   }
 
-  fun hasFingerprintSupport(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hasFingerprintSupport
-  }
-
   override fun onPause() {
     super.onPause()
 
-    if (fingerprintHelper != null && hasFingerprintSupport()) {
+    if (fingerprintHelper != null && hasDeviceFingerprintSupport()) {
       fingerprintHelper!!.cancel()
     }
   }
@@ -175,27 +179,27 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
       sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
-    if (fingerprintHelper != null && hasFingerprintSupport()) {
+    if (fingerprintHelper != null && hasDeviceFingerprintSupport()) {
       setupFingerprintStuff()
     }
   }
 
-  protected fun isPatternCorrect(pattern: List<PatternView.Cell>): Boolean {
+  private fun isPatternCorrect(pattern: List<PatternView.Cell>): Boolean {
     return PatternUtils.patternToSha1String(pattern) == sharedPreferences!!.getString("APP_LOCK_PATTERN", "")
   }
 
-  protected fun onConfirmed() {
+  private fun onConfirmed() {
     setResult(Activity.RESULT_OK)
     finish()
   }
 
-  protected fun onWrongPattern() {
+  private fun onWrongPattern() {
     ++numFailedAttempts
     if (numFailedAttempts >= 5) {
       val editor = sharedPreferences!!.edit()
       editor.putLong("WRONG_PATTERN_LOCK", System.currentTimeMillis())
       editor.commit()
-      messageText.setText(R.string.locked_one_minute)
+      pl_message_tv.setText(R.string.locked_one_minute)
       numFailedAttempts = 0
     }
   }
@@ -223,9 +227,19 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
     onConfirmed()
   }
 
+  private fun removeClearPatternRunnable() {
+    patternView.removeCallbacks(clearPatternRunnable)
+  }
+
+  private fun postClearPatternRunnable() {
+    removeClearPatternRunnable()
+    patternView.postDelayed(clearPatternRunnable, CLEAR_PATTERN_DELAY_MILLI.toLong())
+  }
+
   companion object {
 
-    val REQUEST_CODE = 1000
+    private const val CLEAR_PATTERN_DELAY_MILLI = 2000
+    const val REQUEST_CODE = 1000
 
     private var pausedFirst: Boolean = false
     private var unlockedFirst: Boolean = false
@@ -246,8 +260,7 @@ class AppLockActivity : BasePatternActivity(), PatternView.OnPatternListener, Fi
       }
 
       // Ask for login if pw protection is enabled and last login is more than 4 minutes ago
-      if (preferences.getLong("APP_UNLOCKED", 0) <= System.currentTimeMillis() - 4 * 60 * 1000 && onResume && !pausedFirst && preferences.getString(
-          "APP_LOCK_PATTERN", "") != "") {
+      if (preferences.getLong("APP_UNLOCKED", 0) <= System.currentTimeMillis() - 4 * 60 * 1000 && onResume && !pausedFirst && preferences.getString("APP_LOCK_PATTERN", "") != "") {
         val patternLock = Intent(c, AppLockActivity::class.java)
         c.startActivityForResult(patternLock, AppLockActivity.REQUEST_CODE)
       }

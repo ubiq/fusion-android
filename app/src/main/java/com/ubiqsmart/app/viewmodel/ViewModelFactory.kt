@@ -5,6 +5,7 @@ import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.ubiqsmart.app.ui.main.MainViewModel
+import com.ubiqsmart.app.ui.main.fragments.price.PriceViewModel
 import com.ubiqsmart.app.ui.onboarding.OnBoardingViewModel
 import com.ubiqsmart.app.ui.splash.SplashViewModel
 
@@ -19,6 +20,7 @@ class ViewModelFactory private constructor(
           isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application)
           isAssignableFrom(OnBoardingViewModel::class.java) -> OnBoardingViewModel(application)
           isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application)
+          isAssignableFrom(PriceViewModel::class.java) -> PriceViewModel(application)
           else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
       } as T

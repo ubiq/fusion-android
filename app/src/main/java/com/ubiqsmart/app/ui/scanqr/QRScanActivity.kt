@@ -33,7 +33,7 @@ class QRScanActivity : BaseActivity(), ZXingScannerView.ResultHandler {
 
     setContentView(R.layout.activity_qrscan)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    val toolbar = findViewById<Toolbar>(R.id.toolbar_view)
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)

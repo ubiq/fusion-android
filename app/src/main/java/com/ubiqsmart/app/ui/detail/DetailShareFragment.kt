@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +47,7 @@ class DetailShareFragment : BaseFragment() {
       Toast.makeText(activity, R.string.wallet_menu_action_copied_to_clipboard, Toast.LENGTH_SHORT).show()
     }
 
-    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-    val qrCodeEncoder = QREncoder(if (prefs.getBoolean("qr_encoding_erc", false)) AddressEncoder.encodeERC(AddressEncoder(ethaddress)) else ethaddress, null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)
+    val qrCodeEncoder = QREncoder(AddressEncoder.encodeERC(AddressEncoder(ethaddress)), null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)
     try {
       val bitmap = qrCodeEncoder.encodeAsBitmap()
       qrcode.setImageBitmap(bitmap)

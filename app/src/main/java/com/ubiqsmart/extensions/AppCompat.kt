@@ -2,6 +2,7 @@ package com.ubiqsmart.extensions
 
 import android.arch.lifecycle.ViewModelProviders
 import android.support.annotation.IdRes
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -18,5 +19,5 @@ inline fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: Actio
   setupActionBar(toolbar, action)
 }
 
-fun <T : BaseViewModel> AppCompatActivity.obtainViewModel(viewModelClass: Class<T>): T =
+fun <T : BaseViewModel> FragmentActivity.obtainViewModel(viewModelClass: Class<T>): T =
     ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)

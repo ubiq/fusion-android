@@ -2,15 +2,16 @@ package com.ubiqsmart.app.services
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.github.salomonbrys.kodein.android.KodeinIntentService
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
-import com.ubiqsmart.domain.models.FullWallet
 import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.utils.*
+import com.ubiqsmart.domain.models.FullWallet
 import org.spongycastle.util.encoders.Hex
 import org.web3j.crypto.CipherException
 import org.web3j.crypto.ECKeyPair
@@ -103,6 +104,9 @@ class WalletGenService : KodeinIntentService(WalletGenService::class.java.simple
   companion object {
 
     private val NOTIFICATION_ID = 152
+
+    fun getStartIntent(context: Context) = Intent(context, WalletGenService::class.java)
+
   }
 
 }

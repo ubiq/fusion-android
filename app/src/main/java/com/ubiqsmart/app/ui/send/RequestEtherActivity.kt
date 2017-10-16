@@ -1,7 +1,6 @@
 package com.ubiqsmart.app.ui.send
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.*
@@ -14,8 +13,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.ubiqsmart.R
 import com.ubiqsmart.R.id.qrcode
-import com.ubiqsmart.domain.models.Wallet
-import com.ubiqsmart.app.ui.base.SecureAppCompatActivity
+import com.ubiqsmart.app.ui.base.SecureActivity
 import com.ubiqsmart.app.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.app.utils.AddressNameConverter
 import com.ubiqsmart.app.utils.ExchangeCalculator
@@ -23,10 +21,11 @@ import com.ubiqsmart.app.utils.WalletStorage
 import com.ubiqsmart.app.utils.qr.AddressEncoder
 import com.ubiqsmart.app.utils.qr.Contents
 import com.ubiqsmart.app.utils.qr.QREncoder
+import com.ubiqsmart.domain.models.Wallet
 import java.math.BigDecimal
 import java.util.*
 
-class RequestEtherActivity : SecureAppCompatActivity(), View.OnClickListener {
+class RequestEtherActivity : SecureActivity(), View.OnClickListener {
 
   private var coord: CoordinatorLayout? = null
   private var qr: ImageView? = null
@@ -41,7 +40,7 @@ class RequestEtherActivity : SecureAppCompatActivity(), View.OnClickListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_request_ether)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    val toolbar = findViewById<Toolbar>(R.id.toolbar_view)
     setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayShowTitleEnabled(false)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -117,18 +116,12 @@ class RequestEtherActivity : SecureAppCompatActivity(), View.OnClickListener {
       iban += "?amount=" + amount!!.text.toString()
     }
 
-    val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
     val qrCodeEncoder: QREncoder
-    if (prefs.getBoolean("qr_encoding_erc", false)) {
-      val temp = AddressEncoder(selectedEtherAddress)
-      if (amount!!.text.toString().length > 0 && BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) > 0) {
-        temp.amount = amount!!.text.toString()
-      }
-      qrCodeEncoder = QREncoder(AddressEncoder.encodeERC(temp), null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)
-    } else {
-      qrCodeEncoder = QREncoder(iban, null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)
+    val temp = AddressEncoder(selectedEtherAddress)
+    if (amount!!.text.toString().length > 0 && BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) > 0) {
+      temp.amount = amount!!.text.toString()
     }
+    qrCodeEncoder = QREncoder(AddressEncoder.encodeERC(temp), null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)
 
     try {
       val bitmap = qrCodeEncoder.encodeAsBitmap()

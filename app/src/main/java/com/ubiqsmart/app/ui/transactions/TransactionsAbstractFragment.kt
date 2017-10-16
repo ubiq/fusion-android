@@ -192,7 +192,7 @@ abstract class TransactionsAbstractFragment : BaseFragment(), View.OnClickListen
   }
 
   fun setName(address: String) {
-    val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
+    val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.Ubiq_Dialog_Alert) else AlertDialog.Builder(activity)
     builder.setTitle(R.string.name_other_address)
 
     val input = EditText(activity).apply {

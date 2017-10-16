@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.ui.main.fragments
+package com.ubiqsmart.app.ui.main.fragments.price
 
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -35,6 +35,7 @@ import org.json.JSONException
 import java.io.IOException
 import java.util.*
 
+@Deprecated("Moving logic to PriceFragment for easy refactoring")
 class PriceFragment : BaseFragment() {
 
   private val preferences: SharedPreferences by instance()
@@ -169,7 +170,7 @@ class PriceFragment : BaseFragment() {
     chart.axisLeft.spaceBottom = 30f
     chart.axisLeft.axisLineColor = 0xFFFFFF
     chart.axisLeft.textColor = 0xFFFFFF
-    chart.axisLeft.setDrawTopYLabelEntry(true)
+    chart.axisLeft.setDrawTopYLabelEntry(false)
     chart.axisLeft.labelCount = 10
 
     chart.xAxis.isEnabled = true
@@ -225,7 +226,7 @@ class PriceFragment : BaseFragment() {
 
   private fun updateExchangeRates() {
     try {
-      exchangeCalculator.updateExchangeRates(preferences.getString("maincurrency", "USD"), activity)
+//      exchangeCalculator.updateExchangeRates(preferences.getString("maincurrency", "USD"), activity)
       update()
       onItemsLoadComplete()
     } catch (e: IOException) {

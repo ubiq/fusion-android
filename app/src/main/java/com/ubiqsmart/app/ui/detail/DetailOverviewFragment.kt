@@ -240,7 +240,7 @@ class DetailOverviewFragment : BaseFragment(), View.OnClickListener, View.OnCrea
   }
 
   fun setName() {
-    val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.AlertDialogTheme) else AlertDialog.Builder(activity)
+    val builder = if (Build.VERSION.SDK_INT >= 24) AlertDialog.Builder(activity, R.style.Ubiq_Dialog_Alert) else AlertDialog.Builder(activity)
     if (type == AddressDetailActivity.OWN_WALLET) {
       builder.setTitle(R.string.name_your_address)
     } else {
