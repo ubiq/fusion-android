@@ -6,7 +6,7 @@ import com.ubiqsmart.app.utils.ExchangeCalculator;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class Wallet implements Comparable {
+public class WalletAdapter implements Comparable {
 
   public static final byte NORMAL = 0;
   public static final byte WATCH_ONLY = 1;
@@ -17,14 +17,14 @@ public class Wallet implements Comparable {
   private BigInteger balance;
   private byte type;
 
-  public Wallet(String name, String publicKey, BigInteger balance, byte type) {
+  public WalletAdapter(String name, String publicKey, BigInteger balance, byte type) {
     this.name = name;
     this.publicKey = publicKey;
     this.balance = balance;
     this.type = type;
   }
 
-  public Wallet(String name, String publicKey) {
+  public WalletAdapter(String name, String publicKey) {
     this.name = name;
     this.publicKey = publicKey;
     this.balance = null;
@@ -63,11 +63,7 @@ public class Wallet implements Comparable {
     return publicKey.toLowerCase();
   }
 
-  public void setPublicKey(String publicKey) {
-    this.publicKey = publicKey;
-  }
-
   @Override public int compareTo(@NonNull Object o) {
-    return name.compareTo(((Wallet) o).getName());
+    return name.compareTo(((WalletAdapter) o).getName());
   }
 }

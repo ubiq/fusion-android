@@ -249,7 +249,7 @@ public class DialogFactory {
     //  @Override public void onClick(DialogInterface dialog, int which) {
     //    try {
     //      walletStorage.importWallets(files);
-    //      c.snackError("Wallet" + (files.size() > 1 ? "s" : "") + " successfully imported!");
+    //      c.snackError("WalletAdapter" + (files.size() > 1 ? "s" : "") + " successfully imported!");
     //      if (c.getFragments() != null && c.getFragments().get(1) != null) {
     //        ((WalletsFragment) c.getFragments().get(1)).update();
     //      }

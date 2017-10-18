@@ -25,7 +25,7 @@ class TokenAdapter(
   var position: Int = 0
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-    val itemView = LayoutInflater.from(parent.context).inflate(R.layout.view_w_token, parent, false).apply {
+    val itemView = LayoutInflater.from(parent.context).inflate(R.layout.token_item_adapter, parent, false).apply {
       setOnClickListener(listener)
       setOnCreateContextMenuListener(contextMenuListener)
     }

@@ -43,6 +43,11 @@ class SettingsActivity : BaseActivity() {
     return true
   }
 
+  override fun onBackPressed() {
+    super.onBackPressed()
+    overridePendingTransition(R.anim.fade_in, R.anim.fade_out_slide_out_left)
+  }
+
   companion object {
 
     val REQUEST_CODE = 800

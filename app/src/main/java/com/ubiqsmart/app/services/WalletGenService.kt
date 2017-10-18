@@ -51,7 +51,7 @@ class WalletGenService : KodeinIntentService(WalletGenService::class.java.simple
       }
 
       walletStorage.add(FullWallet("0x" + walletAddress, walletAddress))
-      addressNameConverter.put("0x" + walletAddress, "Wallet " + ("0x" + walletAddress).substring(0, 6))
+      addressNameConverter.put("0x" + walletAddress, "WalletAdapter " + ("0x" + walletAddress).substring(0, 6))
       Settings.walletBeingGenerated = false
 
       finished("0x" + walletAddress)

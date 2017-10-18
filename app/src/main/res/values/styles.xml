@@ -18,7 +18,8 @@
     <item name="android:windowAllowReturnTransitionOverlap">true</item>
     <item name="android:windowSharedElementsUseOverlay">false</item>
     <item name="android:alertDialogTheme">@style/Ubiq.Dialog.Alert</item>
-    <item name="android:actionBarStyle">@style/ThemeOverlay.Ubiq.Dark</item>
+    <item name="android:actionBarStyle">@style/ThemeOverlay.Ubiq.Toolbar.Dark</item>
+    <item name="android:progressBarStyle">@style/Widget.Ubiq.ProgressBar</item>
     <item name="patternViewStyle">@style/Widget.Ubiq.PatternView</item>
   </style>
 
@@ -47,7 +48,7 @@
 
   <!-- <Toolbar> -->
 
-  <style name="ThemeOverlay.Ubiq.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+  <style name="ThemeOverlay.Ubiq.Toolbar.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     <item name="android:background">@color/background_super_dark</item>
     <item name="titleTextStyle">@style/TextAppearance.Ubiq.ToolbarTitle</item>
   </style>
@@ -105,6 +106,10 @@
     <item name="pl_regularColor">?colorControlNormal</item>
     <item name="pl_errorColor">@color/pattern_view_error</item>
     <item name="pl_successColor">@color/accent</item>
+  </style>
+
+  <style name="Widget.Ubiq.ProgressBar" parent="Widget.AppCompat.ProgressBar">
+
   </style>
 
   <!-- </Widgets> -->

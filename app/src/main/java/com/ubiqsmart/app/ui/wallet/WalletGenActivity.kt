@@ -1,6 +1,7 @@
 package com.ubiqsmart.app.ui.wallet
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
@@ -79,6 +80,8 @@ class WalletGenActivity : SecureActivity() {
   companion object {
 
     val REQUEST_CODE = 401
+
+    fun getStartIntent(context: Context) = Intent(context, WalletGenActivity::class.java)
   }
 
 }

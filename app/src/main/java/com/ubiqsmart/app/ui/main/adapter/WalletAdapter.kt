@@ -10,25 +10,25 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.ubiqsmart.R
-import com.ubiqsmart.domain.models.TransactionDisplay
-import com.ubiqsmart.domain.models.Wallet
 import com.ubiqsmart.app.utils.AddressNameConverter
 import com.ubiqsmart.app.utils.Blockies
 import com.ubiqsmart.app.utils.ExchangeCalculator
+import com.ubiqsmart.domain.models.TransactionDisplay
+import com.ubiqsmart.domain.models.WalletAdapter
 import me.grantland.widget.AutofitTextView
 
 class WalletAdapter(
-    private val wallets: List<Wallet>,
+    private val wallets: List<WalletAdapter>,
     private val context: Context,
     private val listener: View.OnClickListener,
     private val contextMenuListener: View.OnCreateContextMenuListener
-) : RecyclerView.Adapter<WalletAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<com.ubiqsmart.app.ui.main.adapter.WalletAdapter.MyViewHolder>() {
 
   private var lastPosition = -1
   var position: Int = 0
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-    val itemView = LayoutInflater.from(parent.context).inflate(R.layout.view_w_address, parent, false)
+    val itemView = LayoutInflater.from(parent.context).inflate(R.layout.wallet_item_adapter, parent, false)
     itemView.setOnClickListener(listener)
     itemView.setOnCreateContextMenuListener(contextMenuListener)
     return MyViewHolder(itemView)
@@ -43,13 +43,13 @@ class WalletAdapter(
     holder.apply {
       walletaddress.text = box.publicKey
       walletname.text = walletName ?: context.getString(R.string.new_wallet)
-      if (box.type != Wallet.CONTACT) {
+      if (box.type != WalletAdapter.CONTACT) {
         holder.walletbalance.text = String.format("%s %s",
             exchangeCalculator.displayBalanceNicely(exchangeCalculator.convertRate(box.balance, exchangeCalculator.current.rate)),
             exchangeCalculator.currencyShort)
       }
       addressimage.setImageBitmap(Blockies.createIcon(box.publicKey))
-      type.visibility = if (box.type == TransactionDisplay.NORMAL || box.type == Wallet.CONTACT) View.INVISIBLE else View.VISIBLE
+      type.visibility = if (box.type == TransactionDisplay.NORMAL || box.type == WalletAdapter.CONTACT) View.INVISIBLE else View.VISIBLE
     }
 
     holder.itemView.setOnLongClickListener {
@@ -60,7 +60,7 @@ class WalletAdapter(
     setAnimation(holder.container, position)
   }
 
-  override fun onViewRecycled(holder: WalletAdapter.MyViewHolder?) {
+  override fun onViewRecycled(holder: MyViewHolder?) {
     holder!!.itemView.setOnLongClickListener(null)
     super.onViewRecycled(holder)
   }

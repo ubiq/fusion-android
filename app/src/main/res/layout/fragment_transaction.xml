@@ -4,7 +4,8 @@
   xmlns:fab="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  tools:context=".app.ui.main.MainActivity2">
 
   <FrameLayout
     android:layout_width="match_parent"
@@ -28,14 +29,12 @@
       android:id="@+id/nothing_found"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:background="#ffffff"
       android:visibility="gone">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="70dp"
-
         android:layout_marginLeft="70dp"
         android:layout_marginRight="70dp"
         android:layout_marginTop="40dp"
@@ -46,7 +45,7 @@
           android:layout_width="100dp"
           android:layout_height="100dp"
           android:contentDescription="@null"
-          android:src="@drawable/etherkont" />
+          android:src="@drawable/as_ether_logo" />
 
         <TextView
           android:id="@+id/infoText"
@@ -74,7 +73,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="70dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"

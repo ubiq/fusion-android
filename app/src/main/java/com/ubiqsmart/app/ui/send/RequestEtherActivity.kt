@@ -21,7 +21,6 @@ import com.ubiqsmart.app.utils.WalletStorage
 import com.ubiqsmart.app.utils.qr.AddressEncoder
 import com.ubiqsmart.app.utils.qr.Contents
 import com.ubiqsmart.app.utils.qr.QREncoder
-import com.ubiqsmart.domain.models.Wallet
 import java.math.BigDecimal
 import java.util.*
 
@@ -31,7 +30,7 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
   private var qr: ImageView? = null
   private var recyclerView: RecyclerView? = null
   private var walletAdapter: WalletAdapter? = null
-  private val wallets = ArrayList<Wallet>()
+  private val wallets = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
   private var selectedEtherAddress: String? = null
   private var amount: TextView? = null
   private var usdPrice: TextView? = null
@@ -88,13 +87,13 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
   fun update() {
     wallets.clear()
 
-    val myAddresses = ArrayList<Wallet>()
+    val myAddresses = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
     val walletStorage = WalletStorage.getInstance(this, null)
 
     val storedAddresses = ArrayList(walletStorage.get())
     for (i in storedAddresses.indices) {
       if (i == 0) selectedEtherAddress = storedAddresses[i].pubKey
-      myAddresses.add(Wallet(AddressNameConverter.getInstance(this).get(storedAddresses[i].pubKey), storedAddresses[i].pubKey))
+      myAddresses.add(com.ubiqsmart.domain.models.WalletAdapter(AddressNameConverter.getInstance(this).get(storedAddresses[i].pubKey), storedAddresses[i].pubKey))
     }
 
     wallets.addAll(myAddresses)

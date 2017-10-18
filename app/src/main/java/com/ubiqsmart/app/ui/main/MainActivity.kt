@@ -114,11 +114,11 @@ class MainActivity : SecureActivity() {
     when (requestCode) {
 
       ExternalStorageHandler.REQUEST_WRITE_STORAGE -> {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          (viewPagerAdapter.fragments[1] as WalletsFragment).export()
-        } else {
-          snackError(getString(R.string.main_grant_permission_export))
-        }
+//        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//          (viewPagerAdapter.fragments[1] as WalletsFragment).export()
+//        } else {
+//          snackError(getString(R.string.main_grant_permission_export))
+//        }
       }
 
       ExternalStorageHandler.REQUEST_READ_STORAGE -> {
@@ -211,7 +211,7 @@ class MainActivity : SecureActivity() {
           val suc = walletStorage.add(WatchWallet(data.getStringExtra("ADDRESS")))
           Handler().postDelayed({
             try {
-              (viewPagerAdapter.fragments[1] as WalletsFragment).update()
+//              (viewPagerAdapter.fragments[1] as WalletsFragment).update()
             } catch (e: IOException) {
               e.printStackTrace()
             }
@@ -259,7 +259,7 @@ class MainActivity : SecureActivity() {
   }
 
   fun broadCastDataSetChanged() {
-    (viewPagerAdapter.fragments[1] as WalletsFragment).notifyDataSetChanged()
+//    (viewPagerAdapter.fragments[1] as WalletsFragment).notifyDataSetChanged()
     (viewPagerAdapter.fragments[2] as TransactionsAllFragment).notifyDataSetChanged()
   }
 

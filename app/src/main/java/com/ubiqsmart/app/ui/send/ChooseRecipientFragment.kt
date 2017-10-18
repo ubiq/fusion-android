@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import com.ubiqsmart.R
-import com.ubiqsmart.domain.models.Wallet
 import com.ubiqsmart.app.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.utils.AddressNameConverter
@@ -27,7 +26,7 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener, View.OnCreateC
   private var send: Button? = null
   private var addressBox: EditText? = null
 
-  private val wallets = ArrayList<Wallet>()
+  private val wallets = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val rootView = inflater!!.inflate(R.layout.fragment_recipient, container, false)

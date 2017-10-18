@@ -5,193 +5,105 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <FrameLayout
+  <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-      android:layout_width="match_parent"
+    <ProgressBar
+      android:id="@+id/progress_bar_view"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:orientation="vertical">
+      android:layout_gravity="center"
+      android:indeterminate="true"
+      fab:layout_constraintBottom_toBottomOf="parent"
+      fab:layout_constraintEnd_toEndOf="parent"
+      fab:layout_constraintStart_toStartOf="parent"
+      fab:layout_constraintTop_toTopOf="parent" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="19dp"
-        android:orientation="vertical">
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="0dp"
-          android:layout_gravity="center"
-          android:layout_marginBottom="3dp"
-          android:layout_weight="1"
-          android:text="@string/fr_wallet_overall_balance"
-          android:textSize="13sp" />
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="3dp"
-          android:orientation="horizontal">
-
-          <ImageView
-            android:id="@+id/left_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:src="@drawable/ic_arrow_left" />
-
-          <TextView
-            android:id="@+id/balance_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:minWidth="135dp"
-            android:text="@string/zero_ubiqs"
-            android:textColor="@color/primary_dark"
-            android:textSize="24sp" />
-
-          <ImageView
-            android:id="@+id/right_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:src="@drawable/ic_arrow_right" />
-
-        </LinearLayout>
-      </LinearLayout>
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#7aa1a1a1" />
-
-
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/recycler_view"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:scrollbars="vertical"
-          tools:showIn="@layout/activity_main" />
-      </RelativeLayout>
-    </LinearLayout>
-
-    <FrameLayout
-      android:id="@+id/nothing_found"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:background="#ffffff"
-      android:visibility="gone">
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="70dp"
-
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-          android:layout_width="100dp"
-          android:layout_height="100dp"
-          android:contentDescription="@null"
-          android:src="@drawable/etherkont" />
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"
-          android:layout_marginTop="20dp"
-          android:gravity="center"
-          android:text="@string/no_wallet_history"
-          android:textColor="#99323232"
-          android:textSize="16sp" />
-
-      </LinearLayout>
-
-    </FrameLayout>
-
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:fitsSystemWindows="true">
+      android:scrollbars="vertical"
+      android:visibility="gone"
+      fab:layout_constraintBottom_toBottomOf="parent"
+      fab:layout_constraintEnd_toEndOf="parent"
+      fab:layout_constraintStart_toStartOf="parent"
+      fab:layout_constraintTop_toTopOf="parent"
+      tools:listitem="@layout/wallet_item_adapter" />
 
-      <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fab_menu_view"
+    <TextView
+      android:id="@+id/nothing_found"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_marginTop="24dp"
+      android:drawableTop="@drawable/as_ubiq_white_logo"
+      android:gravity="center"
+      android:text="@string/no_wallet_history"
+      android:textAlignment="center"
+      android:visibility="gone"
+      tools:visibility="gone" />
+
+    <com.github.clans.fab.FloatingActionMenu
+      android:id="@+id/fab_menu_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|right"
+      android:layout_marginEnd="16dp"
+      android:visibility="gone"
+      fab:layout_constraintBottom_toBottomOf="parent"
+      fab:layout_constraintEnd_toEndOf="parent"
+      fab:menu_animationDelayPerItem="20"
+      fab:menu_colorNormal="@color/accent"
+      fab:menu_colorPressed="@color/accent_2"
+      fab:menu_colorRipple="@color/accent"
+      tools:visibility="gone">
+
+      <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/import_wallet_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="70dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        fab:menu_animationDelayPerItem="20"
+        android:src="@drawable/ic_wallet"
+        fab:fab_label="@string/import_title"
         fab:menu_colorNormal="@color/accent"
         fab:menu_colorPressed="@color/accent_2"
-        fab:menu_colorRipple="@color/accent"
-        fab:menu_shadowColor="#444">
+        fab:menu_colorRipple="@color/accent" />
 
-        <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/import_fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_wallet"
-          fab:fab_label="@string/import_title"
-          fab:menu_colorNormal="@color/accent"
-          fab:menu_colorPressed="@color/accent_2"
-          fab:menu_colorRipple="@color/accent"
-          />
+      <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/generate_wallet_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_wallet"
+        fab:fab_label="@string/fab_gen_new"
+        fab:menu_colorNormal="@color/accent"
+        fab:menu_colorPressed="@color/accent_2"
+        fab:menu_colorRipple="@color/accent" />
 
-        <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/gen_fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_wallet"
-          fab:fab_label="@string/fab_gen_new"
-          fab:menu_colorNormal="@color/accent"
-          fab:menu_colorPressed="@color/accent_2"
-          fab:menu_colorRipple="@color/accent" />
+      <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/watch_address_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_scan"
+        fab:fab_label="@string/fab_add_watch"
+        fab:menu_colorNormal="@color/accent"
+        fab:menu_colorPressed="@color/accent_2"
+        fab:menu_colorRipple="@color/accent" />
 
-        <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/add_fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_scan"
-          fab:fab_label="@string/fab_add_watch"
-          fab:menu_colorNormal="@color/accent"
-          fab:menu_colorPressed="@color/accent_2"
-          fab:menu_colorRipple="@color/accent" />
+      <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/scan_address_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_search"
+        fab:fab_label="@string/fab_scan"
+        fab:menu_colorNormal="@color/accent"
+        fab:menu_colorPressed="@color/accent_2"
+        fab:menu_colorRipple="@color/accent" />
 
-        <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/scan_fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_search"
-          fab:fab_label="@string/fab_scan"
-          fab:menu_colorNormal="@color/accent"
-          fab:menu_colorPressed="@color/accent_2"
-          fab:menu_colorRipple="@color/accent" />
+    </com.github.clans.fab.FloatingActionMenu>
 
-
-      </com.github.clans.fab.FloatingActionMenu>
-    </RelativeLayout>
-
-  </FrameLayout>
+  </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

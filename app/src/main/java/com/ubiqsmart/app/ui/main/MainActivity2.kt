@@ -79,7 +79,7 @@ class MainActivity2 : SecureActivity(), MainNavigator {
 
   override fun openSettingsScreen() {
     startActivityForResult(SettingsActivity.getStartIntent(this), SettingsActivity.REQUEST_CODE)
-    overridePendingTransition(R.anim.slide_in_right, 0)
+    overridePendingTransition(R.anim.fade_in_slide_in_right, R.anim.fade_out)
   }
 
   companion object {
