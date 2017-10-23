@@ -13,7 +13,6 @@ import com.squareup.moshi.Moshi
 import com.ubiqsmart.App
 import com.ubiqsmart.BuildConfig
 import com.ubiqsmart.app.db.AppDatabase
-import com.ubiqsmart.app.services.NotificationLauncher
 import com.ubiqsmart.app.utils.AddressNameConverter
 import com.ubiqsmart.app.utils.ExchangeCalculator
 import com.ubiqsmart.app.utils.WalletStorage
@@ -111,9 +110,6 @@ object Modules {
     bind<WalletStorage>() with singleton { WalletStorage.getInstance(app, instance()) }
 
     bind<AddressNameConverter>() with singleton { AddressNameConverter.getInstance(app) }
-
-    bind<NotificationLauncher>() with singleton { NotificationLauncher.getInstance(app, instance()) }
-
   }
 
 }

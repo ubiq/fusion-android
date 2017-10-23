@@ -1,263 +1,113 @@
 package com.ubiqsmart.app.ui.main.fragments.price
 
-import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.Paint
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IFillFormatter
-import com.github.salomonbrys.kodein.instance
+import com.github.mikephil.charting.components.YAxis.AxisDependency
+import com.github.mikephil.charting.data.CandleData
+import com.github.mikephil.charting.data.CandleDataSet
+import com.github.mikephil.charting.data.CandleEntry
 import com.ubiqsmart.R
 import com.ubiqsmart.app.ui.base.BaseFragment
-import com.ubiqsmart.app.ui.main.MainActivity
-import com.ubiqsmart.app.ui.widgets.charts.DontShowNegativeFormatter
-import com.ubiqsmart.app.ui.widgets.charts.HourXFormatter
-import com.ubiqsmart.app.ui.widgets.charts.WeekXFormatter
-import com.ubiqsmart.app.ui.widgets.charts.YearXFormatter
-import com.ubiqsmart.app.utils.ExchangeCalculator
-import com.ubiqsmart.datasource.api.EtherscanAPI
-import kotlinx.android.synthetic.main.fragment_price.*
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import org.json.JSONArray
-import org.json.JSONException
-import java.io.IOException
-import java.util.*
+import com.ubiqsmart.extensions.obtainViewModel
+import kotlinx.android.synthetic.main.fragment_price2.*
 
-@Deprecated("Moving logic to PriceFragment for easy refactoring")
 class PriceFragment : BaseFragment() {
 
-  private val preferences: SharedPreferences by instance()
-  private val exchangeCalculator: ExchangeCalculator by instance()
-  private val etherscanApi: EtherscanAPI by instance()
-
-  private var ac: MainActivity? = null
-
-  private var displayType = 1
-  private var displayInUsd = true // True = USD, False = BTC
+  private lateinit var viewModel: PriceViewModel
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater!!.inflate(R.layout.fragment_price, container, false)
+    return inflater!!.inflate(R.layout.fragment_price2, container, false)
   }
 
   override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-    ac = activity as MainActivity
+    onSetupChartView()
+    onCreateViewModel()
+  }
 
-    TITLE_TEXTS = arrayOf(getString(R.string.last_24_hours), getString(R.string.last_7_days), getString(R.string.last_30_days), getString(R.string.last_year))
+  override fun onDestroyView() {
+    viewModel.onDestroyView()
+    super.onDestroyView()
+  }
 
-    price_switch.setOnClickListener {
-      displayInUsd = !displayInUsd
+  private fun onSetupChartView() {
+    candlestick_chart_view.description.isEnabled = false
+    candlestick_chart_view.legend.isEnabled = false
+    candlestick_chart_view.setTouchEnabled(true)
+    candlestick_chart_view.setScaleEnabled(true)
+    candlestick_chart_view.setPinchZoom(true)
 
-      update()
-      general()
+    candlestick_chart_view.axisLeft.isEnabled = true
+    candlestick_chart_view.axisLeft.setDrawGridLines(false)
+    candlestick_chart_view.axisLeft.disableGridDashedLine()
+    candlestick_chart_view.axisLeft.gridLineWidth = 1.2f
+    candlestick_chart_view.axisLeft.gridColor = Color.WHITE
 
-      preferences.edit().putBoolean("price_displayInUsd", displayInUsd).apply()
+    candlestick_chart_view.axisRight.isEnabled = false
+    candlestick_chart_view.axisRight.setDrawGridLines(false)
+    candlestick_chart_view.axisRight.gridLineWidth = 1.2f
+    candlestick_chart_view.axisRight.gridColor = Color.WHITE
+//    candlestick_chart_view.axisLeft.setDrawGridLines(false)
+//    candlestick_chart_view.axisLeft.setDrawAxisLine(false)
+//    candlestick_chart_view.axisLeft.spaceTop = 10f
+//    candlestick_chart_view.axisLeft.spaceBottom = 30f
+//    candlestick_chart_view.axisLeft.axisLineColor = 0xFFFFFF
+//    candlestick_chart_view.axisLeft.textColor = 0xFFFFFF
+//    candlestick_chart_view.axisLeft.setDrawTopYLabelEntry(false)
+//    candlestick_chart_view.axisLeft.labelCount = 0
+
+//    candlestick_chart_view.xAxis.isEnabled = false
+//    candlestick_chart_view.xAxis.setDrawGridLines(false)
+//    candlestick_chart_view.xAxis.setDrawAxisLine(false)
+//    candlestick_chart_view.xAxis.axisLineColor = 0xFFFFFF
+//    candlestick_chart_view.xAxis.textColor = 0xFFFFFF
+
+    val yVals1 = ArrayList<CandleEntry>()
+
+    for (i in 0 until 60) {
+      val mult = i + 1
+      val value = (Math.random() * 40).toFloat() + mult
+
+      val high = (Math.random() * 9).toFloat() + 8f
+      val low = (Math.random() * 9).toFloat() + 8f
+
+      val open = (Math.random() * 6).toFloat() + 1f
+      val close = (Math.random() * 6).toFloat() + 1f
+
+      val even = i % 2 == 0
+
+      yVals1.add(CandleEntry(
+          i.toFloat(), value + high,
+          value - low,
+          if (even) value + open else value - open,
+          if (even) value - close else value + close
+      ))
     }
 
-    displayInUsd = preferences.getBoolean("price_displayInUsd", true)
-    displayType = preferences.getInt("displaytype_chart", 1)
+    val set1 = CandleDataSet(yVals1, "")
 
-    left_arrow.setOnClickListener { previous() }
-    right_arrow.setOnClickListener { next() }
-
-    swipe_refresh_layout2.setColorSchemeColors(ContextCompat.getColor(context, R.color.primary))
-    swipe_refresh_layout2.setOnRefreshListener {
-      updateExchangeRates()
-      general()
-    }
-
-    general()
-    update()
-
-    price_chart.visibility = View.INVISIBLE
-    swipe_refresh_layout2.isRefreshing = true
-  }
-
-  private operator fun next() {
-    displayType = (displayType + 1) % PERIOD.size
-    general()
-  }
-
-  private fun previous() {
-    displayType = if (displayType > 0) displayType - 1 else PERIOD.size - 1
-    general()
-  }
-
-  private fun general() {
-    price_chart.visibility = View.INVISIBLE
-    chart_title.text = TITLE_TEXTS!![displayType]
-
-//    color_padding.setBackgroundColor(ContextCompat.getColor(context, R.color.color_primary_little_darker))
-
-    preferences.edit().putInt("displaytype_chart", displayType).apply()
-
-    try {
-      loadPriceData(TIMESTAMPS[displayType].toLong(), PERIOD[displayType])
-    } catch (e: IOException) {
-      e.printStackTrace()
-    }
-  }
-
-  @Throws(IOException::class)
-  private fun loadPriceData(time: Long, period: Int) {
-    etherscanApi.getPriceChart(System.currentTimeMillis() / 1000 - time, period, displayInUsd, object : Callback { // 1467321600,
-      override fun onFailure(call: Call, e: IOException) {
-        ac?.runOnUiThread {
-          onItemsLoadComplete()
-          ac?.snackError(getString(R.string.err_no_con), Snackbar.LENGTH_LONG)
-        }
-      }
-
-      @Throws(IOException::class)
-      override fun onResponse(call: Call, response: Response) {
-        val yVals = ArrayList<Entry>()
-        try {
-          val data = JSONArray(response.body()!!.string())
-          val exchangeRate = ExchangeCalculator.getInstance().rateForChartDisplay
-          val commas = (if (displayInUsd) 100 else 10000).toFloat()
-          (0 until data.length())
-              .asSequence()
-              .map { data.getJSONObject(it) }
-              .mapTo(yVals) { Entry(it.getLong("date").toFloat(), Math.floor(it.getDouble("high") * exchangeRate * commas.toDouble()).toFloat() / commas) }
-
-          ac?.runOnUiThread {
-            price_chart.visibility = View.VISIBLE
-            onItemsLoadComplete()
-            if (isAdded) {
-//              setupChart(price_chart, getData(yVals), ContextCompat.getColor(context, R.color.color_primary_little_darker))
-              update()
-            }
-          }
-
-        } catch (e: JSONException) {
-          e.printStackTrace()
-        }
-
-      }
-    })
-  }
-
-  private fun setupChart(chart: LineChart, data: LineData, color: Int) {
-    (data.getDataSetByIndex(0) as LineDataSet).setCircleColorHole(color)
-    chart.description.isEnabled = false
-    chart.setDrawGridBackground(false)
-    chart.setTouchEnabled(false)
-    chart.isDragEnabled = false
-    chart.setScaleEnabled(true)
-    chart.setPinchZoom(false)
-    chart.setBackgroundColor(color)
-    chart.setViewPortOffsets(0f, 23f, 0f, 0f)
-    chart.data = data
-
-    val legend = chart.legend
-    legend.isEnabled = false
-
-    chart.axisLeft.isEnabled = true
-    chart.axisLeft.setDrawGridLines(false)
-    chart.axisLeft.setDrawAxisLine(false)
-    chart.axisLeft.spaceTop = 10f
-    chart.axisLeft.spaceBottom = 30f
-    chart.axisLeft.axisLineColor = 0xFFFFFF
-    chart.axisLeft.textColor = 0xFFFFFF
-    chart.axisLeft.setDrawTopYLabelEntry(false)
-    chart.axisLeft.labelCount = 10
-
-    chart.xAxis.isEnabled = true
-    chart.xAxis.setDrawGridLines(false)
-    chart.xAxis.setDrawAxisLine(false)
-    chart.xAxis.axisLineColor = 0xFFFFFF
-    chart.xAxis.textColor = 0xFFFFFF
-
-    val tf = Typeface.DEFAULT
-
-    // X Axis
-    val xAxis = chart.xAxis
-    xAxis.typeface = tf
-    xAxis.removeAllLimitLines()
-    xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
-    xAxis.textColor = Color.argb(150, 255, 255, 255)
-
-    if (displayType == 1 || displayType == 2) { // Week and Month
-      xAxis.valueFormatter = WeekXFormatter()
-    } else if (displayType == 0) { //  Day
-      xAxis.valueFormatter = HourXFormatter()
-    } else { // Year
-      xAxis.valueFormatter = YearXFormatter()
-    }
-
-    // Y Axis
-    val leftAxis = chart.axisLeft
-    leftAxis.removeAllLimitLines()
-    leftAxis.typeface = tf
-    leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART)
-    leftAxis.textColor = Color.argb(150, 255, 255, 255)
-    leftAxis.valueFormatter = DontShowNegativeFormatter(displayInUsd)
-
-    chart.axisRight.isEnabled = false // Deactivates horizontal lines
-    chart.animateX(1300)
-    chart.notifyDataSetChanged()
-  }
-
-  private fun getData(yVals: List<Entry>): LineData {
-    val set1 = LineDataSet(yVals, "")
-    set1.lineWidth = 1.45f
-    set1.color = Color.argb(240, 255, 255, 255)
-    set1.setCircleColor(Color.WHITE)
-    set1.highLightColor = Color.WHITE
-//    set1.fillColor = ContextCompat.getColor(context, R.color.chart_filled)
-    set1.setDrawCircles(false)
+    set1.setDrawIcons(false)
     set1.setDrawValues(false)
-    set1.setDrawFilled(true)
-    set1.fillFormatter = IFillFormatter { _, _ -> price_chart.axisLeft.axisMinimum }
+    set1.axisDependency = AxisDependency.LEFT
+    set1.shadowColor = Color.WHITE
+    set1.shadowWidth = 0.5f
+    set1.decreasingColor = Color.parseColor("#814C3D")
+    set1.decreasingPaintStyle = Paint.Style.FILL
 
-    return LineData(set1)
+    set1.increasingColor = Color.parseColor("#374732")
+    set1.increasingPaintStyle = Paint.Style.STROKE
+
+    val data = CandleData(set1)
+
+    candlestick_chart_view.data = data
+    candlestick_chart_view.invalidate()
   }
 
-  private fun updateExchangeRates() {
-    try {
-//      exchangeCalculator.updateExchangeRates(preferences.getString("maincurrency", "USD"), activity)
-      update()
-      onItemsLoadComplete()
-    } catch (e: IOException) {
-      e.printStackTrace()
-    }
-  }
-
-  fun update() {
-    price?.text = when {
-      displayInUsd -> "${exchangeCalculator.displayUsdNicely(exchangeCalculator.usdPrice)} ${exchangeCalculator.mainCurreny.name}"
-      else -> "${exchangeCalculator.displayEthNicely(exchangeCalculator.btcPrice)} BTC"
-    }
-    onItemsLoadComplete()
-  }
-
-  internal fun onItemsLoadComplete() {
-    swipe_refresh_layout2?.isRefreshing = false
-    color_padding?.setBackgroundColor(0xF05a7899.toInt())
-  }
-
-  companion object {
-
-    private val TIMESTAMPS = intArrayOf(
-        86400, // 24 hours
-        604800, // Week
-        2678400, // Month
-        31536000 // Year
-    )
-
-    private var TITLE_TEXTS: Array<String>? = null
-
-    private val PERIOD = intArrayOf(300, 1800, 7200, 86400)
+  private fun onCreateViewModel() {
+    viewModel = activity.obtainViewModel(PriceViewModel::class.java)
+    viewModel.onViewCreated()
   }
 }

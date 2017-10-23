@@ -1,4 +1,4 @@
-package com.ubiqsmart.app.interfaces
+package com.ubiqsmart.domain.models
 
 interface StorableWallet {
 

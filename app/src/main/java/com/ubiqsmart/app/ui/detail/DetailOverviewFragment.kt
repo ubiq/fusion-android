@@ -29,7 +29,6 @@ import com.ubiqsmart.domain.models.Token
 import com.ubiqsmart.domain.models.WatchWallet
 import com.ubiqsmart.app.ui.base.BaseFragment
 import com.ubiqsmart.app.ui.detail.adapter.TokenAdapter
-import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.ui.send.SendActivity
 import com.ubiqsmart.app.utils.*
 import kotlinx.android.synthetic.main.fragment_detail_ov.*

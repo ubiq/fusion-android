@@ -7,15 +7,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import com.ubiqsmart.app.interfaces.StorableWallet;
+import com.ubiqsmart.domain.models.StorableWallet;
 import com.ubiqsmart.domain.models.FullWallet;
 import com.ubiqsmart.domain.models.WatchWallet;
-import com.ubiqsmart.app.ui.main.MainActivity;
 import kotlin.Deprecated;
-import org.json.JSONException;
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -193,7 +188,7 @@ public class WalletStorage {
         toImport.get(i).delete();
 
         add(new FullWallet("0x" + address, address));
-        addressNameConverter.put("0x" + address, "WalletAdapter " + ("0x" + address).substring(0, 6));
+        addressNameConverter.put("0x" + address, "WalletEntry " + ("0x" + address).substring(0, 6));
 
         final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         final Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object
@@ -266,12 +261,12 @@ public class WalletStorage {
     }
   }
 
-  public Credentials getFullWallet(String password, String wallet) throws IOException, JSONException, CipherException {
-    if (wallet.startsWith("0x")) {
-      wallet = wallet.substring(2, wallet.length());
-    }
-    return WalletUtils.loadCredentials(password, new File(context.getFilesDir(), wallet));
-  }
+  //public Credentials getFullWallet(String password, String wallet) throws IOException, JSONException, CipherException {
+  //  if (wallet.startsWith("0x")) {
+  //    wallet = wallet.substring(2, wallet.length());
+  //  }
+  //  return WalletUtils.loadCredentials(password, new File(context.getFilesDir(), wallet));
+  //}
 
   private synchronized void save() {
     final FileOutputStream fout;

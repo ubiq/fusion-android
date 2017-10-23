@@ -11,13 +11,12 @@ import android.widget.EditText
 import android.widget.TextView
 import com.ubiqsmart.R
 import com.ubiqsmart.app.ui.base.SecureActivity
-import com.ubiqsmart.app.utils.Settings
 
 class WalletGenActivity : SecureActivity() {
 
+  private var coord: CoordinatorLayout? = null
   private var password: EditText? = null
   private var passwordConfirm: EditText? = null
-  private var coord: CoordinatorLayout? = null
   private var walletGenText: TextView? = null
   private var toolbar_title: TextView? = null
   private var privateKeyProvided: String? = null
@@ -55,8 +54,6 @@ class WalletGenActivity : SecureActivity() {
       snackError(resources.getString(R.string.error_invalid_password))
       return
     }
-
-    Settings.walletBeingGenerated = true // Lock so a user can only generate one wallet at a time
 
     val data = Intent()
     data.putExtra("PASSWORD", passwordConfirm!!.text.toString())

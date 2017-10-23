@@ -4,7 +4,6 @@ import android.app.Application
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.with
-import com.ubiqsmart.app.services.NotificationLauncher
 import com.ubiqsmart.app.ui.base.BaseViewModel
 import com.ubiqsmart.domain.interactors.exchanges.GetPriceExchangeInteractor
 import com.ubiqsmart.domain.models.PriceExchange
@@ -13,7 +12,6 @@ import io.reactivex.rxkotlin.subscribeBy
 class MainViewModel(app: Application) : BaseViewModel(app) {
 
   private val getPriceExchangeInteractor: GetPriceExchangeInteractor by injector.with(this@MainViewModel).instance()
-  private val notificationLauncher: NotificationLauncher by instance()
 
   override fun provideOverridingModule() = Kodein.Module {
     import(MainDI.Module)
@@ -21,10 +19,7 @@ class MainViewModel(app: Application) : BaseViewModel(app) {
 
   override fun onViewCreated() {
     super.onViewCreated()
-//    fetchCurrentExchangeRate()
-
-//    Settings.initiate(getApplication())
-//    notificationLauncher.start()
+    fetchCurrentExchangeRate()
   }
 
   private fun fetchCurrentExchangeRate() {

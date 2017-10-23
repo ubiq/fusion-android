@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/fusion-android.iml" filepath="$PROJECT_DIR$/fusion-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web3kt/web3kt.iml" filepath="$PROJECT_DIR$/web3kt/web3kt.iml" />
     </modules>
   </component>
 </project>

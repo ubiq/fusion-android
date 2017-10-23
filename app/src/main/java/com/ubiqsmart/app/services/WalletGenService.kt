@@ -9,17 +9,9 @@ import android.support.v4.app.NotificationCompat
 import com.github.salomonbrys.kodein.android.KodeinIntentService
 import com.github.salomonbrys.kodein.instance
 import com.ubiqsmart.R
-import com.ubiqsmart.app.ui.main.MainActivity
-import com.ubiqsmart.app.utils.*
-import com.ubiqsmart.domain.models.FullWallet
-import org.spongycastle.util.encoders.Hex
-import org.web3j.crypto.CipherException
-import org.web3j.crypto.ECKeyPair
-import java.io.File
-import java.io.IOException
-import java.security.InvalidAlgorithmParameterException
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
+import com.ubiqsmart.app.utils.AddressNameConverter
+import com.ubiqsmart.app.utils.Blockies
+import com.ubiqsmart.app.utils.WalletStorage
 
 class WalletGenService : KodeinIntentService(WalletGenService::class.java.simpleName) {
 
@@ -32,40 +24,40 @@ class WalletGenService : KodeinIntentService(WalletGenService::class.java.simple
   private var normalMode = true
 
   override fun onHandleIntent(intent: Intent?) {
-    val password = intent!!.getStringExtra("PASSWORD")
-    var privatekey = ""
-
-    if (intent.hasExtra("PRIVATE_KEY")) {
-      normalMode = false
-      privatekey = intent.getStringExtra("PRIVATE_KEY")
-    }
-
-    sendNotification()
-
-    try {
-      val walletAddress: String = if (normalMode) { // Create new key
-        OwnWalletUtils.generateNewWalletFile(password, File(this.filesDir, ""), true)
-      } else { // Privatekey passed
-        val keys = ECKeyPair.create(Hex.decode(privatekey))
-        OwnWalletUtils.generateWalletFile(password, keys, File(this.filesDir, ""), true)
-      }
-
-      walletStorage.add(FullWallet("0x" + walletAddress, walletAddress))
-      addressNameConverter.put("0x" + walletAddress, "WalletAdapter " + ("0x" + walletAddress).substring(0, 6))
-      Settings.walletBeingGenerated = false
-
-      finished("0x" + walletAddress)
-    } catch (e: CipherException) {
-      e.printStackTrace()
-    } catch (e: IOException) {
-      e.printStackTrace()
-    } catch (e: InvalidAlgorithmParameterException) {
-      e.printStackTrace()
-    } catch (e: NoSuchAlgorithmException) {
-      e.printStackTrace()
-    } catch (e: NoSuchProviderException) {
-      e.printStackTrace()
-    }
+//    val password = intent!!.getStringExtra("PASSWORD")
+//    var privatekey = ""
+//
+//    if (intent.hasExtra("PRIVATE_KEY")) {
+//      normalMode = false
+//      privatekey = intent.getStringExtra("PRIVATE_KEY")
+//    }
+//
+//    sendNotification()
+//
+//    try {
+//      val walletAddress: String = if (normalMode) { // Create new key
+//        OwnWalletUtils.generateNewWalletFile(password, File(this.filesDir, ""), true)
+//      } else { // Privatekey passed
+//        val keys = ECKeyPair.create(Hex.decode(privatekey))
+//        OwnWalletUtils.generateWalletFile(password, keys, File(this.filesDir, ""), true)
+//      }
+//
+//      walletStorage.add(FullWallet("0x" + walletAddress, walletAddress))
+//      addressNameConverter.put("0x" + walletAddress, "WalletEntry " + ("0x" + walletAddress).substring(0, 6))
+//      Settings.walletBeingGenerated = false
+//
+//      finished("0x" + walletAddress)
+//    } catch (e: CipherException) {
+//      e.printStackTrace()
+//    } catch (e: IOException) {
+//      e.printStackTrace()
+//    } catch (e: InvalidAlgorithmParameterException) {
+//      e.printStackTrace()
+//    } catch (e: NoSuchAlgorithmException) {
+//      e.printStackTrace()
+//    } catch (e: NoSuchProviderException) {
+//      e.printStackTrace()
+//    }
   }
 
   private fun sendNotification() {

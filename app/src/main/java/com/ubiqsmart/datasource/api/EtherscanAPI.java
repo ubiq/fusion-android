@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import com.ubiqsmart.app.interfaces.LastIconLoaded;
-import com.ubiqsmart.app.interfaces.StorableWallet;
+import com.ubiqsmart.domain.models.StorableWallet;
 import com.ubiqsmart.app.utils.TokenIconCache;
 import kotlin.Deprecated;
 import okhttp3.Call;

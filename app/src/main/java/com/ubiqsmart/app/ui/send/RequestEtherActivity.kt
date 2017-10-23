@@ -21,6 +21,7 @@ import com.ubiqsmart.app.utils.WalletStorage
 import com.ubiqsmart.app.utils.qr.AddressEncoder
 import com.ubiqsmart.app.utils.qr.Contents
 import com.ubiqsmart.app.utils.qr.QREncoder
+import com.ubiqsmart.domain.models.WalletEntry
 import java.math.BigDecimal
 import java.util.*
 
@@ -30,7 +31,7 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
   private var qr: ImageView? = null
   private var recyclerView: RecyclerView? = null
   private var walletAdapter: WalletAdapter? = null
-  private val wallets = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
+  private val wallets = ArrayList<WalletEntry>()
   private var selectedEtherAddress: String? = null
   private var amount: TextView? = null
   private var usdPrice: TextView? = null
@@ -49,7 +50,7 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
     recyclerView = findViewById(R.id.recycler_view)
     amount = findViewById(R.id.amount)
     usdPrice = findViewById(R.id.usdPrice)
-    walletAdapter = WalletAdapter(wallets, this, this, this)
+    walletAdapter = WalletAdapter(this, wallets, this, this)
 
     val mgr = LinearLayoutManager(this)
     recyclerView!!.layoutManager = mgr
@@ -87,13 +88,13 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
   fun update() {
     wallets.clear()
 
-    val myAddresses = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
+    val myAddresses = ArrayList<WalletEntry>()
     val walletStorage = WalletStorage.getInstance(this, null)
 
     val storedAddresses = ArrayList(walletStorage.get())
     for (i in storedAddresses.indices) {
       if (i == 0) selectedEtherAddress = storedAddresses[i].pubKey
-      myAddresses.add(com.ubiqsmart.domain.models.WalletAdapter(AddressNameConverter.getInstance(this).get(storedAddresses[i].pubKey), storedAddresses[i].pubKey))
+      myAddresses.add(WalletEntry(AddressNameConverter.getInstance(this).get(storedAddresses[i].pubKey), storedAddresses[i].pubKey))
     }
 
     wallets.addAll(myAddresses)
@@ -111,13 +112,13 @@ class RequestEtherActivity : SecureActivity(), View.OnClickListener {
   fun updateQR() {
     val qrCodeDimention = 400
     var iban = "iban:" + selectedEtherAddress!!
-    if (amount!!.text.toString().length > 0 && BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) > 0) {
+    if (amount!!.text.toString().isNotEmpty() && BigDecimal(amount!!.text.toString()) > BigDecimal("0")) {
       iban += "?amount=" + amount!!.text.toString()
     }
 
     val qrCodeEncoder: QREncoder
     val temp = AddressEncoder(selectedEtherAddress)
-    if (amount!!.text.toString().length > 0 && BigDecimal(amount!!.text.toString()).compareTo(BigDecimal("0")) > 0) {
+    if (amount!!.text.toString().isNotEmpty() && BigDecimal(amount!!.text.toString()) > BigDecimal("0")) {
       temp.amount = amount!!.text.toString()
     }
     qrCodeEncoder = QREncoder(AddressEncoder.encodeERC(temp), null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), qrCodeDimention)

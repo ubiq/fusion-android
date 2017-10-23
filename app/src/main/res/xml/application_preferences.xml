@@ -38,6 +38,7 @@
     android:title="@string/prefs_lock_with_pw" />
 
   <PreferenceScreen
+    android:layout_height="wrap_content"
     android:summary="@string/prefs_set_pw_sum"
     android:title="@string/prefs_set_pw">
     <intent android:action="rehanced.com.simpleetherwallet.activities.SetAppLockActivity" />

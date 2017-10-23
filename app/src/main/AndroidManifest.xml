@@ -70,7 +70,7 @@
       android:theme="@style/Ubiq.OnBoarding" />
 
     <activity
-      android:name="com.ubiqsmart.app.ui.main.MainActivity2"
+      android:name="com.ubiqsmart.app.ui.main.MainActivity"
       android:configChanges="orientation|screenSize" />
 
     <activity
@@ -79,7 +79,8 @@
 
     <activity
       android:name="com.ubiqsmart.app.ui.scanqr.QRScanActivity"
-      android:configChanges="orientation|screenSize" />
+      android:configChanges="orientation|screenSize"
+      android:launchMode="singleTop" />
 
     <activity
       android:name="com.ubiqsmart.app.ui.settings.SettingsActivity"
@@ -121,7 +122,7 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    
+
     <service
       android:name="com.ubiqsmart.app.services.NotificationService"
       android:exported="false" />

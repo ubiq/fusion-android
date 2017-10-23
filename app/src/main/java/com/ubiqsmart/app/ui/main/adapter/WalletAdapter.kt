@@ -14,27 +14,27 @@ import com.ubiqsmart.app.utils.AddressNameConverter
 import com.ubiqsmart.app.utils.Blockies
 import com.ubiqsmart.app.utils.ExchangeCalculator
 import com.ubiqsmart.domain.models.TransactionDisplay
-import com.ubiqsmart.domain.models.WalletAdapter
+import com.ubiqsmart.domain.models.WalletEntry
 import me.grantland.widget.AutofitTextView
 
 class WalletAdapter(
-    private val wallets: List<WalletAdapter>,
     private val context: Context,
+    private val wallets: List<WalletEntry>,
     private val listener: View.OnClickListener,
     private val contextMenuListener: View.OnCreateContextMenuListener
-) : RecyclerView.Adapter<com.ubiqsmart.app.ui.main.adapter.WalletAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<com.ubiqsmart.app.ui.main.adapter.WalletAdapter.WalletViewHolder>() {
 
   private var lastPosition = -1
-  var position: Int = 0
+  var position = 0
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletViewHolder {
     val itemView = LayoutInflater.from(parent.context).inflate(R.layout.wallet_item_adapter, parent, false)
     itemView.setOnClickListener(listener)
     itemView.setOnCreateContextMenuListener(contextMenuListener)
-    return MyViewHolder(itemView)
+    return WalletViewHolder(itemView)
   }
 
-  override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: WalletViewHolder, position: Int) {
     val box = wallets[position]
 
     val exchangeCalculator = ExchangeCalculator.getInstance()
@@ -43,13 +43,18 @@ class WalletAdapter(
     holder.apply {
       walletaddress.text = box.publicKey
       walletname.text = walletName ?: context.getString(R.string.new_wallet)
-      if (box.type != WalletAdapter.CONTACT) {
+      if (box.type != WalletEntry.CONTACT) {
         holder.walletbalance.text = String.format("%s %s",
             exchangeCalculator.displayBalanceNicely(exchangeCalculator.convertRate(box.balance, exchangeCalculator.current.rate)),
             exchangeCalculator.currencyShort)
       }
       addressimage.setImageBitmap(Blockies.createIcon(box.publicKey))
-      type.visibility = if (box.type == TransactionDisplay.NORMAL || box.type == WalletAdapter.CONTACT) View.INVISIBLE else View.VISIBLE
+      type.visibility =
+          if (box.type == TransactionDisplay.NORMAL || box.type == WalletEntry.CONTACT) {
+            View.INVISIBLE
+          } else {
+            View.VISIBLE
+          }
     }
 
     holder.itemView.setOnLongClickListener {
@@ -60,10 +65,16 @@ class WalletAdapter(
     setAnimation(holder.container, position)
   }
 
-  override fun onViewRecycled(holder: MyViewHolder?) {
+  override fun onViewRecycled(holder: WalletViewHolder?) {
     holder!!.itemView.setOnLongClickListener(null)
     super.onViewRecycled(holder)
   }
+
+  override fun onViewDetachedFromWindow(holder: WalletViewHolder?) {
+    holder!!.clearAnimation()
+  }
+
+  override fun getItemCount() = wallets.size
 
   private fun setAnimation(viewToAnimate: View, position: Int) {
     if (position > lastPosition) {
@@ -73,15 +84,7 @@ class WalletAdapter(
     }
   }
 
-  override fun onViewDetachedFromWindow(holder: MyViewHolder?) {
-    holder!!.clearAnimation()
-  }
-
-  override fun getItemCount(): Int {
-    return wallets.size
-  }
-
-  class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+  class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     var walletname: TextView = view.findViewById(R.id.wallet_name)
     var walletbalance: TextView = view.findViewById(R.id.wallet_balance)

@@ -2,11 +2,11 @@ package com.ubiqsmart.app.utils;
 
 import android.content.Context;
 import com.ubiqsmart.app.interfaces.LastIconLoaded;
-import com.ubiqsmart.app.interfaces.StorableWallet;
+import com.ubiqsmart.domain.models.StorableWallet;
 import com.ubiqsmart.datasource.api.EtherscanAPI;
 import com.ubiqsmart.domain.models.Token;
 import com.ubiqsmart.domain.models.TransactionDisplay;
-import com.ubiqsmart.domain.models.WalletAdapter;
+import com.ubiqsmart.domain.models.WalletEntry;
 import com.ubiqsmart.domain.models.WatchWallet;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,8 +51,8 @@ import java.util.*;
     }
   }
 
-  public static List<WalletAdapter> parseWallets(String response, List<StorableWallet> storedwallets, Context context) throws Exception {
-    ArrayList<WalletAdapter> display = new ArrayList<WalletAdapter>();
+  public static List<WalletEntry> parseWallets(String response, List<StorableWallet> storedwallets, Context context) throws Exception {
+    ArrayList<WalletEntry> display = new ArrayList<WalletEntry>();
     JSONArray data = new JSONObject(response).getJSONArray("result");
     for (int i = 0; i < storedwallets.size(); i++) {
       BigInteger balance = new BigInteger("0");
@@ -63,8 +63,8 @@ import java.util.*;
         }
       }
       String walletname = AddressNameConverter.Companion.getInstance(context).get(storedwallets.get(i).getPubKey());
-      display.add(new WalletAdapter(walletname == null ? "New WalletAdapter" : walletname, storedwallets.get(i).getPubKey(), balance,
-          storedwallets.get(i) instanceof WatchWallet ? WalletAdapter.WATCH_ONLY : WalletAdapter.NORMAL));
+      display.add(new WalletEntry(walletname == null ? "New WalletEntry" : walletname, storedwallets.get(i).getPubKey(), balance,
+          storedwallets.get(i) instanceof WatchWallet ? WalletEntry.WATCH_ONLY : WalletEntry.NORMAL));
     }
     return display;
   }

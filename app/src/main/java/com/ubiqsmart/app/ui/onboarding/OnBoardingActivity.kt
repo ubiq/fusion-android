@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.github.paolorotolo.appintro.AppIntro
 import com.github.paolorotolo.appintro.AppIntroFragment
 import com.ubiqsmart.R
-import com.ubiqsmart.app.ui.main.MainActivity2
+import com.ubiqsmart.app.ui.main.MainActivity
 import com.ubiqsmart.app.ui.onboarding.steps.TOSFragment
 import com.ubiqsmart.extensions.getColorCompat
 import com.ubiqsmart.extensions.obtainViewModel
@@ -146,7 +146,7 @@ class OnBoardingActivity : AppIntro(), OnBoardingNavigator {
   }
 
   override fun openMainScreen() {
-    val intent = MainActivity2.getStartIntent(this@OnBoardingActivity)
+    val intent = MainActivity.getStartIntent(this@OnBoardingActivity)
     startActivity(intent)
     finish()
   }

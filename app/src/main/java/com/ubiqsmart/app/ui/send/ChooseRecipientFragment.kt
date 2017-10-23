@@ -15,6 +15,7 @@ import com.ubiqsmart.R
 import com.ubiqsmart.app.ui.main.adapter.WalletAdapter
 import com.ubiqsmart.app.ui.scanqr.QRScanActivity
 import com.ubiqsmart.app.utils.AddressNameConverter
+import com.ubiqsmart.domain.models.WalletEntry
 import java.util.*
 
 class ChooseRecipientFragment : Fragment(), View.OnClickListener, View.OnCreateContextMenuListener {
@@ -26,7 +27,7 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener, View.OnCreateC
   private var send: Button? = null
   private var addressBox: EditText? = null
 
-  private val wallets = ArrayList<com.ubiqsmart.domain.models.WalletAdapter>()
+  private val wallets = ArrayList<WalletEntry>()
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val rootView = inflater!!.inflate(R.layout.fragment_recipient, container, false)
@@ -36,7 +37,7 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener, View.OnCreateC
     addressBox = rootView.findViewById(R.id.receiver)
     recyclerView = rootView.findViewById(R.id.recycler_view)
 
-    walletAdapter = WalletAdapter(wallets, activity, this, this)
+    walletAdapter = WalletAdapter(activity, wallets, this, this)
 
     val mgr = LinearLayoutManager(activity)
     recyclerView!!.layoutManager = mgr

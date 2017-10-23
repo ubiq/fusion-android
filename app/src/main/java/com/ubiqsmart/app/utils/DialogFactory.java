@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ubiqsmart.R;
 import com.ubiqsmart.app.ui.detail.AddressDetailActivity;
-import com.ubiqsmart.app.ui.main.MainActivity;
 import com.ubiqsmart.domain.models.Token;
 import com.ubiqsmart.domain.models.TransactionDisplay;
 import me.grantland.widget.AutofitTextView;
@@ -249,7 +248,7 @@ public class DialogFactory {
     //  @Override public void onClick(DialogInterface dialog, int which) {
     //    try {
     //      walletStorage.importWallets(files);
-    //      c.snackError("WalletAdapter" + (files.size() > 1 ? "s" : "") + " successfully imported!");
+    //      c.snackError("WalletEntry" + (files.size() > 1 ? "s" : "") + " successfully imported!");
     //      if (c.getFragments() != null && c.getFragments().get(1) != null) {
     //        ((WalletsFragment) c.getFragments().get(1)).update();
     //      }

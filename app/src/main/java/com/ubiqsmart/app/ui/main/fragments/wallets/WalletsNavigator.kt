@@ -4,4 +4,6 @@ interface WalletsNavigator {
 
   fun openWalletGeneratorScreen()
 
+  fun openScanQRScreen()
+
 }

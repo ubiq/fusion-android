@@ -1,7 +1,7 @@
 package com.ubiqsmart.app.utils
 
 import android.content.Context
-import com.ubiqsmart.domain.models.WalletAdapter
+import com.ubiqsmart.domain.models.WalletEntry
 
 import java.io.*
 import java.util.*
@@ -13,11 +13,11 @@ class AddressNameConverter private constructor(context: Context) {
 
   private val context: Context = context.applicationContext
 
-  val asAddressBook: List<WalletAdapter>
+  val asAddressBook: List<WalletEntry>
     get() {
-      val erg = ArrayList<WalletAdapter>()
+      val erg = ArrayList<WalletEntry>()
       for ((key, value) in mapdb!!) {
-        erg.add(WalletAdapter(value, key))
+        erg.add(WalletEntry(value, key))
       }
       Collections.sort(erg)
       return erg

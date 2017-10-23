@@ -15,17 +15,16 @@ class ViewModelFactory private constructor(
 ) : ViewModelProvider.NewInstanceFactory() {
 
   @Suppress("UNCHECKED_CAST")
-  override fun <T : ViewModel> create(modelClass: Class<T>) =
-      with(modelClass) {
-        when {
-          isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application)
-          isAssignableFrom(OnBoardingViewModel::class.java) -> OnBoardingViewModel(application)
-          isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application)
-          isAssignableFrom(PriceViewModel::class.java) -> PriceViewModel(application)
-          isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(application)
-          else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
-        }
-      } as T
+  override fun <T : ViewModel> create(modelClass: Class<T>) = with(modelClass) {
+    when {
+      isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(application)
+      isAssignableFrom(OnBoardingViewModel::class.java) -> OnBoardingViewModel(application)
+      isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application)
+      isAssignableFrom(PriceViewModel::class.java) -> PriceViewModel(application)
+      isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(application)
+      else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+    }
+  } as T
 
   companion object {
 

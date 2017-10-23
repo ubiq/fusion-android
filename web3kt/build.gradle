@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+buildscript {
+  ext.kotlin_version = '1.1.51'
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+android {
+  compileSdkVersion 26
+  buildToolsVersion '26.0.2'
+  defaultConfig {
+    minSdkVersion 21
+    targetSdkVersion 26
+  }
+
+  compileOptions {
+    targetCompatibility 1.7
+    sourceCompatibility 1.7
+  }
+}
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  implementation 'org.bouncycastle:bcprov-jdk15on:1.58'
+
+//  testImplementation 'junit:junit:4.12'
+  testImplementation('org.jetbrains.spek:spek-api:1.1.5', {
+    exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib"
+  })
+  //testImplementation "org.junit.platform:junit-platform-runner:1.1.5"
+  testImplementation 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+}

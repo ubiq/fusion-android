@@ -10,9 +10,7 @@ import com.github.salomonbrys.kodein.android.autoAndroidModule
 import com.github.salomonbrys.kodein.lazy
 import com.ubiqsmart.di.Modules
 import io.fabric.sdk.android.Fabric
-import org.spongycastle.jce.provider.BouncyCastleProvider
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
-import java.security.Security
 
 class App : MultiDexApplication(), KodeinAware {
 
@@ -52,11 +50,4 @@ class App : MultiDexApplication(), KodeinAware {
 
     Fabric.with(this, kit)
   }
-
-  companion object {
-    init {
-      Security.insertProviderAt(BouncyCastleProvider(), 1)
-    }
-  }
-
 }
